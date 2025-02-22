@@ -110,7 +110,6 @@ Meaning of <n> Across Types:
 \begin{equation}
     \tag{$\Delta$-intro}
     \dfrac{
-       \begin{split}
          & v_k, f_m : \textbf{Simplex}, e_i : \textbf{Path}_{\Delta} \\
        \end{split}
     }{
@@ -119,17 +118,21 @@ Meaning of <n> Across Types:
 \end{equation}
 ```
 
-#### Elimination (Simplex-Face)
+#### Elim Face
 
 ```
 ```
 
-#### Composition
+#### Elim Composition
 
 ```
+\begin{equation}
+    \tag{$\Delta$-Elim$_2$}
+    \dfrac{ s_1, s_2 \in \Delta, e_i : \partial_{i,i-1} s_1 = \partial_{i,0} s_2 }{ s_1 \circ s_1 : \Delta }
+\end{equation}
 ```
 
-#### Map
+#### Elim Degeneracy
 
 ```
 ```
@@ -399,6 +402,13 @@ def cube_infty : Category := П (a b c : Simplex),
        cube3 = cube2 ∘ f, cube3 : Simplex
        ⊢ ∞ (a b c | cube2 cube3)
 ```
+
+## Bibliography
+
+* Daniel Kan. Abstract Homotopy I. 1955.
+* Daniel Kan. Abstract Homotopy II. 1956.
+* Daniel Kan. On c.s.s. Complexes. 1957.
+* Daniel Kan. A Combinatorial Definition of Homotopy Groups. 1958.
 
 ## Conclusion
 
