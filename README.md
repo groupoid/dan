@@ -1,7 +1,7 @@
 # Dan Kan: Simplicial HoTT
 
 Groupoid Infinity Simplicial HoTT pure algebraїc implementation with explicit syntaxt for fastest type checking.
-It supports following extensions: Chain, Simplex, Simplicial, Category, Monoid, Group.
+It supports following extensions: `Chain`, `Simplex`, `Simplicial`, `Category`, `Monoid`, `Group`.
 Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders/Dan core.
 
 ## Abstract
@@ -40,7 +40,7 @@ def group : Group := П (context), conditions ⊢ n (generators | relations)
 def cat : Category := П (context), conditions ⊢ n (objects | morphisms | coherence)
 ```
 
-### Formal BNF
+### BNF
 
 ```
 <program> ::= <definition> | <definition> <program>
