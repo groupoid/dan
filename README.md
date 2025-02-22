@@ -40,7 +40,7 @@ def group : Group := П (context), conditions ⊢ n (generators | relations)
 def cat : Category := П (context), conditions ⊢ n (objects | morphisms | coherence)
 ```
 
-### Formal BNF
+### BNF
 
 ```
 <program> ::= <definition> | <definition> <program>
