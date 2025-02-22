@@ -49,7 +49,7 @@ def cat : Category := П (context), conditions ⊢ n (objects | morphisms | cohe
 <type-term> ::= "П" "(" <context> ")" "⊢" <n> "(" <elements> "|" <constraints> ")" 
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 <superscript> ::= "¹" | "²" | "³" | "⁴" | "⁵" | "⁶" | "⁷" | "⁸" | "⁹"
-<n> ::= <digit> | <digit> <n>
+<n> ::= <digit> | <digit> <n> | "∞"
 <context> ::= <hypothesis> | <hypothesis> "," <context>
 <hypothesis> ::= <id> ":" <type-term>              % Single declaration, e.g., a : Simplex
                | "(" <id-list> ":" <type-term> ")" % Grouped declaration, e.g., (a b c : Simplex)
