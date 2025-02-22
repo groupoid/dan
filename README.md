@@ -101,7 +101,7 @@ Meaning of <n> Across Types:
 #### Formation
 
 ```
-\frac{}{\Gamma \vdash \text{Simplex} : \text{Set}} \quad (\text{Simplex-Form})
+\Delta : U =_{def} \textbf{Simplicial}.
 ```
 
 #### Introduction
@@ -122,17 +122,16 @@ Meaning of <n> Across Types:
 #### Elimination (Simplex-Face)
 
 ```
-\frac{ \Gamma \vdash k [v_0 \, \dots \, v_k] \{ f_0, \dots, f_l \} : \text{Simplex} \quad i : \text{Fin}(k+1)}
-     { \Gamma \vdash \partial_i \, (k [v_0 \, \dots \, v_k] \{ f_0, \dots, f_l \})
-       \Rightarrow f_i } \quad (\text{Simplex-Face})
 ```
 
-#### Composition 
+#### Composition
 
 ```
-\frac{\Gamma \vdash g : \text{Simplex} \quad \Gamma \vdash h : \text{Simplex} \\
-      \Gamma \vdash \partial_0 g = \partial_k h }
-     {\Gamma \vdash g \circ h : \text{Simplex}} \quad (\text{Composition})
+```
+
+#### Map
+
+```
 ```
 
 #### Computation
@@ -140,21 +139,16 @@ Meaning of <n> Across Types:
 Face Extraction:
 
 ```
-\partial_i \, (k [v_0 \, \dots \, v_k] \{ f_0, f_1, \dots, f_l \}) \to f_i
 ```
 
 Composition Reduction:
 
 ```
-f_i \to g \circ h \quad \text{if } \Gamma \text{ contains } f_i = g \circ h
 ```
 
 Degeneracy Reduction:
 
 ```
-k [v_0 \, \dots \, v_i \, v_{i+1} \, \dots \, v_k] \{ f_0, \dots, f_l \} 
-\to (k-1) [v_0 \, \dots \, v_{i-1} \, v_{i+1} \, \dots \, v_k] 
-  \{ f_0', \dots, f_{l-1}' \} \quad \text{if } v_i = v_{i+1} \text{ in } \Gamma
 ```
 
 Base Case:
@@ -168,31 +162,16 @@ Base Case:
 Uniqueness of Face Extraction (Simplex-Uniqueness-Face):
 
 ```
-\frac{ \Gamma \vdash s = k [v_0 \, \dots \, v_k] \{ f_0, \dots, f_l \} : \text{Simplex} \\
-       \Gamma \vdash t = k [v_0 \, \dots \, v_k] \{ f_0, \dots, f_l \} : \text{Simplex} \\
-       \Gamma \vdash \partial_i \, s = \partial_i \, t \quad (\text{for all } i) }
-     { \Gamma \vdash s = t} \quad (\text{Simplex-Uniqueness-Face})
 ```
 
 Uniqueness of Composition (Composition-Uniqueness):
 
 ```
-\frac{ \Gamma \vdash f = g \circ h : \text{Simplex} \\
-       \Gamma \vdash f' = g' \circ h' : \text{Simplex} \\
-       \Gamma \vdash g = g' \quad \Gamma \vdash h = h' \\
-       \Gamma \vdash \partial_0 g = \partial_k h \quad \Gamma \vdash \partial_0 g' = \partial_k h'}
-     { \Gamma \vdash f = f' } \quad (\text{Composition-Uniqueness})
 ```
 
 Uniqueness of Degeneracy (Degeneracy-Uniqueness):
 
 ```
-\frac{ \Gamma \vdash s = k [v_0 \, \dots \, v_i \, v_{i+1} \, \dots \, v_k] \{ f_0, \dots, f_l \} : \text{Simplex} \\
-       \Gamma \vdash t = (k-1) [v_0 \, \dots \, v_{i-1} \, v_{i+1} \, \dots \, v_k] \{ f_0', \dots, f_{l-1}' \}
-     : \text{Simplex} \\
-       \Gamma \vdash v_i = v_{i+1} \\
-       \Gamma \vdash \partial_j s = \partial_j t \quad (\text{for all } j, \text{ adjusted indices}) }
-     { \Gamma \vdash s = t } \quad (\text{Degeneracy-Uniqueness})
 ```
 
 ## Examples
