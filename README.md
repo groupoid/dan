@@ -101,40 +101,56 @@ Meaning of <n> Across Types:
 #### Formation
 
 ```
-\Delta : U =_{def} \textbf{Simplicial}.
+\Delta_n(S,R) : U =_{def} \textbf{Simplicial}\ \vdash [n]\ (\ S\ |\ R\ ).
+
 ```
 
 #### Introduction
 
 ```
-\begin{equation}
-    \tag{$\Delta$-intro}
-    \dfrac{
-         & v_k, f_m : \textbf{Simplex}, e_i : \textbf{Path}_{\Delta} \\
-       \end{split}
-    }{
-       \Pi\ (\text{context}), \text{condition} \vdash k\ (\ v_k\ |\ f_m,\ e_i).
-    }
-\end{equation}
+\begin{equation}                                                           
+\tag{$\Delta$-intro}                                                       
+\dfrac{\begin{split}                                                       
+  & v_k, f_m : \Delta, e_i : \textbf{Path}_{\Delta} \\                
+  & \text{context}, \text{cond} : \Gamma \\                           
+  \end{split} } { \Pi\ (\text{context}), \text{cond} \vdash k\ (\ v_k\ |\ f_m,\ e_i). }
+\end{equation}                                                             
 ```
 
 #### Elim Face
 
 ```
+\begin{equation}                                         
+   \tag{$\Delta$-Elim$_1$}                               
+   \dfrac{ \partial : [k] \rightarrow [k-1],             
+           s : \Delta_k,                                 
+           r = \partial_{i,j} < s, i : \text{Fin}_{k+1} }
+         { \partial_{i,j} s : \Delta_{k-1} }             
+\end{equation}                                           
 ```
 
 #### Elim Composition
 
 ```
-\begin{equation}
-    \tag{$\Delta$-Elim$_2$}
-    \dfrac{ s_1, s_2 \in \Delta, e_i : \partial_{i,i-1} s_1 = \partial_{i,0} s_2 }{ s_1 \circ s_1 : \Delta }
-\end{equation}
+\begin{equation}                                                 
+   \tag{$\Delta$-Elim$_2$}                                       
+   \dfrac{ \circ : \Delta \rightarrow \Delta  \rightarrow \Delta,
+           s_1, s_2 : \Delta,                                    
+           e_i : \partial_{i,i-1} s_1 = \partial_{i,0} s_2 }     
+         { s_1 \circ s_2 : \Delta }                              
+\end{equation}                                                   
 ```
 
 #### Elim Degeneracy
 
 ```
+\begin{equation}                                    
+\tag{$\Delta$-Elim$_3$}                             
+\dfrac{ \sigma : [k] \rightarrow [k+1],             
+        s : \Delta_k,                               
+        r = \sigma_{i,j} < s, i : \text{Fin}_{k+1} }
+      { \sigma_{i,j} s : \Delta_{k+1}}              
+\end{equation}                                      
 ```
 
 #### Computation
@@ -162,17 +178,17 @@ Base Case:
 
 #### Uniqueness
 
-Uniqueness of Face Extraction (Simplex-Uniqueness-Face):
+Face Uniqueness:
 
 ```
 ```
 
-Uniqueness of Composition (Composition-Uniqueness):
+Uniqueness of Composition:
 
 ```
 ```
 
-Uniqueness of Degeneracy (Degeneracy-Uniqueness):
+Uniqueness of Degeneracy:
 
 ```
 ```
