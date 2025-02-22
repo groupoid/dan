@@ -4,7 +4,7 @@ Groupoid Infinity Simplicial HoTT pure algebraїc implementation with explicit s
 It supports following extensions: `Chain`, `Simplex`, `Simplicial`, `Category`, `Monoid`, `Group`.
 Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders/Dan core.
 
-<img src="img/Daniel_Kan.JPG"></img>
+<img src="styles/Daniel_Kan.JPG"></img>
 
 ## Abstract
 
