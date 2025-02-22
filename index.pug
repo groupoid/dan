@@ -1,0 +1,182 @@
+include header
+
+html
+    head
+        meta(property='og:title'       content='DAN KAN')
+        meta(property='og:description' content='Simplicial Homotopy Type System')
+        meta(property='og:url'         content='https://dan.groupoid.space/')
+
+block title
+    title DAN KAN
+
+block content
+    nav
+        <a href='#'>DAN KAN</a>
+        <a href='lib/index.html'>LIB</a>
+        <a href='spec/index.html'>SPEC</a>
+    article.main
+        .exe
+            section
+                h1 SIMPLICIAL HOMOTOPY TYPE SYSTEM
+            aside
+                time Published: 28 FEB 2025 LOSAR
+                +tex.
+                    We present Groupoid Infinity Simplicial HoTT $\textbf{Dan Kan}$
+                    pure algebraїc implementation with explicit syntaxt
+                    for fastest type checking. It supports following
+                    extensions: Chain, Simplex,
+                    Simplicial, Category,
+                    Monoid, Group. Simplicial HoTT
+                    is a Rezk/GAP replacement incorporated into
+                    CCHM/CHM/HTS Agda-like Anders/Dan core.
+
+                +tex.
+                    Our language is a domain-specific language, the extension to
+                    Cubical Homotopy Type Theory (CCHM) for simplicial structures,
+                    designed as a fast type checker with a focus on algebraic purity.
+                    The language employs a Lean/Anders-like sequent syntax:
+                +tex(true).
+                    $$
+                      \Pi\ (context), cond \vdash k\ (\ v_0,\ ...,\ v_k\ |\ f_0,\ ...,\ f_i\ |\ ...\ )
+                    $$
+                +tex.
+                    to define $k$-dimensional $0, ..., n, \infty$ simplices via explicit
+                    contexts, vertex lists, and face relations, eschewing
+                    geometric coherence terms in favor of compositional
+                    constraints (e.g., $f = g \circ h$). The semantics, formalized as
+                    inference rules in a Martin-Löf Type Theory
+                    MLTT-like setting, include Formation, Introduction,
+                    Elimination, Composition, Computational,
+                    and Uniqueness rules, ensuring a lightweight,
+                    deterministic computational model with
+                    linear-time type checking (O(k + m + n),
+                    where k is vertices, m is faces, and n is relations).
+                    Inspired by opetopic purity, our system optionally avoids
+                    cubical path-filling (e.g., PathP), aligning
+                    with syntactic approaches to higher structures
+                    while retaining CCHM’s type-theoretic foundation.
+                    Compared to opetopic sequent calculi and the Rzk
+                    prover, our DSL balances algebraic simplicity
+                    with practical efficiency, targeting simplicial
+                    constructions over general $\infty$-categories,
+                    and achieves a fast, pure checker suitable for
+                    formal proofs and combinatorial reasoning.
+
+            section
+                .macro
+                    .macro__col
+                        h3#hts <b>HTS</b>
+                        ol
+                            li: a(href='#universe') UNI
+                            li: a(href='https://anders.groupoid.space/foundations/mltt/pi/') PI
+                            li: a(href='https://anders.groupoid.space/foundations/mltt/sigma/') SIGMA
+                            li: a(href='https://anders.groupoid.space/foundations/mltt/id/') ID
+                            li: a(href='https://anders.groupoid.space/foundations/univalent/path/') PATH
+                            li: a(href='https://anders.groupoid.space/foundations/univalent/glue/') GLUE
+                            li: a(href='https://anders.groupoid.space/foundations/mltt/inductive/') 0,1,2,W
+                    .macro__col
+                        h3#mltt <b>KAN</b>
+                        ol
+                            li: a(href='#simplex') SIMPLEX
+                            li: a(href='#simplicial') SIMPLICIAL
+                            li: a(href='https://anders.groupoid.space/mathematics/algebra/algebra/') MONOID
+                            li: a(href='https://anders.groupoid.space/mathematics/algebra/algebra/') GROUP
+                            li: a(href='https://anders.groupoid.space/mathematics/categories/category/') CATEGORY
+                            li: a(href='https://anders.groupoid.space/mathematics/algebra/homology/') CHAIN
+                br
+                br
+                +tex.
+                    $\mathbf{Installation}$.
+
+                +code.
+                    $ git clone git@github.com:groupoid/dan
+                    $ ocamlopt -o dan src/simplicity.ml
+                    $ ./dan
+
+            section
+                h1 SYNTAX
+
+            section
+
+                h1 SEMANTICS
+
+            section
+
+                h2 Formation
+
+                +tex.
+                    $\mathbf{Definition\ 20.1}$ ($\Delta$-Formation, Simplicial Set).
+                +tex(true).
+                    $$
+                        \Delta : U =_{def} \textbf{Simplicial}.
+                    $$
+
+                h2 Introduction
+
+                +tex.
+                    $\mathbf{Definition\ 20.2}$ ($\Delta$-Introduction, Simplicial).
+                +tex(false).
+                    $$
+                      \begin{equation}
+                      \tag{$\Delta$-intro}
+                      \dfrac{\begin{split}
+                             & v_k, f_m : \Delta, e_i : \textbf{Path}_{\Delta} \\
+                             & \text{context}, \text{cond} : \Gamma \\
+                             \end{split}
+                            }
+                            {\Pi\ (\text{context}), \text{cond} \vdash k\ (\ v_k\ |\ f_m,\ e_i).}
+                     \end{equation}
+                    $$
+
+
+                h2 Eliminators
+
+                +tex.
+                    $\mathbf{Definition\ 20.3}$ ($\Delta$-Face).
+                +tex(true).
+                    $$
+                      \begin{equation}
+                      \tag{$\Delta$-Elim$_1$}
+                      \dfrac{\begin{split}
+                             & v_k, f_m : \Delta, e_i : \textbf{Path}_{\Delta}, i : \text{Fin}_{k+1}\\
+                             \end{split}
+                            }
+                            {\partial_i \Delta \rightarrow f_i}
+                     \end{equation}
+                    $$
+
+                +tex.
+                    $\mathbf{Definition\ 20.4}$ ($\Delta$-Composition).
+                +tex(true).
+                    $$
+                      \begin{equation}
+                      \tag{$\Delta$-Elim$_2$}
+                      \dfrac{\begin{split}
+                             & g, h : \Delta, e_i : \partial_0 g = \partial_k h \\
+                             \end{split}
+                            }
+                            {g \circ h : \Delta}
+                     \end{equation}
+                    $$
+
+                +tex.
+                    $\mathbf{Definition\ 20.5}$ ($\Delta$-Filing).
+                +tex(false).
+                    $$
+                      \begin{equation}
+                      \tag{$\Delta$-Elim$_3$}
+                      \dfrac{\begin{split}
+                             & g : \Delta, h : \textbf{Path}_{\Delta} \\
+                             \end{split}
+                            }
+                            {g < h : \Delta}
+                     \end{equation}
+                    $$
+
+                center.
+                    <br>🧊 <br><br><br>
+
+                +tex.
+                    Thanks to kind people of 🇸🇪, 🇺🇦.
+
+include footer
