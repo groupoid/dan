@@ -2,7 +2,7 @@
 
 Groupoid Infinity Simplicial HoTT pure algebraїc implementation with explicit syntaxt for fastest type checking.
 It supports following extensions: Chain, Simplex, Simplicial, Category, Monoid, Group.
-Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders core.
+Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders/Dan core.
 
 ## Abstract
 
@@ -405,33 +405,21 @@ let s1_infty = {
 }
 ```
 
+### ∞-Category with cube fillers
+
+```
+def cube_infty : Category := П (a b c : Simplex),
+       (f g h : Simplex), cube2 = g ∘ f, cube2 : Simplex,
+       cube3 = cube2 ∘ f, cube3 : Simplex
+       ⊢ ∞ (a b c | cube2 cube3)
+```
+
 ## Conclusion
 
-Rzk supports synthetic ∞-categories via simplicial Homotopy Type Theory (sHoTT), extending MLTT with:
-Shapes: Simplicial shapes (e.g., Δn) as types, representing n-simplices.
-Topes: Geometric constraints (e.g., i=j, i≤k) over the interval I, enforced by a tope solver.
-Higher Paths: Hom_A(x,y) as path types over shapes, supporting higher morphisms (e.g., 2-morphisms, 3-morphisms).
-Type Checking: Bidirectional with a tope solver — O(n + solver cost), where solver cost varies (e.g., O(n²) or worse for complex constraints).
-Expressiveness: Models ∞-categories (e.g., Kan complexes, ∞-groupoids) with infinite-dimensional coherences.
-Our DSL currently handles finite-dimensional simplices (e.g., k-simplices with k+1 faces) with explicit compositions—no shapes, topes, or higher paths.
-
-Adding ∞-category support akin to the Rzk prover to our Lean/Anders-like simplicial
-DSL in CCHM would significantly impact type checking speed, shifting it from our
-current lightweight, linear-time design (O(k + m + n)) to a more complex system
-with potentially higher computational costs. 
-
-Our CCHM DSL is a fast, pure simplicial checker—aligned with opetopic purity in its algebraic core,
-but distinct in its fixed-face simplicial structure and CCHM reductions. Compared to Rzk, it sacrifices
-generality for speed and simplicity, embedding a lean DSL in a type-theoretic framework. It’s a sweet
-spot—opetopic-inspired, MLTT-rigorous, and CCHM-efficient—ideal for compact, non-trivial simplicial constructions.
-
-A lightweight, fast type checker—O(k + m + n)—balancing opetopic purity (algebraic,
-no geometry) with CCHM’s computational power (reductions, uniqueness). It’s less
-expressive than Rzk (no ∞-categories) and less flexible than opetopes (fixed faces vs. trees),
-but excels at simplicial tasks. Ours is O(k + m + n)—faster than potential O(n log n) tree
-traversals in opetopic derivations, due to fixed structure and no recursion.
-
-Both avoid geometric filling—our DSL uses explicit face compositions (e.g., ab = bc ∘ ac),
-akin to opetopic grafting, while opetopes rely on tree-based pasting (e.g., Γ ⊢ o).
-We’re purer than traditional simplicial sets (no coh). Opetopes lack computational
-reductions—ours adds MLTT-like rules (∂_i → f_i), diverging from static syntax but enhancing usability in CCHM.
+Dan Kan Simplicity HoTT, hosted at groupoid/dan, is a lightweight, pure type checker
+built on Cubical Homotopy Type Theory (CCHM), named in tribute to Daniel Kan for
+his foundational work on simplicial sets—e.g., enabling O(5) checks for circle—driving
+our focus on algebraic elegance and efficiency. With a unified syntax — 
+`П (context) ⊢ n (elements | constraints)` — Dan supports a rich type
+system `Simplex`, `Group`, `Simplicial`, `Chain`, `Category`, `Monoid`, now extended with 
+∞-categories featuring cube fillers.
