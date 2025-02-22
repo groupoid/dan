@@ -404,8 +404,7 @@ def cube_infty : Category := П (a b c : Simplex),
 
 Dan Kan Simplicity HoTT, hosted at groupoid/dan, is a lightweight, pure type checker
 built on Cubical Homotopy Type Theory (CCHM), named in tribute to Daniel Kan for
-his foundational work on simplicial sets—e.g., enabling O(5) checks for circle—driving
-our focus on algebraic elegance and efficiency. With a unified syntax — 
+his foundational work on simplicial sets. With a unified syntax — 
 `П (context) ⊢ n (elements | constraints)` — Dan supports a rich type
 system `Simplex`, `Group`, `Simplicial`, `Chain`, `Category`, `Monoid`, now extended with 
 ∞-categories featuring cube fillers.
