@@ -107,17 +107,16 @@ Meaning of <n> Across Types:
 #### Introduction
 
 ```
-\frac{
-  \Gamma = v_0 : \text{Simplex}, \dots, v_k : \text{Simplex}, e_1, \dots,
-   e_p, f_0 : \text{Simplex}, \dots, f_m : \text{Simplex}, r_1, \dots, r_n \\
-  \{ v_0, \dots, v_k \} = \text{vertices in } [v_0 \, \dots \, v_k] \text{ after applying equalities } e_i \\
-  \{ f_0, \dots, f_l \} = \{ f_0, \dots, f_m \} \cup \{ f_i \mid r_j = f_i = g \circ h \} \\
-  |\text{set } \{ f_0, \dots, f_l \}| = k + 1 \\
-  \text{for each } e_i = v_a = v_b, \, \Gamma \vdash v_a = v_b \\
-  \text{for each } r_j = f_i = g \circ h, \, \Gamma \vdash \partial_0 g = \partial_k h
-}{
-  \Gamma \vdash k [v_0 \, \dots \, v_k] \{ f_0, \dots, f_l \} : \text{Simplex}
-} \quad (\text{Simplex-Intro})
+\begin{equation}
+    \tag{$\Delta$-intro}
+    \dfrac{
+       \begin{split}
+         & v_k, f_m : \textbf{Simplex}, e_i : \textbf{Path}_{\Delta} \\
+       \end{split}
+    }{
+       \Pi\ (\text{context}), \text{condition} \vdash k\ (\ v_k\ |\ f_m,\ e_i).
+    }
+\end{equation}
 ```
 
 #### Elimination (Simplex-Face)
