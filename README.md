@@ -9,7 +9,7 @@ Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-li
 We present a domain-specific language (DSL) extension to Cubical Homotopy Type Theory (CCHM) for simplicial structures,
 designed as a fast type checker with a focus on algebraic purity. Built on the Cohen-Coquand-Huber-Mörtberg (CCHM)
 framework, our DSL employs a Lean/Anders-like sequent syntax `П (context) ⊢ k (v₀, ..., vₖ | f₀, ..., fₗ | ... )` to define 
-k-dimensional `[0,...,n,∞]` simplices via explicit contexts, vertex lists, and face relations, eschewing geometric coherence terms
+k-dimensional `0, ..., n, ∞` simplices via explicit contexts, vertex lists, and face relations, eschewing geometric coherence terms
 in favor of compositional constraints (e.g., `f = g ∘ h`). The semantics, formalized as inference rules in a Martin-Löf
 Type Theory MLTT-like setting, include Formation, Introduction, Elimination, Composition, Computational, and
 Uniqueness rules, ensuring a lightweight, deterministic computational model with linear-time type checking (O(k + m + n),
