@@ -1,7 +1,8 @@
 # Dan Kan: Simplicial HoTT
 
-Groupoid Infinity Simplicial HoTT pure algebraїc implementation with explicit syntaxt for fastest type checking.
-It supports following extensions: `Chain`, `Cochain`, `Simplex`, `Simplicial`, `Category`, `Monoid`, `Group`.
+Groupoid Infinity Simplicial HoTT Computer Algebra System is a pure algebraїc implementation
+with explicit syntaxt for fastest type checking. It supports following extensions: `Chain`,
+`Cochain`, `Simplex`, `Simplicial`, `Category`, `Monoid`, `Group`, `Ring`.
 Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders/Dan core.
 
 <img src="styles/Daniel_Kan.JPG"></img>
@@ -495,6 +496,40 @@ def cube_infty : Category := П (a b c : Simplex),
        cube3 = cube2 ∘ f, cube3 : Simplex
        ⊢ ∞ (a b c | cube2 cube3)
 ```
+
+### Matrix Ring Spectrum
+
+```
+def matrix_ring_spectrum : Ring
+ := П (a b s p : Simplex),
+      a + b = s, a ⋅ b = p,
+      a = [[1,2],[3,4]], b = [[0,1],[1,0]], s = [[1,3],[4,4]], p = [[2,1],[4,3]]
+    ⊢ 4 (a b s p | a + b = s, a ⋅ b = p, a = [[1,2],[3,4]], b = [[0,1],[1,0]],
+                   s = [[1,3],[4,4]], p = [[2,1],[4,3]])
+```
+
+### HZ spectrum
+
+```
+def hz_spectrum : Ring
+ := П (x y p : Simplex),
+      x ⋅ y = p,
+      x = 2, y = 3, p = 6
+    ⊢ 3 (x y p | x ⋅ y = p, x = 2, y = 3, p = 6)
+```
+
+### Poly Ring spectrum
+
+```
+def poly_ring_zx : Ring
+ := П (f g s p : Simplex),
+      f + g = s, f ⋅ g = p,
+      f = x + 1, g = 2 ⋅ x, s = 3 ⋅ x + 1, p = 2 ⋅ x ⋅ x + 2 ⋅ x
+    ⊢ 4 (f g s p | f + g = s, f ⋅ g = p, f = x + 1, g = 2 ⋅ x,
+                   s = 3 ⋅ x + 1, p = 2 ⋅ x ⋅ x + 2 ⋅ x)
+```
+
+### 
 
 ## Bibliography
 
