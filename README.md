@@ -77,7 +77,7 @@ def cat : Category := П (context), conditions ⊢ n (objects | morphisms | cohe
       | "e"                                         % identity
 ```
 
-Meaning of <n> Across Types:
+Meaning of `<n>` Across Types:
 
 * Simplex: Dimension of the simplex—e.g., n=2 for a triangle (2-simplex).
 * Group: Number of generators—e.g., n=1 for Z/3Z (one generator a).
