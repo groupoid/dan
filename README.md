@@ -107,10 +107,10 @@ Meaning of `<n>` Across Types:
 ### Category
 
 1. Formation. Γ ⊢ Category : Set
-2. Intro. Γ ⊢ n (O | R) : Category  if  Γ = o₁, …, oₙ, m₁, …, mₖ : Simplex, r₁, …, rₚ ∧ O = (o₁, …, oₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ Γ
-3. Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (O | R) : Category ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
-4. Comp Comp. (m₁ ∘ m₂) (n (O | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
-5. Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (O | R) : Category ∧ n (O' | R') : Category ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ Γ ∧ m₁', m₂' ∈ Γ'
+2. Intro. Γ ⊢ n (O | M | R) : Category  if  Γ = o₁, …, oₙ, m₁, …, mₖ : Simplex, r₁, …, rₚ ∧ O = (o₁, …, oₙ) ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ Γ
+3. Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (O | M | R) : Category ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+4. Comp Comp. (m₁ ∘ m₂) (n (O | M | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+5. Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (O | M | R) : Category ∧ n (O' | M' | R') : Category ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ Γ ∧ m₁', m₂' ∈ Γ'
 
 ### Monoid
 
