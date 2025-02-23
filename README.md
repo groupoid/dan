@@ -1,14 +1,15 @@
 # Dan Kan: Simplicial HoTT
 
-Groupoid Infinity Simplicial HoTT pure algebraїc implementation with explicit syntaxt for fastest type checking.
-It supports following extensions: `Chain`, `Simplex`, `Simplicial`, `Category`, `Monoid`, `Group`.
+Groupoid Infinity Simplicial HoTT Computer Algebra System is a pure algebraїc implementation
+with explicit syntaxt for fastest type checking. It supports following extensions: `Chain`,
+`Cochain`, `Simplex`, `Simplicial`, `Category`, `Monoid`, `Group`, `Ring`.
 Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders/Dan core.
 
 <img src="styles/Daniel_Kan.JPG"></img>
 
 ## Abstract
 
-We present a domain-specific language (DSL) extension to Cubical Homotopy Type Theory (CCHM) for simplicial structures,
+We present a domain-specific language (DSL), the extension to Cubical Homotopy Type Theory (CCHM) for simplicial structures,
 designed as a fast type checker with a focus on algebraic purity. Built on the Cohen-Coquand-Huber-Mörtberg (CCHM)
 framework, our DSL employs a Lean/Anders-like sequent syntax `П (context) ⊢ k (v₀, ..., vₖ | f₀, ..., fₗ | ... )` to define 
 k-dimensional `0, ..., n, ∞` simplices via explicit contexts, vertex lists, and face relations, eschewing geometric coherence terms
@@ -21,7 +22,7 @@ type-theoretic foundation. Compared to opetopic sequent calculi and the Rzk prov
 simplicity with practical efficiency, targeting simplicial constructions over general ∞-categories,
 and achieves a fast, pure checker suitable for formal proofs and combinatorial reasoning.
 
-## Compile and Run
+## Setup
 
 ```
 $ ocamlopt -o dan src/simplicity.ml && ./dan
@@ -53,8 +54,8 @@ def cat : Category := П (context), conditions ⊢ n (objects | morphisms | cohe
 ```
 <program> ::= <definition> | <definition> <program>
 <definition> ::= "def" <id> ":" <type-name> ":=" <type-term>
-<type-name> ::= "Simplex" | "Group" | "Simplicial" | "Chain" | "Cochain" | "Category" | "Monoid"
-<type-term> ::= "П" "(" <context> ")" "⊢" <n> "(" <elements> "|" <constraints> ")" 
+<type-name> ::= "Simplex" | "Group" | "Simplicial" | "Chain" | "Cochain" | "Category" | "Monoid" | "Ring" | "Field"
+<type-term> ::= "П" "(" <context> ")" "⊢" <n> "(" <elements> "|" <constraints> ")"
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 <superscript> ::= "¹" | "²" | "³" | "⁴" | "⁵" | "⁶" | "⁷" | "⁸" | "⁹"
 <n> ::= <digit> | <digit> <n> | "∞"
@@ -62,19 +63,37 @@ def cat : Category := П (context), conditions ⊢ n (objects | morphisms | cohe
 <hypothesis> ::= <id> ":" <type-term>               % Single declaration, e.g., a : Simplex
                | "(" <id-list> ":" <type-term> ")"  % Grouped declaration, e.g., (a b c : Simplex)
                | <id> "=" <t> "<" <t>               % Map, e.g., ∂₁ = C₂ < C₃
-               | <id> "=" <t> "∘" <t>               % Equality, e.g., ac = ab ∘ bc
+               | <id> "=" <t>                        % Equality, e.g., x = 2
+               | <id> "=" <t> "∘" <t>               % Monoid composition, e.g., ac = ab ∘ bc
+               | <id> "=" <t> "+" <t>               % Ring addition, e.g., x + y = s
+               | <id> "=" <t> "⋅" <t>               % Ring multiplication, e.g., x ⋅ y = p
+               | <id> "=" <t> "/" <t>               % Field division, e.g., x / y = d
 <id-list> ::= <id> | <id> <id-list>                 % e.g., a b c
-<elements> ::= <element-list> | ε 
+<elements> ::= <element-list> | ε
 <element-list> ::= <id> | <id> "," <element-list>
 <constraints> ::= <constraint-list> | ε
-<constraint-list> ::= <constraint> | <constraint>  "," <constraint-list>
-<constraint> ::= <t> "=" <t>                        % Equality (e.g., a ∘ a = e)
-               | <id> "<" <id>                      % Map (e.g., ∂₁ < C₂)
+<constraint-list> ::= <constraint> | <constraint> "," <constraint-list>
+<constraint> ::= <t> "=" <t>                        % Equality, e.g., a = 2
+               | <t> "∘" <t> "=" <t>                % Monoid composition, e.g., a ∘ a = e
+               | <t> "+" <t> "=" <t>                % Ring addition, e.g., x + y = s
+               | <t> "⋅" <t> "=" <t>                % Ring multiplication, e.g., x ⋅ y = p
+               | <t> "/" <t> "=" <t>                % Field division, e.g., x / y = d
+               | <id> "<" <id>                      % Map, e.g., ∂₁ < C₂
 <t> ::= <id>                                        % e.g., a
       | <t> "∘" <t>                                 % e.g., a ∘ b
+      | <t> "+" <t>                                 % e.g., x + y
+      | <t> "⋅" <t>                                 % e.g., x ⋅ y
+      | <t> "/" <t>                                 % e.g., x / y
       | <t> "^-1"                                   % e.g., a^-1
       | <t> "^" <superscript>                       % e.g., a³
       | "e"                                         % identity
+      | <number>                                    % e.g., 2
+      | <matrix>                                    % e.g., [[1,2],[3,4]]
+<number> ::= <digit> | <digit> <number>             % e.g., 123
+<matrix> ::= "[" <row-list> "]"                     % e.g., [[1,2],[3,4]]
+<row-list> ::= <row> | <row> "," <row-list>
+<row> ::= "[" <number-list> "]"                     % e.g., [1,2]
+<number-list> ::= <number> | <number> "," <number-list>  % e.g., 1,2
 ```
 
 Meaning of `<n>` Across Types:
@@ -102,15 +121,15 @@ Meaning of `<n>` Across Types:
 2. Intro. Γ ⊢ n (S | R) : Cochain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ σᵢⱼ < sₖₗ, Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
 3. Elim Degeneracy. Γ ⊢ σᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Cochain ∧ r = σᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
 4. Comp Degeneracy. σᵢⱼ (n (S | R)) → s'  if  r = σᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
-5. Uniq Degeneracy. Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s'  if  Γ ⊢ n (S | R) : CoChain ∧ n (S' | R') : CoChain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢⱼ < s ∈ R ∧ r' = σᵢⱼ < s' ∈ R'
+5. Uniq Degeneracy. Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s'  if  Γ ⊢ n (S | R) : Cochain ∧ n (S' | R') : Cochain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢⱼ < s ∈ R ∧ r' = σᵢⱼ < s' ∈ R'
 
 ### Category
 
 1. Formation. Γ ⊢ Category : Set
-2. Intro. Γ ⊢ n (O | R) : Category  if  Γ = o₁, …, oₙ, m₁, …, mₖ : Simplex, r₁, …, rₚ ∧ O = (o₁, …, oₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ Γ
-3. Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (O | R) : Category ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
-4. Comp Comp. (m₁ ∘ m₂) (n (O | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
-5. Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (O | R) : Category ∧ n (O' | R') : Category ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ Γ ∧ m₁', m₂' ∈ Γ'
+2. Intro. Γ ⊢ n (O | M | R) : Category  if  Γ = o₁, …, oₙ, m₁, …, mₖ : Simplex, r₁, …, rₚ ∧ O = (o₁, …, oₙ) ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ Γ
+3. Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (O | M | R) : Category ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+4. Comp Comp. (m₁ ∘ m₂) (n (O | M | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+5. Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (O | M | R) : Category ∧ n (O' | M' | R') : Category ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ Γ ∧ m₁', m₂' ∈ Γ'
 
 ### Monoid
 
@@ -204,7 +223,7 @@ The face map ∂ᵢⱼ applied to a simplicial set reduces to the simplex s′ s
     s' ∈ S
 ```
 
-### Composition Computation.
+#### Composition Computation.
 
 The composition s₁ ∘ s₂ applied to a simplicial set reduces to the simplex c specified by the constraint r in R, given s1 and s2 are composable.
 
@@ -216,7 +235,7 @@ The composition s₁ ∘ s₂ applied to a simplicial set reduces to the simplex
 Γ ⊢ ∂ᵢᵢ₋₁ s₁ = ∂ᵢ₀ s₂
 ```
 
-### Degeneracy Computation.
+#### Degeneracy Computation.
 
 The degeneracy map σᵢⱼ applied to a simplicial set reduces to the simplex s′ specified by the constraint r in R.
 
@@ -240,7 +259,7 @@ Two face maps ∂ᵢⱼ s and ∂ᵢⱼ s′ are equal if they are defined by co
     r' = ∂ᵢⱼ < s' ∈ R'
 ```
 
-### Uniqueness of Composition.
+#### Uniqueness of Composition.
 
 Two composed simplices c and c′ are equal if their constraints r and r′ define compositions of matching pairs s₁, s₂ and s₁′, s₂′ across two simplicial sets with composability conditions.
 
@@ -256,7 +275,7 @@ Two composed simplices c and c′ are equal if their constraints r and r′ defi
 Γ ⊢ ∂ᵢᵢ₋₁ s₁' = ∂ᵢ₀ s₂'
 ```
 
-### Uniqueness of Degeneracy.
+#### Uniqueness of Degeneracy.
 
 Two degeneracy maps σᵢⱼ s and σᵢⱼ s′ are equal if they are defined by constraints r and r′ across two simplicial sets with matching elements.
 
@@ -494,6 +513,66 @@ def cube_infty : Category := П (a b c : Simplex),
        (f g h : Simplex), cube2 = g ∘ f, cube2 : Simplex,
        cube3 = cube2 ∘ f, cube3 : Simplex
        ⊢ ∞ (a b c | cube2 cube3)
+```
+
+### Matrix Ring Spectrum
+
+```
+def matrix_ring_spectrum : Ring
+ := П (a b s p : Simplex),
+      a + b = s, a ⋅ b = p,
+      a = [[1,2],[3,4]], b = [[0,1],[1,0]], s = [[1,3],[4,4]], p = [[2,1],[4,3]]
+    ⊢ 4 (a b s p | a + b = s, a ⋅ b = p, a = [[1,2],[3,4]], b = [[0,1],[1,0]],
+                   s = [[1,3],[4,4]], p = [[2,1],[4,3]])
+```
+
+### HZ spectrum
+
+```
+def hz_spectrum : Ring
+ := П (x y p : Simplex),
+      x ⋅ y = p,
+      x = 2, y = 3, p = 6
+    ⊢ 3 (x y p | x ⋅ y = p, x = 2, y = 3, p = 6)
+```
+
+### Poly Ring spectrum
+
+```
+def poly_ring_zx : Ring
+ := П (f g s p : Simplex),
+      f + g = s, f ⋅ g = p,
+      f = x + 1, g = 2 ⋅ x, s = 3 ⋅ x + 1, p = 2 ⋅ x ⋅ x + 2 ⋅ x
+    ⊢ 4 (f g s p | f + g = s, f ⋅ g = p, f = x + 1, g = 2 ⋅ x,
+                   s = 3 ⋅ x + 1, p = 2 ⋅ x ⋅ x + 2 ⋅ x)
+```
+
+### GF(2⁴) Finite Field
+
+```
+def gf16 : Field
+ := П (x y s p d : Simplex),
+      x + y = s, x ⋅ y = p, x / y = d,
+      x = Z(2^4), y = Z(2^4)^2,
+      s = Z(2^4) + Z(2^4)^2,
+      p = Z(2^4)^3, d = Z(2^4)^14
+    ⊢ 5 (x y s p d | x + y = s, x ⋅ y = p, x / y = d,
+                     x = Z(2^4), y = Z(2^4)^2,
+                     s = Z(2^4) + Z(2^4)^2,
+                     p = Z(2^4)^3,
+                     d = Z(2^4)^14)
+```
+
+### GF(7) Prime Field
+
+```
+def gf7 : Field
+ := П (x y s p d : Simplex),
+      x + y = s, x ⋅ y = p, x / y = d,
+      x = 2, y = 3, s = 5, p = 6, d = 3
+    ⊢ 5 (x y s p d | x + y = s, x ⋅ y = p,
+         x / y = d, x = 2, y = 3,
+         s = 5, p = 6, d = 3)
 ```
 
 ## Bibliography
