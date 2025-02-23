@@ -204,7 +204,7 @@ The face map ∂ᵢⱼ applied to a simplicial set reduces to the simplex s′ s
     s' ∈ S
 ```
 
-### Composition Computation.
+#### Composition Computation.
 
 The composition s₁ ∘ s₂ applied to a simplicial set reduces to the simplex c specified by the constraint r in R, given s1 and s2 are composable.
 
@@ -216,7 +216,7 @@ The composition s₁ ∘ s₂ applied to a simplicial set reduces to the simplex
 Γ ⊢ ∂ᵢᵢ₋₁ s₁ = ∂ᵢ₀ s₂
 ```
 
-### Degeneracy Computation.
+#### Degeneracy Computation.
 
 The degeneracy map σᵢⱼ applied to a simplicial set reduces to the simplex s′ specified by the constraint r in R.
 
@@ -240,7 +240,7 @@ Two face maps ∂ᵢⱼ s and ∂ᵢⱼ s′ are equal if they are defined by co
     r' = ∂ᵢⱼ < s' ∈ R'
 ```
 
-### Uniqueness of Composition.
+#### Uniqueness of Composition.
 
 Two composed simplices c and c′ are equal if their constraints r and r′ define compositions of matching pairs s₁, s₂ and s₁′, s₂′ across two simplicial sets with composability conditions.
 
@@ -256,7 +256,7 @@ Two composed simplices c and c′ are equal if their constraints r and r′ defi
 Γ ⊢ ∂ᵢᵢ₋₁ s₁' = ∂ᵢ₀ s₂'
 ```
 
-### Uniqueness of Degeneracy.
+#### Uniqueness of Degeneracy.
 
 Two degeneracy maps σᵢⱼ s and σᵢⱼ s′ are equal if they are defined by constraints r and r′ across two simplicial sets with matching elements.
 
