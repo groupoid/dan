@@ -54,8 +54,8 @@ def cat : Category := П (context), conditions ⊢ n (objects | morphisms | cohe
 ```
 <program> ::= <definition> | <definition> <program>
 <definition> ::= "def" <id> ":" <type-name> ":=" <type-term>
-<type-name> ::= "Simplex" | "Group" | "Simplicial" | "Chain" | "Cochain" | "Category" | "Monoid"
-<type-term> ::= "П" "(" <context> ")" "⊢" <n> "(" <elements> "|" <constraints> ")" 
+<type-name> ::= "Simplex" | "Group" | "Simplicial" | "Chain" | "Cochain" | "Category" | "Monoid" | "Ring" | "Field"
+<type-term> ::= "П" "(" <context> ")" "⊢" <n> "(" <elements> "|" <constraints> ")"
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 <superscript> ::= "¹" | "²" | "³" | "⁴" | "⁵" | "⁶" | "⁷" | "⁸" | "⁹"
 <n> ::= <digit> | <digit> <n> | "∞"
@@ -63,19 +63,37 @@ def cat : Category := П (context), conditions ⊢ n (objects | morphisms | cohe
 <hypothesis> ::= <id> ":" <type-term>               % Single declaration, e.g., a : Simplex
                | "(" <id-list> ":" <type-term> ")"  % Grouped declaration, e.g., (a b c : Simplex)
                | <id> "=" <t> "<" <t>               % Map, e.g., ∂₁ = C₂ < C₃
-               | <id> "=" <t> "∘" <t>               % Equality, e.g., ac = ab ∘ bc
+               | <id> "=" <t>                        % Equality, e.g., x = 2
+               | <id> "=" <t> "∘" <t>               % Monoid composition, e.g., ac = ab ∘ bc
+               | <id> "=" <t> "+" <t>               % Ring addition, e.g., x + y = s
+               | <id> "=" <t> "⋅" <t>               % Ring multiplication, e.g., x ⋅ y = p
+               | <id> "=" <t> "/" <t>               % Field division, e.g., x / y = d
 <id-list> ::= <id> | <id> <id-list>                 % e.g., a b c
-<elements> ::= <element-list> | ε 
+<elements> ::= <element-list> | ε
 <element-list> ::= <id> | <id> "," <element-list>
 <constraints> ::= <constraint-list> | ε
-<constraint-list> ::= <constraint> | <constraint>  "," <constraint-list>
-<constraint> ::= <t> "=" <t>                        % Equality (e.g., a ∘ a = e)
-               | <id> "<" <id>                      % Map (e.g., ∂₁ < C₂)
+<constraint-list> ::= <constraint> | <constraint> "," <constraint-list>
+<constraint> ::= <t> "=" <t>                        % Equality, e.g., a = 2
+               | <t> "∘" <t> "=" <t>                % Monoid composition, e.g., a ∘ a = e
+               | <t> "+" <t> "=" <t>                % Ring addition, e.g., x + y = s
+               | <t> "⋅" <t> "=" <t>                % Ring multiplication, e.g., x ⋅ y = p
+               | <t> "/" <t> "=" <t>                % Field division, e.g., x / y = d
+               | <id> "<" <id>                      % Map, e.g., ∂₁ < C₂
 <t> ::= <id>                                        % e.g., a
       | <t> "∘" <t>                                 % e.g., a ∘ b
+      | <t> "+" <t>                                 % e.g., x + y
+      | <t> "⋅" <t>                                 % e.g., x ⋅ y
+      | <t> "/" <t>                                 % e.g., x / y
       | <t> "^-1"                                   % e.g., a^-1
       | <t> "^" <superscript>                       % e.g., a³
       | "e"                                         % identity
+      | <number>                                    % e.g., 2
+      | <matrix>                                    % e.g., [[1,2],[3,4]]
+<number> ::= <digit> | <digit> <number>             % e.g., 123
+<matrix> ::= "[" <row-list> "]"                     % e.g., [[1,2],[3,4]]
+<row-list> ::= <row> | <row> "," <row-list>
+<row> ::= "[" <number-list> "]"                     % e.g., [1,2]
+<number-list> ::= <number> | <number> "," <number-list>  % e.g., 1,2
 ```
 
 Meaning of `<n>` Across Types:
