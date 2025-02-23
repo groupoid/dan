@@ -21,7 +21,7 @@ type-theoretic foundation. Compared to opetopic sequent calculi and the Rzk prov
 simplicity with practical efficiency, targeting simplicial constructions over general ∞-categories,
 and achieves a fast, pure checker suitable for formal proofs and combinatorial reasoning.
 
-## Compile and Run
+## Setup
 
 ```
 $ ocamlopt -o dan src/simplicity.ml && ./dan
