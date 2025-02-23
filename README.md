@@ -100,48 +100,62 @@ Meaning of <n> Across Types:
 
 #### Formation
 
+The simplicial type is declared as a set within the context Γ without any premises.
+
 ```
 Γ ⊢ Simplicial : Set
 ```
 
 #### Introduction
 
+A simplicial set of rank n with elements S and constraints R is formed from context Γ if simplices, equalities, face maps, and degeneracy maps are properly defined.
+
 ```
-Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ
-S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ)
-∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ'
-∀ ∂ᵢⱼ < sₖₗ, Γ ⊢ ∂ᵢⱼ : sₖₗ → sₖ₋₁,ₘ
-∀ σᵢⱼ < sₖₗ, Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
-───────────────────────────────────────
-Π (Γ) ⊢ n (s₀₁, …, sₙₘₙ | r₁, …, rₚ) : Simplicial                                                        
+Γ ⊢ n (S | R) : Simplicial if
+Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧
+    S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧
+    rⱼ = tⱼ = tⱼ',
+Γ ⊢ rⱼ : tⱼ = tⱼ' ∧
+    ∂ᵢⱼ < sₖₗ,
+Γ ⊢ ∂ᵢⱼ : sₖₗ → sₖ₋₁,ₘ ∧
+    σᵢⱼ < sₖₗ,
+Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
 ```
 
 #### Elim Face
 
+The face map ∂ᵢⱼ extracts a simplex from s in a simplicial set if the constraint r defines the face relation.
+
 ```
-Γ ⊢ n (S | R) : Simplicial
-r = ∂ᵢⱼ < s, r ∈ R, s ∈ S
-──────────────────────
-Γ ⊢ ∂ᵢⱼ s : Simplex                                        
+Γ ⊢ ∂ᵢⱼ s : Simplex if
+Γ ⊢ n (S | R) : Simplicial ∧
+    r = ∂ᵢⱼ < s ∧
+    r ∈ R ∧
+    s ∈ S                                  
 ```
 
 #### Elim Composition
 
+The composition s₁ ∘ s₂ yields a simplex c in a simplicial set if the constraint r defines it and s1 and s2 are composable.
+
 ```
-Γ ⊢ n (S | R) : Simplicial
-r = c = s₁ ∘ s₂, r ∈ R, s₁, s₂ ∈ S
+Γ ⊢ c : Simplex if
+Γ ⊢ n (S | R) : Simplicial ∧
+    r = c = s₁ ∘ s₂ ∧
+    r ∈ R ∧ s₁, s₂ ∈ S ∧
 Γ ⊢ ∂ᵢᵢ₋₁ s₁ = ∂ᵢ₀ s₂
-───────────────────────
-Γ ⊢ c : Simplex                                                
 ```
 
 #### Elim Degeneracy
 
+The degeneracy map σᵢⱼ lifts a simplex s to a higher simplex in a simplicial set if the constraint r defines the degeneracy relation.
+
 ```
-Γ ⊢ n (S | R) : Simplicial
-r = σᵢⱼ < s, r ∈ R, s ∈ S
-──────────────────────
-Γ ⊢ σᵢⱼ s : Simplex                                     
+Γ ⊢ σᵢⱼ s : Simplex if
+Γ ⊢ n (S | R) : Simplicial ∧
+    r = σᵢⱼ < s,
+    r ∈ R,
+    s ∈ S
 ```
 
 #### Computation
