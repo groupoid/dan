@@ -529,7 +529,33 @@ def poly_ring_zx : Ring
                    s = 3 ⋅ x + 1, p = 2 ⋅ x ⋅ x + 2 ⋅ x)
 ```
 
-### 
+### GF(2⁴) Finite Field
+
+```
+def gf16 : Field
+ := П (x y s p d : Simplex),
+      x + y = s, x ⋅ y = p, x / y = d,
+      x = Z(2^4), y = Z(2^4)^2,
+      s = Z(2^4) + Z(2^4)^2,
+      p = Z(2^4)^3, d = Z(2^4)^14
+    ⊢ 5 (x y s p d | x + y = s, x ⋅ y = p, x / y = d,
+                     x = Z(2^4), y = Z(2^4)^2,
+                     s = Z(2^4) + Z(2^4)^2,
+                     p = Z(2^4)^3,
+                     d = Z(2^4)^14)
+```
+
+### GF(7) Prime Field
+
+```
+def gf7 : Field
+ := П (x y s p d : Simplex),
+      x + y = s, x ⋅ y = p, x / y = d,
+      x = 2, y = 3, s = 5, p = 6, d = 3
+    ⊢ 5 (x y s p d | x + y = s, x ⋅ y = p,
+         x / y = d, x = 2, y = 3,
+         s = 5, p = 6, d = 3)
+```
 
 ## Bibliography
 
