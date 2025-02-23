@@ -146,19 +146,32 @@ r = σᵢⱼ < s, r ∈ R, s ∈ S
 
 #### Computation
 
-Face Extraction:
+Face Computation. The face map ∂ᵢⱼ applied to a simplicial set reduces to the simplex s′ specified by the constraint r in R.
 
 ```
+∂ᵢⱼ (n (S | R)) → s' if
+    r = ∂ᵢⱼ < s' ∧
+    r ∈ R ∧
+    s' ∈ S
 ```
 
-Composition Reduction:
+Composition Computation. The composition s₁ ∘ s₂ applied to a simplicial set reduces to the simplex c specified by the constraint r in R, given s1 and s2 are composable.
 
 ```
+(s₁ ∘ s₂) (n (S | R)) → c if
+    r = c = s₁ ∘ s₂ ∧
+    r ∈ R ∧
+    s₁, s₂ ∈ S ∧
+Γ ⊢ ∂ᵢᵢ₋₁ s₁ = ∂ᵢ₀ s₂
 ```
 
-Degeneracy Reduction:
+Degeneracy Computation. The degeneracy map σᵢⱼ applied to a simplicial set reduces to the simplex s′ specified by the constraint r in R.
 
 ```
+σᵢⱼ (n (S | R)) → s' if
+    r = σᵢⱼ < s' ∧ 
+    r ∈ R ∧ 
+    s' ∈ S
 ```
 
 Base Case:
@@ -169,19 +182,41 @@ Base Case:
 
 #### Uniqueness
 
-Face Uniqueness:
+Face Uniqueness. Two face maps ∂ᵢⱼ s and ∂ᵢⱼ s′ are equal if they are defined by constraints r and r′ across two simplicial sets with matching elements.
 
 ```
+Γ ⊢ ∂ᵢⱼ s ≡ ∂ᵢⱼ s'  if  
+Γ ⊢ n (S | R) : Simplicial ∧ 
+    n (S' | R') : Simplicial ∧ 
+    s ∈ S ∧ s' ∈ S' ∧ 
+    r = ∂ᵢⱼ < s ∈ R ∧ 
+    r' = ∂ᵢⱼ < s' ∈ R'
 ```
 
-Uniqueness of Composition:
+Uniqueness of Composition. Two composed simplices c and c′ are equal if their constraints r and r′ define compositions of matching pairs s₁, s₂ and s₁′, s₂′ across two simplicial sets with composability conditions.
 
 ```
+Γ ⊢ c ≡ c' if
+Γ ⊢ n (S | R) : Simplicial ∧
+    n (S' | R') : Simplicial ∧ 
+    r = c = s₁ ∘ s₂ ∈ R ∧
+    r' = c' = s₁' ∘ s₂' ∈ R' ∧
+    s₁, s₂ ∈ S ∧ 
+    s₁', s₂' ∈ S' ∧ 
+Γ ⊢ ∂ᵢᵢ₋₁ s₁ = ∂ᵢ₀ s₂ ∧ 
+Γ ⊢ ∂ᵢᵢ₋₁ s₁' = ∂ᵢ₀ s₂'
 ```
 
-Uniqueness of Degeneracy:
+Uniqueness of Degeneracy.
 
 ```
+Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s' if
+Γ ⊢ n (S | R) : Simplicial ∧
+    n (S' | R') : Simplicial ∧
+    s ∈ S ∧
+    s' ∈ S' ∧
+    r = σᵢⱼ < s ∈ R ∧
+    r' = σᵢⱼ < s' ∈ R'
 ```
 
 ## Examples
