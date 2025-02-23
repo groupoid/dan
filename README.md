@@ -101,56 +101,47 @@ Meaning of <n> Across Types:
 #### Formation
 
 ```
-\Delta_n(S,R) : U =_{def} \textbf{Simplicial}\ \vdash [n]\ (\ S\ |\ R\ ).
-
+Γ ⊢ Simplicial : Set
 ```
 
 #### Introduction
 
 ```
-\begin{equation}                                                           
-\tag{$\Delta$-intro}                                                       
-\dfrac{\begin{split}                                                       
-  & v_k, f_m : \Delta, e_i : \textbf{Path}_{\Delta} \\                
-  & \text{context}, \text{cond} : \Gamma \\                           
-  \end{split} } { \Pi\ (\text{context}), \text{cond} \vdash k\ (\ v_k\ |\ f_m,\ e_i). }
-\end{equation}                                                             
+Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ
+S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ)
+∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ'
+∀ ∂ᵢⱼ < sₖₗ, Γ ⊢ ∂ᵢⱼ : sₖₗ → sₖ₋₁,ₘ
+∀ σᵢⱼ < sₖₗ, Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
+───────────────────────────────────────
+Π (Γ) ⊢ n (s₀₁, …, sₙₘₙ | r₁, …, rₚ) : Simplicial                                                        
 ```
 
 #### Elim Face
 
 ```
-\begin{equation}                                         
-   \tag{$\Delta$-Elim$_1$}                               
-   \dfrac{ \partial : [k] \rightarrow [k-1],             
-           s : \Delta_k,                                 
-           r = \partial_{i,j} < s, i : \text{Fin}_{k+1} }
-         { \partial_{i,j} s : \Delta_{k-1} }             
-\end{equation}                                           
+Γ ⊢ n (S | R) : Simplicial
+r = ∂ᵢⱼ < s, r ∈ R, s ∈ S
+──────────────────────
+Γ ⊢ ∂ᵢⱼ s : Simplex                                        
 ```
 
 #### Elim Composition
 
 ```
-\begin{equation}                                                 
-   \tag{$\Delta$-Elim$_2$}                                       
-   \dfrac{ \circ : \Delta \rightarrow \Delta  \rightarrow \Delta,
-           s_1, s_2 : \Delta,                                    
-           e_i : \partial_{i,i-1} s_1 = \partial_{i,0} s_2 }     
-         { s_1 \circ s_2 : \Delta }                              
-\end{equation}                                                   
+Γ ⊢ n (S | R) : Simplicial
+r = c = s₁ ∘ s₂, r ∈ R, s₁, s₂ ∈ S
+Γ ⊢ ∂ᵢᵢ₋₁ s₁ = ∂ᵢ₀ s₂
+───────────────────────
+Γ ⊢ c : Simplex                                                
 ```
 
 #### Elim Degeneracy
 
 ```
-\begin{equation}                                    
-\tag{$\Delta$-Elim$_3$}                             
-\dfrac{ \sigma : [k] \rightarrow [k+1],             
-        s : \Delta_k,                               
-        r = \sigma_{i,j} < s, i : \text{Fin}_{k+1} }
-      { \sigma_{i,j} s : \Delta_{k+1}}              
-\end{equation}                                      
+Γ ⊢ n (S | R) : Simplicial
+r = σᵢⱼ < s, r ∈ R, s ∈ S
+──────────────────────
+Γ ⊢ σᵢⱼ s : Simplex                                     
 ```
 
 #### Computation
