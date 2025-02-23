@@ -215,7 +215,7 @@ Uniqueness of Composition. Two composed simplices c and c′ are equal if their 
 Γ ⊢ ∂ᵢᵢ₋₁ s₁' = ∂ᵢ₀ s₂'
 ```
 
-Uniqueness of Degeneracy.
+Uniqueness of Degeneracy. Two degeneracy maps σᵢⱼ s and σᵢⱼ s′ are equal if they are defined by constraints r and r′ across two simplicial sets with matching elements.
 
 ```
 Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s' if
