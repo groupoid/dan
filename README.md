@@ -1,7 +1,7 @@
 # Dan Kan: Simplicial HoTT
 
 Groupoid Infinity Simplicial HoTT pure algebraїc implementation with explicit syntaxt for fastest type checking.
-It supports following extensions: `Chain`, `Simplex`, `Simplicial`, `Category`, `Monoid`, `Group`.
+It supports following extensions: `Chain`, `Cochain`, `Simplex`, `Simplicial`, `Category`, `Monoid`, `Group`.
 Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders/Dan core.
 
 <img src="styles/Daniel_Kan.JPG"></img>
@@ -102,7 +102,7 @@ Meaning of `<n>` Across Types:
 2. Intro. Γ ⊢ n (S | R) : Cochain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ σᵢⱼ < sₖₗ, Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
 3. Elim Degeneracy. Γ ⊢ σᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Cochain ∧ r = σᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
 4. Comp Degeneracy. σᵢⱼ (n (S | R)) → s'  if  r = σᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
-5. Uniq Degeneracy. Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s'  if  Γ ⊢ n (S | R) : CoChain ∧ n (S' | R') : CoChain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢⱼ < s ∈ R ∧ r' = σᵢⱼ < s' ∈ R'
+5. Uniq Degeneracy. Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s'  if  Γ ⊢ n (S | R) : Cochain ∧ n (S' | R') : Cochain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢⱼ < s ∈ R ∧ r' = σᵢⱼ < s' ∈ R'
 
 ### Category
 
