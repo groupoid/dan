@@ -188,12 +188,6 @@ Degeneracy Computation. The degeneracy map σᵢⱼ applied to a simplicial set 
     s' ∈ S
 ```
 
-Base Case:
-
-```
-0 [v] \{ \} \to v
-```
-
 #### Uniqueness
 
 Face Uniqueness. Two face maps ∂ᵢⱼ s and ∂ᵢⱼ s′ are equal if they are defined by constraints r and r′ across two simplicial sets with matching elements.
