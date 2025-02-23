@@ -53,28 +53,28 @@ def cat : Category := П (context), conditions ⊢ n (objects | morphisms | cohe
 ```
 <program> ::= <definition> | <definition> <program>
 <definition> ::= "def" <id> ":" <type-name> ":=" <type-term>
-<type-name> ::= "Simplex" | "Group" | "Simplicial" | "Chain" | "Category" | "Monoid"
+<type-name> ::= "Simplex" | "Group" | "Simplicial" | "Chain" | "Cochain" | "Category" | "Monoid"
 <type-term> ::= "П" "(" <context> ")" "⊢" <n> "(" <elements> "|" <constraints> ")" 
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 <superscript> ::= "¹" | "²" | "³" | "⁴" | "⁵" | "⁶" | "⁷" | "⁸" | "⁹"
 <n> ::= <digit> | <digit> <n> | "∞"
 <context> ::= <hypothesis> | <hypothesis> "," <context>
-<hypothesis> ::= <id> ":" <type-term>              % Single declaration, e.g., a : Simplex
-               | "(" <id-list> ":" <type-term> ")" % Grouped declaration, e.g., (a b c : Simplex)
-               | <id> "=" <t> "<" <t>              % Map, e.g., ∂₁ = C₂ < C₃
-               | <id> "=" <t> "∘" <t>              % Equality, e.g., ac = ab ∘ bc
-<id-list> ::= <id> | <id> <id-list>                % e.g., a b c
-<elements> ::= <element-list> | ε
+<hypothesis> ::= <id> ":" <type-term>               % Single declaration, e.g., a : Simplex
+               | "(" <id-list> ":" <type-term> ")"  % Grouped declaration, e.g., (a b c : Simplex)
+               | <id> "=" <t> "<" <t>               % Map, e.g., ∂₁ = C₂ < C₃
+               | <id> "=" <t> "∘" <t>               % Equality, e.g., ac = ab ∘ bc
+<id-list> ::= <id> | <id> <id-list>                 % e.g., a b c
+<elements> ::= <element-list> | ε 
 <element-list> ::= <id> | <id> "," <element-list>
 <constraints> ::= <constraint-list> | ε
-<constraint-list> ::= <constraint> | <constraint> "," <constraint-list>
-<constraint> ::= <t> "=" <t>                      % Equality (e.g., a ∘ a = e)
-               | <id> "<" <id>                    % Map (e.g., ∂₁ < C₂)
-<t> ::= <id>                                      % e.g., a
-      | <t> "∘" <t>                               % e.g., a ∘ b
-      | <t> "^-1"                                 % e.g., a^-1
-      | <t> "^" <superscript>                     % e.g., a³
-      | "e"                                       % identity
+<constraint-list> ::= <constraint> | <constraint>  "," <constraint-list>
+<constraint> ::= <t> "=" <t>                        % Equality (e.g., a ∘ a = e)
+               | <id> "<" <id>                      % Map (e.g., ∂₁ < C₂)
+<t> ::= <id>                                        % e.g., a
+      | <t> "∘" <t>                                 % e.g., a ∘ b
+      | <t> "^-1"                                   % e.g., a^-1
+      | <t> "^" <superscript>                       % e.g., a³
+      | "e"                                         % identity
 ```
 
 Meaning of <n> Across Types:
@@ -90,13 +90,48 @@ Meaning of <n> Across Types:
 
 ### Chain
 
+1. Formation. Γ ⊢ Chain : Set
+2. Intro. Γ ⊢ n (S | R) : Chain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢⱼ < sₖₗ, Γ ⊢ ∂ᵢⱼ : sₖₗ → sₖ₋₁,ₘ
+3. Elim Face. Γ ⊢ ∂ᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Chain ∧ r = ∂ᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
+4. Comp Face. ∂ᵢⱼ (n (S | R)) → s'  if  r = ∂ᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
+5. Uniq Face. Γ ⊢ ∂ᵢⱼ s ≡ ∂ᵢⱼ s'  if  Γ ⊢ n (S | R) : Chain ∧ n (S' | R') : Chain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢⱼ < s ∈ R ∧ r' = ∂ᵢⱼ < s' ∈ R'
+
+### Cochain
+
+1. Formation. Γ ⊢ Cochain : Set
+2. Intro. Γ ⊢ n (S | R) : Cochain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ σᵢⱼ < sₖₗ, Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
+3. Elim Degeneracy. Γ ⊢ σᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Cochain ∧ r = σᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
+4. Comp Degeneracy. σᵢⱼ (n (S | R)) → s'  if  r = σᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
+5. Uniq Degeneracy. Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s'  if  Γ ⊢ n (S | R) : CoChain ∧ n (S' | R') : CoChain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢⱼ < s ∈ R ∧ r' = σᵢⱼ < s' ∈ R'
+
 ### Category
+
+1. Formation. Γ ⊢ Category : Set
+2. Intro. Γ ⊢ n (O | R) : Category  if  Γ = o₁, …, oₙ, m₁, …, mₖ : Simplex, r₁, …, rₚ ∧ O = (o₁, …, oₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ Γ
+3. Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (O | R) : Category ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+4. Comp Comp. (m₁ ∘ m₂) (n (O | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+5. Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (O | R) : Category ∧ n (O' | R') : Category ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ Γ ∧ m₁', m₂' ∈ Γ'
 
 ### Monoid
 
-### Simplicial
-
+1. Formation. Γ ⊢ Monoid : Set
+2. Intro. Γ ⊢ n (M | R) : Monoid  if  Γ = m₁, …, mₙ : Simplex, r₁, …, rₚ ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ M
+3. Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (M | R) : Monoid ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
+4. Comp Comp. (m₁ ∘ m₂) (n (M | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
+5. Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (M | R) : Monoid ∧ n (M' | R') : Monoid ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ M ∧ m₁', m₂' ∈ M'
+   
 ### Simplex
+
+1. Formation. Γ ⊢ Simplex : Set
+2. Intro. Γ ⊢ n (S | R) : Simplex  if  Γ = s₀, …, sₙ : Simplex, r₁, …, rₚ ∧ |S| = n + 1 ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢ < sₖ, Γ ⊢ ∂ᵢ : sₖ → sₖ₋₁ ∧ ∀ σᵢ < sₖ, Γ ⊢ σᵢ : sₖ → sₖ₊₁
+3. Elim Face. Γ ⊢ ∂ᵢ s : Simplex  if  Γ ⊢ n (S | R) : Simplex ∧ r = ∂ᵢ < s ∧ r ∈ R ∧ s ∈ S
+4. Elim Degeneracy. Γ ⊢ σᵢ s : Simplex  if  Γ ⊢ n (S | R) : Simplex ∧ r = σᵢ < s ∧ r ∈ R ∧ s ∈ S
+5. Comp Face. ∂ᵢ (n (S | R)) → s'  if  r = ∂ᵢ < s' ∧ r ∈ R ∧ s' ∈ S
+6. Comp Degeneracy. σᵢ (n (S | R)) → s'  if  r = σᵢ < s' ∧ r ∈ R ∧ s' ∈ S
+7. Uniq Face. Γ ⊢ ∂ᵢ s ≡ ∂ᵢ s'  if  Γ ⊢ n (S | R) : Simplex ∧ n (S' | R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢ < s ∈ R ∧ r' = ∂ᵢ < s' ∈ R'
+8. Uniq Degeneracy. Γ ⊢ σᵢ s ≡ σᵢ s'  if  Γ ⊢ n (S | R) : Simplex ∧ n (S' | R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢ < s ∈ R ∧ r' = σᵢ < s' ∈ R'
+
+### Simplicial
 
 #### Formation
 
@@ -158,9 +193,9 @@ The degeneracy map σᵢⱼ lifts a simplex s to a higher simplex in a simplicia
     s ∈ S
 ```
 
-#### Computation
+#### Face Computation
 
-Face Computation. The face map ∂ᵢⱼ applied to a simplicial set reduces to the simplex s′ specified by the constraint r in R.
+The face map ∂ᵢⱼ applied to a simplicial set reduces to the simplex s′ specified by the constraint r in R.
 
 ```
 ∂ᵢⱼ (n (S | R)) → s' if
@@ -169,7 +204,9 @@ Face Computation. The face map ∂ᵢⱼ applied to a simplicial set reduces to 
     s' ∈ S
 ```
 
-Composition Computation. The composition s₁ ∘ s₂ applied to a simplicial set reduces to the simplex c specified by the constraint r in R, given s1 and s2 are composable.
+### Composition Computation.
+
+The composition s₁ ∘ s₂ applied to a simplicial set reduces to the simplex c specified by the constraint r in R, given s1 and s2 are composable.
 
 ```
 (s₁ ∘ s₂) (n (S | R)) → c if
@@ -179,7 +216,9 @@ Composition Computation. The composition s₁ ∘ s₂ applied to a simplicial s
 Γ ⊢ ∂ᵢᵢ₋₁ s₁ = ∂ᵢ₀ s₂
 ```
 
-Degeneracy Computation. The degeneracy map σᵢⱼ applied to a simplicial set reduces to the simplex s′ specified by the constraint r in R.
+### Degeneracy Computation.
+
+The degeneracy map σᵢⱼ applied to a simplicial set reduces to the simplex s′ specified by the constraint r in R.
 
 ```
 σᵢⱼ (n (S | R)) → s' if
@@ -188,9 +227,9 @@ Degeneracy Computation. The degeneracy map σᵢⱼ applied to a simplicial set 
     s' ∈ S
 ```
 
-#### Uniqueness
+#### Face Uniqueness
 
-Face Uniqueness. Two face maps ∂ᵢⱼ s and ∂ᵢⱼ s′ are equal if they are defined by constraints r and r′ across two simplicial sets with matching elements.
+Two face maps ∂ᵢⱼ s and ∂ᵢⱼ s′ are equal if they are defined by constraints r and r′ across two simplicial sets with matching elements.
 
 ```
 Γ ⊢ ∂ᵢⱼ s ≡ ∂ᵢⱼ s'  if  
@@ -201,7 +240,9 @@ Face Uniqueness. Two face maps ∂ᵢⱼ s and ∂ᵢⱼ s′ are equal if they 
     r' = ∂ᵢⱼ < s' ∈ R'
 ```
 
-Uniqueness of Composition. Two composed simplices c and c′ are equal if their constraints r and r′ define compositions of matching pairs s₁, s₂ and s₁′, s₂′ across two simplicial sets with composability conditions.
+### Uniqueness of Composition.
+
+Two composed simplices c and c′ are equal if their constraints r and r′ define compositions of matching pairs s₁, s₂ and s₁′, s₂′ across two simplicial sets with composability conditions.
 
 ```
 Γ ⊢ c ≡ c' if
@@ -215,7 +256,9 @@ Uniqueness of Composition. Two composed simplices c and c′ are equal if their 
 Γ ⊢ ∂ᵢᵢ₋₁ s₁' = ∂ᵢ₀ s₂'
 ```
 
-Uniqueness of Degeneracy. Two degeneracy maps σᵢⱼ s and σᵢⱼ s′ are equal if they are defined by constraints r and r′ across two simplicial sets with matching elements.
+### Uniqueness of Degeneracy.
+
+Two degeneracy maps σᵢⱼ s and σᵢⱼ s′ are equal if they are defined by constraints r and r′ across two simplicial sets with matching elements.
 
 ```
 Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s' if
