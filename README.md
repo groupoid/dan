@@ -54,7 +54,8 @@ def cat : Category := П (context), conditions ⊢ n (objects | morphisms | cohe
 ```
 <program> ::= <definition> | <definition> <program>
 <definition> ::= "def" <id> ":" <type-name> ":=" <type-term>
-<type-name> ::= "Simplex" | "Group" | "Simplicial" | "Chain" | "Cochain" | "Category" | "Monoid" | "Ring" | "Field"
+<type-name> ::= "Simplex" | "Simplicial" | "Chain" | "Cochain"
+                          | "Category"  | "Group" | "Monoid" | "Ring" | "Field"
 <type-term> ::= "П" "(" <context> ")" "⊢" <n> "(" <elements> "|" <constraints> ")"
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 <superscript> ::= "¹" | "²" | "³" | "⁴" | "⁵" | "⁶" | "⁷" | "⁸" | "⁹"
