@@ -107,13 +107,6 @@ Meaning of `<n>` Across Types:
 
 ## Semantics
 
-### Simplicial Modes
-
-* Γ ⊢ Δₙ : Type (Simplex)
-* Γ ⊢ Δₙᵏᵃⁿ : Type
-* Γ ⊢ Δₙʳᵉᶻᵏ : Type
-* Γ ⊢ Δₙˢᵉᵍᵃˡ : Type
-
 ### Chain
 
 1. Formation. Γ ⊢ Chain : Set
@@ -158,6 +151,13 @@ Meaning of `<n>` Across Types:
 8. Uniq Degeneracy. Γ ⊢ σᵢ s ≡ σᵢ s'  if  Γ ⊢ n (S | R) : Simplex ∧ n (S' | R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢ < s ∈ R ∧ r' = σᵢ < s' ∈ R'
 
 ### Simplicial
+
+#### Simplicial Modes
+
+* Γ ⊢ Δₙ : Type (Simplex)
+* Γ ⊢ Δₙᵏᵃⁿ : Type
+* Γ ⊢ Δₙʳᵉᶻᵏ : Type
+* Γ ⊢ Δₙˢᵉᵍᵃˡ : Type
 
 #### Formation
 
