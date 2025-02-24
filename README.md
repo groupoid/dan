@@ -164,7 +164,7 @@ Meaning of `<n>` Across Types:
 The simplicial type is declared as a set within the context Γ without any premises.
 
 ```
-Γ ⊢ Simplicial : Set
+Γ ⊢ Δ : Type
 ```
 
 #### Introduction
