@@ -588,6 +588,15 @@ def gf7 : Field
 * Daniel Kan. Abstract Homotopy II. 1956.
 * Daniel Kan. On c.s.s. Complexes. 1957.
 * Daniel Kan. A Combinatorial Definition of Homotopy Groups. 1958.
+* Daniel Kan, W. G. Dwyer. Adjoint functors. 1958.
+* Daniel Kan, W. G. Dwyer.  Simplicial Localizations of Categories. 1980.
+* Graeme Segal. Classifying spaces and spectral sequences. 1968.
+* Graeme Segal. Categories and cohomology theories. 1974.
+* Graeme Segal, R. Bott. Loop groups and their classifying spaces. 1988.
+* Charles Rezk. A model for the homotopy theory of homotopy theory. 2001.
+* Charles Rezk. A cartesian presentation of weak n-categories". 2010.
+* Charles Rezk, S. Schwede, B. Shipley. Simplicial structures on model categories and functors. 2001.
+* Charles Rezk, J. Bergner. Comparison of models for (∞,n)-categories. 2013.
 
 ## Conclusion
 
