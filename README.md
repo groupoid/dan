@@ -107,6 +107,13 @@ Meaning of `<n>` Across Types:
 
 ## Semantics
 
+### Simplicial Modes
+
+* Γ ⊢ Δₙ : Type (Simplex)
+* Γ ⊢ Δₙᵏᵃⁿ : Type
+* Γ ⊢ Δₙʳᵉᶻᵏ : Type
+* Γ ⊢ Δₙˢᵉᵍᵃˡ : Type
+
 ### Chain
 
 1. Formation. Γ ⊢ Chain : Set
