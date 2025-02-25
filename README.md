@@ -54,7 +54,8 @@ def cat : Category := П (context), conditions ⊢ n (objects | morphisms | cohe
 ```
 <program> ::= <definition> | <definition> <program>
 <definition> ::= "def" <id> ":" <type-name> ":=" <type-term>
-<type-name> ::= "Simplex" | "Group" | "Simplicial" | "Chain" | "Cochain" | "Category" | "Monoid" | "Ring" | "Field"
+<type-name> ::= "Simplex" | "Simplicial" | "Chain" | "Cochain"
+                          | "Category"  | "Group" | "Monoid" | "Ring" | "Field"
 <type-term> ::= "П" "(" <context> ")" "⊢" <n> "(" <elements> "|" <constraints> ")"
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 <superscript> ::= "¹" | "²" | "³" | "⁴" | "⁵" | "⁶" | "⁷" | "⁸" | "⁹"
@@ -152,12 +153,19 @@ Meaning of `<n>` Across Types:
 
 ### Simplicial
 
+#### Simplicial Modes
+
+* Γ ⊢ Δₙ : Type (Simplex)
+* Γ ⊢ Δₙᵏᵃⁿ : Type
+* Γ ⊢ Δₙʳᵉᶻᵏ : Type
+* Γ ⊢ Δₙˢᵉᵍᵃˡ : Type
+
 #### Formation
 
 The simplicial type is declared as a set within the context Γ without any premises.
 
 ```
-Γ ⊢ Simplicial : Set
+Γ ⊢ Δ : Type
 ```
 
 #### Introduction
@@ -581,6 +589,15 @@ def gf7 : Field
 * Daniel Kan. Abstract Homotopy II. 1956.
 * Daniel Kan. On c.s.s. Complexes. 1957.
 * Daniel Kan. A Combinatorial Definition of Homotopy Groups. 1958.
+* Daniel Kan, W. G. Dwyer. Adjoint functors. 1958.
+* Daniel Kan, W. G. Dwyer.  Simplicial Localizations of Categories. 1980.
+* Graeme Segal. Classifying spaces and spectral sequences. 1968.
+* Graeme Segal. Categories and cohomology theories. 1974.
+* Graeme Segal, R. Bott. Loop groups and their classifying spaces. 1988.
+* Charles Rezk. A model for the homotopy theory of homotopy theory. 2001.
+* Charles Rezk. A cartesian presentation of weak n-categories". 2010.
+* Charles Rezk, S. Schwede, B. Shipley. Simplicial structures on model categories and functors. 2001.
+* Charles Rezk, J. Bergner. Comparison of models for (∞,n)-categories. 2013.
 
 ## Conclusion
 
