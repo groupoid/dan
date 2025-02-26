@@ -1,4 +1,4 @@
-# Dan Kan: Simplicial HoTT
+ # Dan Kan: Simplicial HoTT
 
 Groupoid Infinity Simplicial HoTT Computer Algebra System is a pure algebraїc implementation
 with explicit syntaxt for fastest type checking. It supports following extensions: `Chain`,
@@ -110,46 +110,46 @@ Meaning of `<n>` Across Types:
 
 ### Chain
 
-1. Formation. Γ ⊢ Chain : Set
-2. Intro. Γ ⊢ n (S | R) : Chain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢⱼ < sₖₗ, Γ ⊢ ∂ᵢⱼ : sₖₗ → sₖ₋₁,ₘ
-3. Elim Face. Γ ⊢ ∂ᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Chain ∧ r = ∂ᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
-4. Comp Face. ∂ᵢⱼ (n (S | R)) → s'  if  r = ∂ᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
-5. Uniq Face. Γ ⊢ ∂ᵢⱼ s ≡ ∂ᵢⱼ s'  if  Γ ⊢ n (S | R) : Chain ∧ n (S' | R') : Chain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢⱼ < s ∈ R ∧ r' = ∂ᵢⱼ < s' ∈ R'
+* Formation. Γ ⊢ Chain : Set
+* Intro. Γ ⊢ n (S | R) : Chain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢⱼ < sₖₗ, Γ ⊢ ∂ᵢⱼ : sₖₗ → sₖ₋₁,ₘ
+* Elim Face. Γ ⊢ ∂ᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Chain ∧ r = ∂ᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
+* Comp Face. ∂ᵢⱼ (n (S | R)) → s'  if  r = ∂ᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
+* Uniq Face. Γ ⊢ ∂ᵢⱼ s ≡ ∂ᵢⱼ s'  if  Γ ⊢ n (S | R) : Chain ∧ n (S' | R') : Chain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢⱼ < s ∈ R ∧ r' = ∂ᵢⱼ < s' ∈ R'
 
 ### Cochain
 
-1. Formation. Γ ⊢ Cochain : Set
-2. Intro. Γ ⊢ n (S | R) : Cochain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ σᵢⱼ < sₖₗ, Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
-3. Elim Degeneracy. Γ ⊢ σᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Cochain ∧ r = σᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
-4. Comp Degeneracy. σᵢⱼ (n (S | R)) → s'  if  r = σᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
-5. Uniq Degeneracy. Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s'  if  Γ ⊢ n (S | R) : Cochain ∧ n (S' | R') : Cochain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢⱼ < s ∈ R ∧ r' = σᵢⱼ < s' ∈ R'
+* Formation. Γ ⊢ Cochain : Set
+* Intro. Γ ⊢ n (S | R) : Cochain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ σᵢⱼ < sₖₗ, Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
+* Elim Degeneracy. Γ ⊢ σᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Cochain ∧ r = σᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
+* Comp Degeneracy. σᵢⱼ (n (S | R)) → s'  if  r = σᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
+* Uniq Degeneracy. Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s'  if  Γ ⊢ n (S | R) : Cochain ∧ n (S' | R') : Cochain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢⱼ < s ∈ R ∧ r' = σᵢⱼ < s' ∈ R'
 
 ### Category
 
-1. Formation. Γ ⊢ Category : Set
-2. Intro. Γ ⊢ n (O | M | R) : Category  if  Γ = o₁, …, oₙ, m₁, …, mₖ : Simplex, r₁, …, rₚ ∧ O = (o₁, …, oₙ) ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ Γ
-3. Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (O | M | R) : Category ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
-4. Comp Comp. (m₁ ∘ m₂) (n (O | M | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
-5. Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (O | M | R) : Category ∧ n (O' | M' | R') : Category ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ Γ ∧ m₁', m₂' ∈ Γ'
+* Formation. Γ ⊢ Category : Set
+* Intro. Γ ⊢ n (O | M | R) : Category  if  Γ = o₁, …, oₙ, m₁, …, mₖ : Simplex, r₁, …, rₚ ∧ O = (o₁, …, oₙ) ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ Γ
+* Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (O | M | R) : Category ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+* Comp Comp. (m₁ ∘ m₂) (n (O | M | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+* Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (O | M | R) : Category ∧ n (O' | M' | R') : Category ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ Γ ∧ m₁', m₂' ∈ Γ'
 
 ### Monoid
 
-1. Formation. Γ ⊢ Monoid : Set
-2. Intro. Γ ⊢ n (M | R) : Monoid  if  Γ = m₁, …, mₙ : Simplex, r₁, …, rₚ ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ M
-3. Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (M | R) : Monoid ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
-4. Comp Comp. (m₁ ∘ m₂) (n (M | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
-5. Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (M | R) : Monoid ∧ n (M' | R') : Monoid ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ M ∧ m₁', m₂' ∈ M'
+* Formation. Γ ⊢ Monoid : Set
+* Intro. Γ ⊢ n (M | R) : Monoid  if  Γ = m₁, …, mₙ : Simplex, r₁, …, rₚ ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ M
+* Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (M | R) : Monoid ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
+* Comp Comp. (m₁ ∘ m₂) (n (M | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
+* Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (M | R) : Monoid ∧ n (M' | R') : Monoid ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ M ∧ m₁', m₂' ∈ M'
    
 ### Simplex
 
-1. Formation. Γ ⊢ Simplex : Set
-2. Intro. Γ ⊢ n (S | R) : Simplex  if  Γ = s₀, …, sₙ : Simplex, r₁, …, rₚ ∧ |S| = n + 1 ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢ < sₖ, Γ ⊢ ∂ᵢ : sₖ → sₖ₋₁ ∧ ∀ σᵢ < sₖ, Γ ⊢ σᵢ : sₖ → sₖ₊₁
-3. Elim Face. Γ ⊢ ∂ᵢ s : Simplex  if  Γ ⊢ n (S | R) : Simplex ∧ r = ∂ᵢ < s ∧ r ∈ R ∧ s ∈ S
-4. Elim Degeneracy. Γ ⊢ σᵢ s : Simplex  if  Γ ⊢ n (S | R) : Simplex ∧ r = σᵢ < s ∧ r ∈ R ∧ s ∈ S
-5. Comp Face. ∂ᵢ (n (S | R)) → s'  if  r = ∂ᵢ < s' ∧ r ∈ R ∧ s' ∈ S
-6. Comp Degeneracy. σᵢ (n (S | R)) → s'  if  r = σᵢ < s' ∧ r ∈ R ∧ s' ∈ S
-7. Uniq Face. Γ ⊢ ∂ᵢ s ≡ ∂ᵢ s'  if  Γ ⊢ n (S | R) : Simplex ∧ n (S' | R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢ < s ∈ R ∧ r' = ∂ᵢ < s' ∈ R'
-8. Uniq Degeneracy. Γ ⊢ σᵢ s ≡ σᵢ s'  if  Γ ⊢ n (S | R) : Simplex ∧ n (S' | R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢ < s ∈ R ∧ r' = σᵢ < s' ∈ R'
+* Formation. Γ ⊢ Simplex : Set
+* Intro. Γ ⊢ n (S | R) : Simplex  if  Γ = s₀, …, sₙ : Simplex, r₁, …, rₚ ∧ |S| = n + 1 ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢ < sₖ, Γ ⊢ ∂ᵢ : sₖ → sₖ₋₁ ∧ ∀ σᵢ < sₖ, Γ ⊢ σᵢ : sₖ → sₖ₊₁
+* Elim Face. Γ ⊢ ∂ᵢ s : Simplex  if  Γ ⊢ n (S | R) : Simplex ∧ r = ∂ᵢ < s ∧ r ∈ R ∧ s ∈ S
+* Elim Degeneracy. Γ ⊢ σᵢ s : Simplex  if  Γ ⊢ n (S | R) : Simplex ∧ r = σᵢ < s ∧ r ∈ R ∧ s ∈ S
+* Comp Face. ∂ᵢ (n (S | R)) → s'  if  r = ∂ᵢ < s' ∧ r ∈ R ∧ s' ∈ S
+* Comp Degeneracy. σᵢ (n (S | R)) → s'  if  r = σᵢ < s' ∧ r ∈ R ∧ s' ∈ S
+* Uniq Face. Γ ⊢ ∂ᵢ s ≡ ∂ᵢ s'  if  Γ ⊢ n (S | R) : Simplex ∧ n (S' | R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢ < s ∈ R ∧ r' = ∂ᵢ < s' ∈ R'
+* Uniq Degeneracy. Γ ⊢ σᵢ s ≡ σᵢ s'  if  Γ ⊢ n (S | R) : Simplex ∧ n (S' | R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢ < s ∈ R ∧ r' = σᵢ < s' ∈ R'
 
 ### Simplicial
 
