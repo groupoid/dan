@@ -3,7 +3,8 @@
 Groupoid Infinity Simplicial HoTT Computer Algebra System is a pure algebraїc implementation
 with explicit syntaxt for fastest type checking. It supports following extensions: `Chain`,
 `Cochain`, `Simplex`, `Simplicial`, `Category`, `Monoid`, `Group`, `Ring`.
-Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders/Dan core.
+Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders/Dan
+with Kan, Rezk and Segal simplicial modes for computable ∞-categories.
 
 <img src="styles/Daniel_Kan.JPG"></img>
 
