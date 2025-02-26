@@ -7,7 +7,7 @@ with explicit syntaxt for fastest type checking. It supports following extension
 Simplicial HoTT is a Rezk/GAP replacement incorporated into CCHM/CHM/HTS Agda-like Anders/Dan
 with Kan, Rezk and Segal simplicial modes for computable ∞-categories.
 
-<img src="styles/Daniel_Kan.JPG"></img>
+<img src="styles/Daniel_Kan.JPG"/>
 
 ## Abstract
 
