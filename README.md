@@ -1,4 +1,5 @@
- # Dan Kan: Simplicial HoTT
+Dan Kan: Simplicial HoTT
+========================
 
 Groupoid Infinity Simplicial HoTT Computer Algebra System is a pure algebraїc implementation
 with explicit syntaxt for fastest type checking. It supports following extensions: `Chain`,
