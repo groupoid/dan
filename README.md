@@ -111,45 +111,45 @@ Meaning of `<n>` Across Types:
 ### Chain
 
 * Formation. Γ ⊢ Chain : Set
-* Intro. Γ ⊢ n (S | R) : Chain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢⱼ < sₖₗ, Γ ⊢ ∂ᵢⱼ : sₖₗ → sₖ₋₁,ₘ
-* Elim Face. Γ ⊢ ∂ᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Chain ∧ r = ∂ᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
-* Comp Face. ∂ᵢⱼ (n (S | R)) → s'  if  r = ∂ᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
-* Uniq Face. Γ ⊢ ∂ᵢⱼ s ≡ ∂ᵢⱼ s'  if  Γ ⊢ n (S | R) : Chain ∧ n (S' | R') : Chain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢⱼ < s ∈ R ∧ r' = ∂ᵢⱼ < s' ∈ R'
+* Intro. Γ ⊢ n (S `|` R) : Chain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢⱼ < sₖₗ, Γ ⊢ ∂ᵢⱼ : sₖₗ → sₖ₋₁,ₘ
+* Elim Face. Γ ⊢ ∂ᵢⱼ s : Simplex  if  Γ ⊢ n (S `|` R) : Chain ∧ r = ∂ᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
+* Comp Face. ∂ᵢⱼ (n (S `|` R)) → s'  if  r = ∂ᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
+* Uniq Face. Γ ⊢ ∂ᵢⱼ s ≡ ∂ᵢⱼ s'  if  Γ ⊢ n (S `|` R) : Chain ∧ n (S' `|` R') : Chain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢⱼ < s ∈ R ∧ r' = ∂ᵢⱼ < s' ∈ R'
 
 ### Cochain
 
 * Formation. Γ ⊢ Cochain : Set
-* Intro. Γ ⊢ n (S | R) : Cochain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ σᵢⱼ < sₖₗ, Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
-* Elim Degeneracy. Γ ⊢ σᵢⱼ s : Simplex  if  Γ ⊢ n (S | R) : Cochain ∧ r = σᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
-* Comp Degeneracy. σᵢⱼ (n (S | R)) → s'  if  r = σᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
-* Uniq Degeneracy. Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s'  if  Γ ⊢ n (S | R) : Cochain ∧ n (S' | R') : Cochain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢⱼ < s ∈ R ∧ r' = σᵢⱼ < s' ∈ R'
+* Intro. Γ ⊢ n (S `|` R) : Cochain  if  Γ = s₀₁, …, sₙₘₙ : Simplex, r₁, …, rₚ ∧ S₀, S₁, …, Sₙ = (s₀₁, …, s₀ₘ₀), …, (sₙ₁, …, sₙₘₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ σᵢⱼ < sₖₗ, Γ ⊢ σᵢⱼ : sₖₗ → sₖ₊₁,ₘ
+* Elim Degeneracy. Γ ⊢ σᵢⱼ s : Simplex  if  Γ ⊢ n (S `|` R) : Cochain ∧ r = σᵢⱼ < s ∧ r ∈ R ∧ s ∈ S
+* Comp Degeneracy. σᵢⱼ (n (S `|` R)) → s'  if  r = σᵢⱼ < s' ∧ r ∈ R ∧ s' ∈ S
+* Uniq Degeneracy. Γ ⊢ σᵢⱼ s ≡ σᵢⱼ s'  if  Γ ⊢ n (S `|` R) : Cochain ∧ n (S' `|` R') : Cochain ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢⱼ < s ∈ R ∧ r' = σᵢⱼ < s' ∈ R'
 
 ### Category
 
 * Formation. Γ ⊢ Category : Set
-* Intro. Γ ⊢ n (O | M | R) : Category  if  Γ = o₁, …, oₙ, m₁, …, mₖ : Simplex, r₁, …, rₚ ∧ O = (o₁, …, oₙ) ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ Γ
-* Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (O | M | R) : Category ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
-* Comp Comp. (m₁ ∘ m₂) (n (O | M | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
-* Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (O | M | R) : Category ∧ n (O' | M' | R') : Category ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ Γ ∧ m₁', m₂' ∈ Γ'
+* Intro. Γ ⊢ n (O `|` M `|` R) : Category  if  Γ = o₁, …, oₙ, m₁, …, mₖ : Simplex, r₁, …, rₚ ∧ O = (o₁, …, oₙ) ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ Γ
+* Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (O `|` M `|` R) : Category ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+* Comp Comp. (m₁ ∘ m₂) (n (O `|` M `|` R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ Γ
+* Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (O `|` M `|` R) : Category ∧ n (O' `|` M' `|` R') : Category ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ Γ ∧ m₁', m₂' ∈ Γ'
 
 ### Monoid
 
 * Formation. Γ ⊢ Monoid : Set
-* Intro. Γ ⊢ n (M | R) : Monoid  if  Γ = m₁, …, mₙ : Simplex, r₁, …, rₚ ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ M
-* Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (M | R) : Monoid ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
-* Comp Comp. (m₁ ∘ m₂) (n (M | R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
-* Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (M | R) : Monoid ∧ n (M' | R') : Monoid ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ M ∧ m₁', m₂' ∈ M'
+* Intro. Γ ⊢ n (M `|` R) : Monoid  if  Γ = m₁, …, mₙ : Simplex, r₁, …, rₚ ∧ M = (m₁, …, mₙ) ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ tⱼ = mₐ ∘ mᵦ, mₐ, mᵦ ∈ M
+* Elim Comp. Γ ⊢ c : Simplex  if  Γ ⊢ n (M `|` R) : Monoid ∧ r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
+* Comp Comp. (m₁ ∘ m₂) (n (M `|` R)) → c  if  r = c = m₁ ∘ m₂ ∧ r ∈ R ∧ m₁, m₂ ∈ M
+* Uniq Comp. Γ ⊢ c ≡ c'  if  Γ ⊢ n (M `|` R) : Monoid ∧ n (M' `|` R') : Monoid ∧ r = c = m₁ ∘ m₂ ∈ R ∧ r' = c' = m₁' ∘ m₂' ∈ R' ∧ m₁, m₂ ∈ M ∧ m₁', m₂' ∈ M'
    
 ### Simplex
 
 * Formation. Γ ⊢ Simplex : Set
-* Intro. Γ ⊢ n (S | R) : Simplex  if  Γ = s₀, …, sₙ : Simplex, r₁, …, rₚ ∧ |S| = n + 1 ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢ < sₖ, Γ ⊢ ∂ᵢ : sₖ → sₖ₋₁ ∧ ∀ σᵢ < sₖ, Γ ⊢ σᵢ : sₖ → sₖ₊₁
-* Elim Face. Γ ⊢ ∂ᵢ s : Simplex  if  Γ ⊢ n (S | R) : Simplex ∧ r = ∂ᵢ < s ∧ r ∈ R ∧ s ∈ S
-* Elim Degeneracy. Γ ⊢ σᵢ s : Simplex  if  Γ ⊢ n (S | R) : Simplex ∧ r = σᵢ < s ∧ r ∈ R ∧ s ∈ S
-* Comp Face. ∂ᵢ (n (S | R)) → s'  if  r = ∂ᵢ < s' ∧ r ∈ R ∧ s' ∈ S
-* Comp Degeneracy. σᵢ (n (S | R)) → s'  if  r = σᵢ < s' ∧ r ∈ R ∧ s' ∈ S
-* Uniq Face. Γ ⊢ ∂ᵢ s ≡ ∂ᵢ s'  if  Γ ⊢ n (S | R) : Simplex ∧ n (S' | R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢ < s ∈ R ∧ r' = ∂ᵢ < s' ∈ R'
-* Uniq Degeneracy. Γ ⊢ σᵢ s ≡ σᵢ s'  if  Γ ⊢ n (S | R) : Simplex ∧ n (S' | R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢ < s ∈ R ∧ r' = σᵢ < s' ∈ R'
+* Intro. Γ ⊢ n (S `|` R) : Simplex  if  Γ = s₀, …, sₙ : Simplex, r₁, …, rₚ ∧ `|`S`|` = n + 1 ∧ ∀ rⱼ = tⱼ = tⱼ', Γ ⊢ rⱼ : tⱼ = tⱼ' ∧ ∀ ∂ᵢ < sₖ, Γ ⊢ ∂ᵢ : sₖ → sₖ₋₁ ∧ ∀ σᵢ < sₖ, Γ ⊢ σᵢ : sₖ → sₖ₊₁
+* Elim Face. Γ ⊢ ∂ᵢ s : Simplex  if  Γ ⊢ n (S `|` R) : Simplex ∧ r = ∂ᵢ < s ∧ r ∈ R ∧ s ∈ S
+* Elim Degeneracy. Γ ⊢ σᵢ s : Simplex  if  Γ ⊢ n (S `|` R) : Simplex ∧ r = σᵢ < s ∧ r ∈ R ∧ s ∈ S
+* Comp Face. ∂ᵢ (n (S `|` R)) → s'  if  r = ∂ᵢ < s' ∧ r ∈ R ∧ s' ∈ S
+* Comp Degeneracy. σᵢ (n (S `|` R)) → s'  if  r = σᵢ < s' ∧ r ∈ R ∧ s' ∈ S
+* Uniq Face. Γ ⊢ ∂ᵢ s ≡ ∂ᵢ s'  if  Γ ⊢ n (S `|` R) : Simplex ∧ n (S' `|` R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = ∂ᵢ < s ∈ R ∧ r' = ∂ᵢ < s' ∈ R'
+* Uniq Degeneracy. Γ ⊢ σᵢ s ≡ σᵢ s'  if  Γ ⊢ n (S `|` R) : Simplex ∧ n (S' `|` R') : Simplex ∧ s ∈ S ∧ s' ∈ S' ∧ ∀ r = σᵢ < s ∈ R ∧ r' = σᵢ < s' ∈ R'
 
 ### Simplicial
 
@@ -422,8 +422,8 @@ Context:
 * Relations: ab = bc ∘ ac,  cd = ac ∘ bd  (twist via composition).
   
 Simplices:
-* (a b c | bc, ac, ab ): First triangle.
-* (b c d | bc, bd, cd ): Second triangle, sharing bc.
+* (a b c `|` bc, ac, ab ): First triangle.
+* (b c d `|` bc, bd, cd ): Second triangle, sharing bc.
   
 Checking:
 * Vertices: a, b, c, d ∈ Γ — O(4).
@@ -446,7 +446,7 @@ Context:
 * Relation: ab = bc ∘ ac.
 
 Simplex:
-* (a b c | bc, ac, ab ) — 3 faces, despite degeneracy.
+* (a b c `|` bc, ac, ab ) — 3 faces, despite degeneracy.
 
 Checking:
 * Vertices: a, b, c ∈ Γ, b = c — O(3).
@@ -469,7 +469,7 @@ Context:
 * Relations: qrs = qrs (degenerate identity), pqr = pqt ∘ qrs.
 
 Simplex: 
-* (p q r s | qrs, prs, pqt, pqr ) — 4 faces, one degenerate.
+* (p q r s `|` qrs, prs, pqt, pqr ) — 4 faces, one degenerate.
 
 Checking:
 * Vertices: p, q, r, s ∈ Γ (t unused, valid) — O(4).
