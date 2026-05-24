@@ -109,7 +109,7 @@ type cmd =
   | CDefType of name * name list * expr
   | CDefTerm of name * name list * expr * expr
   | CCheck of (name * expr) list * (name * expr) list * expr * expr  (* dirtt check *)
-  | CCheckSimplicial of (name * expr) list * expr * expr             (* simplicial check *)
+  | CCheckSimplicial of (name * expr) list * expr * expr        (* simplicial check *)
 ```
 
 Ulrik is a proof assistant based on:
