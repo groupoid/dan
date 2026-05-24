@@ -149,7 +149,6 @@ library/
 ├── abelian.ulrik      -- Zero morphisms in abelian categories
 ├── adjunction.ulrik   -- Adjunctions hom(B, F(a), b) -> hom(A, a, G(b))
 ├── book.ulrik         -- Module index importing the category library
-├── cat.ulrik          -- CAT: category of categories representation
 ├── category.ulrik     -- Precategories, identity, and J composition
 ├── equivalence.ulrik  -- Equivalences, unit and counit transformations
 ├── functor.ulrik      -- Functors, mapping, and J functoriality

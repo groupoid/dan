@@ -1,5 +1,0 @@
-module cat where
-import "library/category.ulrik"
-
--- CAT: The category of categories.
--- The objects are category parameters, and the morphisms are functors/module maps.
