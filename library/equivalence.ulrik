@@ -1,0 +1,14 @@
+module equivalence where
+import "library/natural.ulrik"
+
+-- Two functors F and G forming an equivalence
+functor F (x : A) : B
+functor G (y : B) : A
+
+-- The unit natural transformation of the equivalence: Id_A -> G o F
+-- UnitNat = ∫_{x:A} hom(A, x, G(F(x)))
+def_type UnitNat := end(x : A). hom(A, x, G(F(x)))
+
+-- The counit natural transformation of the equivalence: F o G -> Id_B
+-- CounitNat = ∫_{y:B} hom(B, F(G(y)), y)
+def_type CounitNat := end(y : B). hom(B, F(G(y)), y)

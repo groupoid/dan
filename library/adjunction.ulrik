@@ -1,0 +1,8 @@
+module adjunction where
+import "library/equivalence.ulrik"
+
+-- An adjunction between F and G is defined by a pair of mutually inverse natural maps.
+-- hom(B, F(a), b) ⊸ hom(A, a, G(b))
+
+def_type AdjTo (a b) := hom(B, F(a), b) -> hom(A, a, G(b))
+def_type AdjFrom (a b) := hom(A, a, G(b)) -> hom(B, F(a), b)

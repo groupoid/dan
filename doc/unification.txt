@@ -1,0 +1,75 @@
+This is for a cartesian language. I’m not sure how quadraticality plays into the
+unification algorithm.
+First-order terms consist of variables and constants applied to lists of terms. A
+list of terms is either empty (·) or a cons.
+x∈Γ
+Γ⊢x
+
+⃗
+Γ⊢M
+⃗)
+Γ ⊢ F (M
+
+⃗
+Γ⊢M
+⃗
+Γ ⊢ M, M
+
+Γ⊢M
+Γ⊢·
+
+A context is · or Γ, x. A substitution is
+Γ ⊢ θ : Γ′
+Γ⊢M
+Γ ⊢ θ, M/x : Γ′ , x
+
+Γ⊢·:·
+
+Identity and composition are admissible:
+Γ ⊢ 1Γ : Γ
+
+Γ′ ⊢ θ′′ : Γ′′
+Γ ⊢ θ : Γ′
+Γ ⊢ θ′′ [θ′ ] : Γ′′
+
+The unification judgements have the form
+.
+• M = N | θ where Γ ⊢ M and Γ ⊢ N and Γ′ ⊢ θ : Γ. Operationally, we
+think of M and N and Γ as inputs and Γ′ and θ as outputs, so unification
+produces a new context and a substitution for the original variables from
+it.
+. ⃗
+⃗ =
+⃗ and Γ ⊢ N
+⃗ and Γ′ ⊢ θ : Γ.
+• M
+N | θ where Γ ⊢ M
+Here are the rules (I put in some type annotations that might be helpful):
+.
+. ⃗
+⃗ [θ] =
+M = N | (Γ′ ⊢ θ : Γ)
+M
+N [θ] | (Γ′′ ⊢ θ′ : Γ′ )
+.
+.
+⃗ = N, N
+⃗ | θ[θ′ ]
+· = · | 1Γ
+M, M
+. ⃗
+⃗ =
+M
+N |θ
+.
+⃗ ) = F (N
+⃗) | θ
+F (M
+
+Γ⊢M
+.
+x = M | (Γ ⊢ (1Γ , M/x) : Γ, x)
+
+1
+
+

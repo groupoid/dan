@@ -1,0 +1,10 @@
+module universal where
+import "library/category.ulrik"
+
+-- A limit of a diagram (represented as a bipartite module) is defined as an end.
+-- Limit = ∫_{w:A} M(w, w)
+def_type Limit (A) := end(w : A). hom(A, w, w)
+
+-- A colimit of a diagram is defined as a coend.
+-- Colimit = ∫^{w:A} M(w, w)
+def_type Colimit (A) := coend(w : A). hom(A, w, w)

@@ -1,0 +1,7 @@
+module topos where
+import "library/category.ulrik"
+
+-- In a topos, the classifier logic is represented by presheaves.
+-- A presheaf on A at x is represented by the hom-type hom(A, x, x).
+
+def_type Presheaf (A x) := hom(A, x, x)

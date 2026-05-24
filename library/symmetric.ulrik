@@ -1,0 +1,13 @@
+module symmetric where
+import "library/category.ulrik"
+
+-- Symmetric Monoidal Category structure: tensor symmetry.
+-- symmetry : (M1 ⊗ M2) ⊸ (M2 ⊗ M1)
+-- Defined by tensor elimination followed by tensor introduction.
+
+def_type SymmetryMap (M1 M2) := (M1 * M2) -> (M2 * M1)
+
+def_term symmetry (M1 M2) : (M1 * M2) -> (M2 * M1) :=
+  lambda(t : M1 * M2).
+    let x * y := t in
+    (y * x)

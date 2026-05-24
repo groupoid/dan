@@ -1,0 +1,2717 @@
+MULTIVARIABLE FORMAL CATEGORY THEORY
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+Contents
+
+1. Introduction
+We propose a categorical structure designed for doing “multivariable formal
+category theory”, including particularly contravariant functors and extraordinary
+natural transformations, and hence the abstract study of monoidal objects, enriched
+objects, multivariable adjunctions, closed objects, rigid objects, and so on. This
+is analogous to how proarrow equipments [?] and Yoneda structures [?] provide
+abstract contexts for doing one-variable formal category theory. By analogy with
+the word “equipment”, we call our structure a kit.
+There does already exist one structure in which one can do multivariable formal
+category theory. As observed by Day and Street [?], the opposite of a category is its
+dual in the monoidal bicategory of profunctors, making the latter “compact closed”
+(also called “rigid” or “autonomous”); and inside a compact closed bicategory one
+can define structures of multivariable category theory. Of course, the bicategory of
+profunctors does not quite know which profunctors are representable by functors
+(the left adjoint profunctors are “representable up to Cauchy completion”), but this
+can be remedied by enhancing it to a “compact closed proarrow equipment”.
+The differences between a kit and a compact closed equipment, and hence the
+reasons for defining the former, are:
+(i) Compact closed equipments have not actually been defined yet either, and
+it’s not necessarily a priori obvious how much coherence should be required
+between the “functor arrows” and the compact closed structure. (As observed
+in [?], even for just the one-variable “opposite category” operation there are
+nontrivial coherence questions.) The definition of a kit is “more obviously
+complete”. Below, we will actually also define compact closed equipments and
+prove that any such gives rise to a kit, justifying that definition.
+(ii) A kit is “fully virtual” in the sense of [?]; that is, all of its structure is
+multicategorical. This means that rather than including operations such as
+profunctor composition, monoidal product, and dualization, a kit includes
+a basic notion of “morphism out of such things”, in the same way that a
+multicategory has no actual monoidal product but includes a basic notion
+of “multivariable morphism” that “would be a morphism out of a monoidal
+product if it existed”. This allows these operations, when they exist, to
+be characterized by universal properties, eliminating the question of what
+coherence axioms have to be imposed upon them as structure. It also allows
+us to describe examples where such operations do not exist. For instance,
+1
+
+2
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+categories enriched over any monoidal category V form a kit, whether or not
+V has any limits or colimits; indeed V could be only a multicategory itself.
+(iii) Because of virtuality, it is much simpler to define sub-kits and quotient kits.
+In particular, this allows us to construct “homotopy kits” by first restricting
+to a subclass of well-behaved objects, then quotienting by a homotopy relation. This gives one approach to formal higher category theory using only
+2-categorical machinery.
+(iv) A kit eliminates the “two-sided bias” of a bicategory or an equipment. Twosidedness is appropriate and necessary for one-variable category theory, since
+in examples such as categories enriched in a non-symmetric monoidal category
+(or in a bicategory) the only “modules” that can be defined are covariant in
+exactly one variable and contravariant in exactly one other variable. But for
+multivariable category theory, where a module can naturally be covariant in
+many variables and contravariant in many other variables, it feels artificial
+to divide these variables into a “domain” and a “codomain”, forcing us to
+pass back and forth across dualization equivalences when we want to compare
+a profunctor A 7−
+→ B × C with a profunctor C op × A −7→ B, while intuitively
+(and in most examples) there is really only one notion involved, namely a
+functor B op × C op × A → Set.
+(v) Finally, a kit furnishes a more natural semantics for the “directed type theory”
+of [?], because its classes of objects and morphisms correspond directly to the
+judgments of the latter. In particular, a kit admits a very familiar set-like
+“internal-language” in which to reason about its objects, analogous to the
+“abstract index notation” of tensor calculus. We will introduce this language
+informally here; for details see [?].
+Part 1. Multivariable formal category theory
+In this part we will describe the structure of a kit informally, and consider a
+number of examples of how to use that structure to formulate category-theoretic
+arguments abstractly. The formal definition of a kit is rather technically involved
+and occupies ??; but this part is intended to demonstrate that for nearly all practical
+applications it is not necessary to know the details of the formal definition, only to
+have faith that it exists and behaves as one would expect.
+2. The structure of a kit
+A kit is composed of four sorts of things, which we discuss in turn.
+2.1. Cats. There is a class of objects, which we call cats, since they play the role
+of categories.
+2.2. Functors. We generally call the morphisms between cats functors. This is in
+line with the fact that the morphisms between many different kinds of generalized
+categories — enriched categories, indexed categories, bicategories, ∞-categories, etc.
+— are frequently called just “functors” without qualification.
+The functors in a kit are functors of many variables, some covariant and some
+contravariant. More precisely, the domain of a functor is a finite list of cats, some of
+which are annotated with the formal symbol (−)◦ to indicate contravariance. (This
+does not yet represent an operation of “oppositization” on cats; it is just a formal
+marker for contravariance. Similarly, we do not in general assume a “tensor product”
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+3
+
+of cats; as we will see later, these operations can be characterized by universal
+properties in terms of the multivariable functors.) The codomain of a functor, by
+contrast, is a single cat; thus we might have for instance f : (A, B ◦ , C) → D. If the
+list contains only one cat, we generally omit the parentheses, writing f : A → B.
+Functors can be composed in a “multicategorical” way that keeps track of
+variance. For instance, if in addition to f : (A, B ◦ , C) → D we have g : X → A
+and h : (Y ◦ , Z) → B and k : () → C (yes, lists can have length zero), then
+there is a composite f ◦ (g, h, k) : (X, Y, Z ◦ ) → D. Finally, like in a symmetric
+multicategory, we have symmetric group actions on the domains of functors, so that
+from f : (A, B ◦ , C) → D we can obtain a functor (B ◦ , C, A) → D and so on.
+In particular, we have a category of cats and unary functors, which we denote
+K1 . Later on we will enhance this to a 2-category.
+2.3. Modules. Now we have a second class of objects, which we call modules;
+these represent presheaves, profunctors, and more general “functors into the base of
+enrichment”. Each module is indexed by a finite list of cats with variance (the same
+sort of list that appears as the domain of a functor). We write Mod K (A, B ◦ , C) for
+the category (see below) of modules indexed by a list (A, B ◦ , C). Modules can be
+restricted along functors; thus if M ∈ Mod K (A, B ◦ , C), and g, h, k are as above, we
+have (g, h, k)∗ M ∈ Mod K (X, Y, Z ◦ ). We will also write (g, h, k)∗ M as M (g, h, k).
+This restriction is strictly functorial with respect to functor composition (one could
+consider generalizations of a kit where it is only weakly functorial, but in most
+examples it is strict, and in other cases it can be modified to become so).
+The symmetric groups also act on modules; thus if M ∈ Mod K (A, B ◦ , C) we
+have a module σ ∗ M ∈ Mod K (B ◦ , C, A) and so on. As with restriction, we assume
+for simplicity that this action is strict. Formally, the symmetric group action
+is combined with the restriction along functors, by representing the collection of
+modules as a functor defined on a category whose objects are lists of cats with
+variance and whose morphisms are lists of functors together with a permutation of
+their combined input.
+2.4. Module morphisms. Finally we have module morphisms; this is where all
+the subtlety and difficulty lies. The simplest sort of morphism between modules is
+an “ordinary” one between modules indexed by the same list of cats. These form
+the morphisms of the categories such as Mod K (A, B ◦ , C), and restriction along
+functors is of course functorial on these categories.
+The next simplest sort of module morphism is a “multivariable” one that represents a potential “tensor product of modules” multicategorically, similarly to how
+the multivariable functors represent a potential tensor product of categories. Since
+our intended models include categories enriched over a non-cartesian base, the individual categories such as Mod K (A, B ◦ , C) are not necessarily monoidal (that is, we
+can’t necessarily take a pointwise tensor product of presheaves), but we can expect
+“external” products such as Mod K (A) × Mod K (B) → Mod K (A, B). Thus, representing these multicategorically we have multivariable module morphisms such as
+(M1 , M2 , . . . , Mn ) → N , where Mi ∈ Mod K (Ψi ) and N ∈ Mod K (Ψ1 , Ψ2 , · · · , Ψn ),
+where (Ψ1 , Ψ2 , · · · , Ψn ) indicates the concatenated list of cats with variance. As
+with functors, the symmetric groups act on the domains of such morphisms.
+However, in order to really do multivariable category theory, we also need “extraordinary” natural transformations as in [?]. For instance, given M ∈ Mod K (A, A◦ , B)
+
+4
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+and N ∈ Mod K (C, C ◦ , B) we want to speak about a transformation α : M → N
+that is ordinary natural in B and extraordinary natural in A and C on either side. In
+plain set-based category theory this means we have components αa,b,c : M (a, a, b) →
+N (c, c, b) such that the following naturality squares commute for all f : a1 → a2 ,
+g : b1 → b2 , h : c1 → c2 , and a, b, c:
+M (a, a, b1 )
+M (1,1,g)
+
+α
+
+
+
+
+
+M (a, a, b2 )
+
+α
+
+M (f,1,1)
+
+/ N (c, c, b1 )
+N (1,1,g)
+
+
+M (a1 , a1 , b)
+
+α
+
+M (a, a, b)
+
+N (c1 , c1 , b)
+
+α
+
+M (1,f,1)
+
+/ N (c, c, b2 )
+
+α
+
+/ M (a2 , a2 , b)
+
+M (a1 , a2 , b)
+
+α
+
+
+/ N (c, c, b)
+
+/ N (c2 , c2 , b)
+N (1,h,1)
+
+
+/ N (c2 , c1 , b)
+
+N (h,1,1)
+
+Thus, a kit includes a set of “extraordinary” module morphisms from M to N
+whenever M ∈ Mod K (Ψ1 , Ψ◦1 , Ψ2 ) and N ∈ Mod K (Ψ3 , Ψ◦3 , Ψ2 ). Here the Ψi are
+lists of cats with variance, and Ψ◦ denotes reversal of all the variances in Ψ. Of course,
+in general the cats we want to match up extraordinarily may not appear in exactly
+this order (e.g. we could have M ∈ Mod K (A, B, A◦ ) and N ∈ Mod K (B, C ◦ , C)),
+but we can first act on the modules by a permutation.
+The extraordinary morphisms, like the ordinary ones that form the arrows of
+the categories Mod K (Ψ), can be restricted along functors, in a functorial way.
+Specifically, given M ∈ Mod K (Ψ1 , Ψ◦1 , Ψ2 ) and N ∈ Mod K (Ψ3 , Ψ◦3 , Ψ2 ) as above,
+determining a type of extraordinary module morphism from M to N , then such
+module morphisms can be restricted along any lists of functors fi : Ψ′i → Ψi (for
+i = 1, 2, 3). Here fi consists of a functor with codomain A for each cat A in Ψi , and
+Ψ′i is the concatenated list of the domains of these functors, with the variance of
+each A in Ψi applied to the domain of the corresponding functor. Thus for instance
+if g : (A, B ◦ ) → C and h : D → E, we would have (g, h) : (A, B ◦ , D◦ ) → (C, E ◦ ).
+Note that just as the domain and codomain of an ordinary module morphism
+have to be restricted along the same functor (since restriction defines functors
+Mod K (Ψ) → Mod K (Ψ′ )), the two occurrences of a cat in the domain or codomain
+in an extraordinary morphism also have to be restricted along the same functor.
+Finally, we can have multivariable extraordinary morphisms as well, where the
+domain is a list of modules rather than a single one. In this case we almost always
+want to permute the lists of cats appearing in the domain rather than simply
+concatenating them, so technically we have to incorporate a notion of permutation
+action on a list; in a moment we will introduce a more convenient notation for this.
+The real complication comes when defining how extraordinary morphisms can
+be composed. The rules for how to compose extraordinary natural transformations
+were given in [?], but it seems to be quite involved to use these rules to define an
+abstract structure in a categorically respectable way. In ?? we will describe the
+rules informally; but first we digress to introduce a better notation for extraordinary
+morphisms.
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+5
+
+3. Abstract variable notation
+It turns out to be quite convenient to use a different notation for modules and
+their morphisms. Rather than writing
+M ∈ Mod K (A, B ◦ , C)
+we allow ourselves to think of M as a functor that takes “values” on “variables”
+belonging to A, B, C, and write
+(a : A) , (b : B ◦ ) , (c : C) ⊢ M (a, b, c) ∈ Mod K .
+Note that the cats in a kit are still just abstract objects; we are not asserting that
+they have “elements” in any sense. These “variables” are purely schematic. This is
+very much like the “abstract index notation” of tensor calculus that allows us to
+write Tcab for an element of a tensor space V ⊗ V ⊗ V ∗ without needing to actually
+pick a basis of V to make a, b, c into actual numerical indices of components.
+One reason this “abstract variable notation” is useful is when restricting modules
+along functors. In the previous example with M as above and
+g:X→A
+
+h : (Y ◦ , Z) → B
+
+k : () → C
+
+instead of (g, h, k)∗ M or M (g, h, k) we can write
+(x : X) , (y : Y ) , (z : Z ◦ ) ⊢ M (g(x), h(y, z), k) ∈ Mod K
+This indicates much more clearly how the functors g, h, k match up with the
+dependence of M on A, B ◦ , C and how the resulting dependence on X, Y, Z ◦ feeds
+into g, h, k. The strict functoriality of restriction with respect to functor composition
+means that this notation behaves as we expect on such composites; for instance, if
+we have
+(c : C) ⊢ M (c) ∈ Mod K
+
+g:B→C
+
+f :A→B
+
+then the three restrictions g ∗ M , f ∗ g ∗ M , and (g ◦ f )∗ M are represented in this
+notation as
+(b : B) ⊢ M (g(b)) ∈ Mod K
+(a : A) ⊢ M (g(f (a))) ∈ Mod K
+
+(a : A) ⊢ M ((g ◦ f )(a)) ∈ Mod K
+
+where the second and third are, as we expect, equal.
+Remark 3.1. To avoid confusion between functors and abstract variables, we emphasize that the symbol ⊢ always indicates the use of abstract variables, and in its
+absence we always revert back to the notation M (g, h, k).
+The second place that abstract variable notation is useful is when describing
+module morphisms, and especially extraordinary ones. We said above that extraordinary module morphisms go from M to N whenever M ∈ Mod K (Ψ1 , Ψ◦1 , Ψ2 )
+and N ∈ Mod K (Ψ3 , Ψ◦3 , Ψ2 ). We also mentioned that we generally have to apply
+a permutation in order to put the lists of cats in exactly this form, such as if
+M ∈ Mod K (A, B, A◦ ) and N ∈ Mod K (B, C, C ◦ ). In practice, instead of actually
+acting on M and N by symmetric groups, it is easier to just indicate how the cats
+should be matched up. We can do this with abstract variables as follows:
+(a : A) , (b : B) , (c : C) | M (a, b, a) ⊢ N (b, c, c)
+
+6
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+Note that every variable appears exactly twice to the right of the vertical bar, once
+covariantly and once contravariantly (where occurrences to the left of the turnstile
+⊢ are counted with opposite variance).
+This notation is especially valuable when the same cat appears multiple times.
+For instance, if M ∈ Mod K (A, A◦ , A) and N ∈ Mod K (A), then there are two kinds
+of extraordinary morphisms from M to N , which are represented in this notation as
+(x : A) , (y : A) | M (x, x, y) ⊢ N (y)
+(x : A) , (y : A) | M (x, y, y) ⊢ N (x)
+It is also especially useful when talking about multivariable extraordinary morphisms.
+For instance, we could have
+(a : A) , (b : B) , (c : C) , (d : D) | M1 (a, b), M2 (b, c) ⊢ N (a, d, c, d)
+but here there is no way to act on M1 and M2 by symmetric groups separately to
+put the B, B ◦ in front. Formally, this means that when describing multivariable
+extraordinary morphisms we have to incorporate a permutation in the definition;
+but with abstract variable notation we don’t need to think about that.
+Finally, if the cats that the variables correspond to are obvious from context, we
+can omit their declarations, obtaining a more concise notation M (a, b, a) ⊢ N (b, c, c)
+for a set of extraordinary module morphisms. Thus, if we want to give a name to a
+particular such morphism we can write
+
+ϕ ∈ M (a, b, a) ⊢ N (b, c, c)
+As noted in ??, the symbol ⊢ is still present here to indicate the use of abstract
+variables, even though the correspondence of variables to cats is not explicitly
+“declared”.
+It is worth emphasizing one difference between the use of abstract variables for
+restriction and for extraordinary morphisms. In the case of restriction, we write
+(a : A) , (b : B) ⊢ M (f (a), g(b)) to denote the actual module (f, g)∗ M obtained by
+restricting M along f and g. However, in the case of extraordinary morphisms, it is
+probably better not to think of the notation (a : A) ⊢ M (a, a) as actually denoting
+any module distinct from M ;1 in particular it is not obtained by restriction of M
+along any sort of “diagonal” (which need not exist in an arbitrary kit). We will also
+combine these notations, writing for instance M (f (a), g(a), h(b)) ⊢ N (k(b)); in this
+case it is better to think of the restrictions as happening first (obtaining modules
+such as (a1 : A) , (a2 : A) , (b : B) ⊢ M (f (a1 ), g(a2 ), h(b))), followed by the pairing
+of variables to determine a type of extraordinary morphism.
+So far we have described our “abstract variable notation” somewhat informally.
+When doing formal category theory, this informal understanding is generally sufficient. However, the notation can in fact be made much more precise, by defining a
+type theory to serve as the “internal language” of a kit; see [?].
+4. Composing extraordinary morphisms
+The simplest sort of composition for extraordinary morphisms is composition with
+ordinary ones on either side. For instance, a morphism ϕ ∈ M (a, b, a) ⊢ N (b, c, c)
+can be composed with an ordinary map ψ : N → N ′ in Mod K (B, C, C ◦ ) to obtain
+1In the formal definition to be presented in ??, it is possible to think of (a : A) ⊢ M (a, a) as
+an object of “SE”, but this is arguably just a technical device.
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+7
+
+
+a morphism ψϕ ∈ M (a, b, a) ⊢ N ′ (b, c, c) In examples it is easy to see how to do
+this: just compose the components
+ϕa,b,c
+
+ψb,c,c
+
+M (a, b, a) −−−→ N (b, c, c) −−−→ N ′ (b, c, c)
+and check that the naturality relations (both ordinary and extraordinary) are
+preserved. (Note that the components ψb,c1 ,c2 with c1 ̸= c2 do not appear in the
+definition, but they do appear in the proof of extraordinary naturality.) Formally,
+we can say that each set of extraordinary morphisms admits an action on both sides
+by the categories Mod K (Ψ) (that is, it is a profunctor).
+More interesting sorts of composition involve two extraordinary transformations,
+as explained in [?]. The most basic composite of this sort involves two morphisms
+
+
+ϕ ∈ M (x) ⊢ N (x, y, y)
+ψ ∈ N (z, z, w) ⊢ P (w) .
+with x, y, z, w all associated to the same cat A. In examples, we can compose these
+by composing their components
+ϕx,x
+
+ψx,x
+
+M (x) −−−→ N (x, x, x) −−−→ P (x)
+and check that the result is an ordinary natural transformation M → P .
+Note that the identification of all three variables in N is mandated in order to
+be able to write both ϕ and ψ, since ϕ requires the second and third variables to be
+the same while ψ requires the first and second to be the same. This then determines
+how the naturality of the composite matches up the variables of M and P (in this
+case, of course, they have only one variable each, but in general they might have
+many and this matching might be ambiguous). This process of identifying variables
+can be represented by drawing a graph:
+A
+y
+A
+
+w
+
+A
+x
+
+A
+z
+
+A
+
+or by solving a system of equations that “unifies” each arguments of the codomain
+N (x, y, y) of ϕ with the corresponding argument of the domain N (z, z, w) of ψ:
+x=z
+
+y=z
+
+y=w
+
+There are cases where this doesn’t work; that is, pairs of extraordinary morphisms
+from M to N and from N to P that are “non-composable” despite having the same
+module N in the middle. For example, we might instead have
+
+
+ϕ ∈ M (x) ⊢ N (x, y, y)
+ξ ∈ N (w, z, z) ⊢ P (w) .
+The problem here is that when “composing components” there is no way to decide
+what y and z should be: we can write down the composite
+ϕx,y,y
+
+ξx,y,y
+
+M (x) −−−−→ N (x, y, y) −−−−→ P (x)
+for any value of y, and there is no canonical choice (note that x and w might belong
+to an entirely different cat, so choosing y = x is not an option). Graphically, this
+problem is visible as the presence of a “loop”:
+
+8
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+B
+y
+A
+
+z
+B
+
+x
+
+A
+
+A
+w
+
+A more careful explanation of this condition, and a proof that it is the most general
+answer (for the classical case of enriched categories), can be found in [?].
+The technical work in the precise definition of a kit is to make precise all the
+allowable composites of extraordinary morphisms, how they interact with restriction
+along functors, and in what sense these composites must be “associative”. However,
+in practical applications this generality is rarely needed, as most extraordinary
+morphisms only involve a few variables, and intuition from ordinary category theory
+is generally sufficient to give the right answer. We intend to demonstrate this with
+some examples of doing “formal category theory” in a kit; but first we need to
+discuss some universal properties of cats and modules.
+5. Universal constructions
+Universal constructions in a kit are more complicated than those in an ordinary
+category, due to the interaction of the different kinds of morphisms. Specifically,
+universal properties of cats generally have to be extended to say something about
+modules and module morphisms, while universal properties of modules have to
+include the extraordinary module morphisms somehow and also be stable under
+restriction along functors.
+5.1. Tensor products of cats and opposites. We begin with the simplest universal properties for cats: those that directly internalize the operations represented
+“virtually” by the multicategorical nature of functors. For instance, a tensor product
+of cats A, B should be a cat A ⊗ B with a functor χ : (A, B) → A ⊗ B through
+which any functor (A, B) → C factors uniquely.
+However, this plain universal property, though it suffices to determine A ⊗ B
+uniquely up to isomorphism, is insufficient in several ways. Firstly, as in the case of
+ordinary multicategories, it needs to apply to more general functors containing (A, B)
+as only part of their domain. Secondly, it needs to apply even in the contravariant
+case: functors (A◦ , B ◦ ) → C should factor through (A ⊗ B)◦ . Thirdly, it needs
+to apply to modules as well: we should have Mod K (A ⊗ B) ∼
+= Mod K (A, B), and
+similarly when other cats are also present. And finally, it also needs to apply to
+module morphisms of all sorts, even extraordinary ones.
+In order to state all of these universal properties precisely, we need some more
+notation.
+∗
+• We will write Aε to indicate either A or A◦ , and in this case we write Aε for
+the other one (A◦ or A, respectively).
+• We will use the letter Γ for a finite list of modules with abstract variables, such
+as M (a, b), N (b, c, d), P (e) or M1 (f (x), g(y, z)), M2 (h(y, x)). Similarly, we will
+use the letter Ω for a single module with abstract variables;
+ thus a general
+extraordinary module morphism can be written ϕ ∈ Γ ⊢ Ω .
+• We will write Γ[x ←[ θ] for the result of substituting the expression θ for all
+occurrences of the abstract variable x in Γ, and similarly, for Ω. Thus, for
+instance, if Ω = M (a, b), then Ω[a ←[ f (x, y)] = M (f (x, y), b). Note that this
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+9
+
+might perform zero, one, or two substitutions, depending on how many times
+the variable occurs.
+Definition 5.1. A tensor product of cats A, B is a cat A ⊗ B with a functor
+χ : (A, B) → A ⊗ B such that
+(i) Precomposition with χ induces bijections of functor sets
+∼
+K((Ψ, (A ⊗ B)ε ), C) −
+→ K((Ψ, Aε , B ε ), C)
+
+for any list Ψ of cats with variance;
+(ii) Restriction along χ induces an isomorphism of categories
+∼
+Mod K (Ψ, (A ⊗ B)ε ) −
+→ Mod K (Ψ, Aε , B ε )
+
+for any Ψ; and finally
+(iii) Restriction along χ induces bijections of sets of extraordinary morphisms
+ ∼
+
+Ψ, z : (A ⊗ B)ε | Γ ⊢ Ω −
+→ Ψ, x : Aε , y : B ε | Γ[z ←[ χ(x, y)] ⊢ Ω[z ←[ χ(x, y)]
+whenever this makes sense.
+Note that due to the symmetric group actions, it suffices to assert these universal
+properties when A ⊗ B is at the end of a list; corresponding properties then follow
+when it appears anywhere.
+We can similarly define n-ary tensor products of cats for all n, and using only ??
+we can show that these are associative and symmetric insofar as they exist. That is,
+if A ⊗ B and (A ⊗ B) ⊗ C exist, then the latter is a ternary tensor product; hence
+if B ⊗ C exists then A ⊗ (B ⊗ C) exists and is isomorphic to (A ⊗ B) ⊗ C. A 0-ary
+tensor product is a cat I with a functor χ : () → I, precomposition with which
+induces isomorphisms
+∼
+K((Ψ, I ε ), C) −
+→ K(Ψ, C)
+∼
+Mod K (Ψ, I ε ) −
+→ Mod K (Ψ)
+
+
+∼
+ε
+Ψ, z : I | Γ ⊢ Ω −
+→ Ψ | Γ[z ←[ χ] ⊢ Ω[z ←[ χ]
+
+In particular, if all tensor products of cats exist, then the category K1 of cats and
+unary functors is symmetric monoidal.
+Similarly, we can internalize contravariance by defining an operation of “oppositization”. We will write this as (−)op to distinguish it from the formal marker of
+contravariance (−)◦ .
+Definition 5.2. An opposite of a cat A is a cat Aop with a functor χ : (A◦ ) → Aop
+precomposition with which induces isomorphisms
+∗
+
+∼
+K((Ψ, (Aop )ε ), C) −
+→ K((Ψ, Aε ), C)
+∗
+
+∼
+Mod K (Ψ, (Aop )ε ) −
+→ Mod K (Ψ, Aε )
+
+ ∼ 
+∗
+Ψ, z : (Aop )ε | Γ ⊢ Ω −
+→ Ψ, x : Aε | Γ[z ←[ χ(x)] ⊢ Ω[z ←[ χ(x)]
+
+If all opposites exist, then (−)op defines an endofunctor of K1 . By comparing
+universal properties, we can see that (Aop )op ∼
+= A and (A ⊗ B)op ∼
+= Aop ⊗ B op and
+op
+op
+I , so that (−) is a “symmetric monoidal involution” in a suitable sense.
+
+10
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+5.2. Tensor products of modules. Like the tensor product of cats, the tensor
+product of modules has a universal property very much like that of tensor products
+in an ordinary multicategory. It is simpler in that we don’t need to worry about the
+dependence of modules on cats (the second two properties in ????). However, it is
+more complicated in that the universal property applies to all sorts of extraordinary
+morphisms, and that it must be stable under restriction along functors.
+To state this precisely, we need a bit more notation.
+• If M ∈ Mod K (Ψ), we will write M (θ) for M with a list of expressions θ for
+its abstract variables. For instance, if M ∈ Mod K (A, B ◦ , C) and we have
+g : X → A and h : (Y ◦ , Z) → B and k : () → C, then with θ = (g(x), h(y, z), k)
+we have M (θ) = M (g(x), h(y, z), k). We will also use letters like γ and ω for
+such lists θ.
+Definition 5.3. A tensor product of modules M1 ∈ Mod K (Ψ1 ) and M2 ∈
+Mod K (Ψ2 ) is a module M1 ⊗ M2 ∈ Mod K (Ψ1 , Ψ2 ) along with an (ordinary) morphism χ : (M1 , M2 ) → M1 ⊗M2 such that precomposition with χ (or some restriction
+of it) induces bijections
+ ∼
+
+Γ, (M1 ⊗ M2 )(θ1 , θ2 ) ⊢ Ω −
+→ Γ, M1 (θ1 ), M2 (θ2 ) ⊢ Ω
+The presence of the θs means that this universal property includes extraordinary
+morphisms of all sorts, where paired variables may occur anywhere. Examples
+include:
+ ∼
+
+(M1 ⊗ M2 )(a, b) ⊢ N (a, b) −
+→ M1 (a), M2 (b) ⊢ N (a, b)
+ ∼
+
+(M1 ⊗ M2 )(a, a) ⊢ N −
+→ M1 (a), M2 (a) ⊢ N
+ ∼
+
+P (a), (M1 ⊗ M2 )(a, b, c) ⊢ N (b, c, d, d) −
+→ P (a), M1 (a, b), M2 (c) ⊢ N (b, c, d, d)
+and so on. Similarly, θ can also include restrictions, so that we might have
+ ∼
+
+(M1 ⊗ M2 )(f (a), g(b)) ⊢ N (a, b) −
+→ M1 (f (a)), M2 (g(b)) ⊢ N (a, b)
+In other words, the restricted morphism (f, g)∗ χ : f ∗ M, g ∗ N → (f, g)∗ (M ⊗ N ) has
+the universal property that would be expected of χ : f ∗ M, g ∗ N → f ∗ M ⊗ g ∗ N , and
+thus tensor products are stable under restriction: (f, g)∗ (M ⊗ N ) ∼
+= f ∗ M ⊗ g∗ N .
+In general this stability is only up to isomorphism, so we technically ought to resist
+the temptation to write things like M1 (a, b) ⊗ M2 (c) instead of (M1 ⊗ M2 )(a, b, c).
+However, the former notation is so useful (it reminds us how the dependencies split)
+that we will often succumb to this temptation. It should be possible to prove a
+coherence theorem making tensor products (and all similar universal properties to
+be introduced below) strictly stable under restriction, and this is moreover how
+they appear in the type theory of [?]. Remember also that the pairing of variables
+only indicates the type of extraordinary morphism under consideration; when we
+write (M1 ⊗ M2 )(a, a) or M1 (a) ⊗ M2 (a) we are still talking about the same tensor
+product module M1 ⊗ M2 , just different kinds of morphisms out of it.
+As usual, we can define n-ary tensor products for all n, and the usual arguments
+show that these are associative and symmetric insofar as they exist. A nullary tensor
+product is a module I ∈ Mod K (())
+and a morphism
+() → I, precomposition with
+ ∼
+
+which induces bijections Γ, I ⊢ Ω −
+→ Γ⊢Ω .
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+11
+
+5.3. Ends and coends. The tensor product of modules has a universal property
+that extends to extraordinary morphisms, but the universal morphism (M, N ) →
+M ⊗ N itself is an ordinary morphism. Now we consider universal morphisms that
+are themselves extraordinary. Perhaps the simplest of these are ends and coends.
+First one more bit of notation:
+• We will write ξ for a θ that contains no functors or pairings, only a list of distinct
+abstract variables. In other words, M (ξ) simply stands for a way to import M
+into abstract variable notation, which is unique up to the choice of variable
+names. Thus if M ∈ Mod K (A, B ◦ , C) then M (ξ) might mean M (a, b, c) but
+not M (g(x), h(y, z), k). Moreover, if different ξs appear in an expression we
+assume them to be disjoint.
+For instance, the universal morphism of a tensor product could be written
+
+in abstract variable notation as χ ∈ M1 (ξ1 ), M2 (ξ2 ) ⊢ (M1 ⊗ M2 )(ξ1 , ξ2 ) . We
+avoided this before by writing it without abstract variables, but that is no longer
+possible now that we want to consider extraordinary universal morphisms.
+RA
+Definition 5.4. A coend of a module M 
+∈ Mod K (A, A◦ , Ψ) is a module
+M∈
+
+RA 
+Mod K (Ψ) together with a morphism χ ∈ M (a, a, ξ) ⊢
+M (ξ) , precomposition with which induces bijections
+ R
+
+
+A
+∼
+→ Γ, M (a, a, θ) ⊢ Ω
+Γ, ( M )(θ) ⊢ Ω −
+whenever this makes sense.
+If other variables belonging to A occur elsewhere, then we may indicate which
+R a:A
+one is being “coended” by writing
+M (a, a). In this notation the variable a is
+“bound” and no longer indicates any ordinary or extraordinary dependence of the
+morphism under consideration.
+The simplest case of the universal property of a coend is that
+R
+
+
+A
+M ⊢N ∼
+= M (a, a) ⊢ N
+RA
+for M ∈ Mod K (A, A◦ ) and N ∈ Mod K (()). In other words,
+M is the module
+universally equipped with a morphism from M that is extraordinary in A. As with
+tensor products, the full universal property also applies to multivariable morphisms
+that may have other variables, both ordinary and extraordinary, and also implies a
+RA
+RA ∗
+stability under restriction: f ∗ ( M ) ∼
+f M.
+=
+This stability is, of course, only true for restriction along functors between other
+cats that M may depend on: a functor f : B → A does not induce an isomorphism
+RB
+RA
+RB
+RA
+(f, f )∗ M ∼
+M . We do, however, have a morphism
+(f, f )∗ M →
+M,
+=
+RA
+induced by first restricting the universal morphism M (a, a) →
+M along f to
+RA
+RB
+obtain M (f (b), f (b)) →
+M , then applying the universal property of
+.
+By comparing universal properties, we can deduce the “Fubini theorem”
+RARB
+RBRA
+M∼
+M.
+=
+R A⊗B ′
+Moreover, if A⊗B exists, then both iterated coends are also isomorphic to
+M,
+where M ′ corresponds to M under the universal property of A ⊗ B (applied twice,
+RI ′
+once covariantly and once contravariantly). Similarly, we have
+M ∼
+= M if I is
+′
+the unit cat and M corresponds to M under its universal property.
+
+12
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+Combining the coend with the (external) tensor product of modules, we obtain
+the binding or canceling tensor product of modules:
+RA
+M ⊗A N =
+(M ⊗ N )
+where M ∈ Mod K (Ψ1 , A) and N ∈ Mod K (Ψ2 , A◦ ) (or vice versa). Comparing
+universal properties, we see that this is also associative:
+(M ⊗A N ) ⊗B P ∼
+= M ⊗A (N ⊗B P )
+and we can verify the pentagon axiom. This wants to be the composition operation
+in a bicategory of cats and modules, where the hom-category from A to B is
+Mod K (B ◦ , A); but we do not yet have the identity 1-cells for such a bicategory.
+Note that it is possible to express directly the universal property of the binding
+tensor product: it comes with a morphism M (ξ1 , a), N (a, ξ2 ) ⊢ (M ⊗A N )(ξ1 , ξ2 ),
+inducing bijections
+ ∼
+
+Γ, (M ⊗A N )(θ1 , θ2 ) ⊢ Ω −
+→ Γ, M (θ1 , a), N (a, θ2 ) ⊢ Ω
+This is useful because in some kits the binding tensor product may exist even if the
+external tensor product and coend do not separately exist.
+Finally, ends are dual to coends. These are our first module with a “mapping in”
+universal property.
+R
+Definition 5.5. An end of a module M ∈ Mod K(A, A◦ , Ψ) is a module
+M∈
+A
+
+R
+Mod K (Ψ) together with a morphism χ ∈
+M (ξ) ⊢ M (a, a, ξ) , postcomposiA
+tion with which induces bijections
+ ∼
+
+R
+Γ ⊢ ( A M )(θ) −
+→ Γ ⊢ M (a, a, θ)
+whenever this makes sense.
+5.4. Function modules. For ends and coends, the universal morphism is extraordinary in the input (the module being ended or coended); now we move on
+to universal morphisms that are extraordinary in the output (the object with a
+universal property). The first of these are function modules, the “right adjoints”
+to tensor products — although as we will see, to actually construct adjunctions
+requires incorporating ends and coends as well.
+Definition 5.6. A function module of modules M1 ∈ Mod K (Φ1 ) and M2 ∈
+Mod K (Φ2 ) is a module M1 ⊸ M2 ∈ Mod K (Φ◦1 , Φ2 ) with a morphism
+
+ev ∈ (M1 ⊸ M2 )(ξ1 , ξ2 ), M1 (ξ1 ) ⊢ M2 (ξ2 ) ,
+postcomposition with which induces bijections
+ ∼
+
+(5.7)
+Γ ⊢ (M1 ⊸ M2 )(θ1 , θ2 ) −
+→ Γ, M1 (θ1 ) ⊢ M2 (θ2 )
+whenever this makes sense.
+As before, ξ’s represent disjoint lists of distinct variables; thus ev (“evaluation”)
+is a single morphism such as (M1 ⊸ M2 )(a, b), M1 (a) ⊢ M2 (b). But also as before,
+the θ’s represent arbitrary expressions, possibly with variable pairings; thus the
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+universal property includes as particular cases:
+ ∼
+N (a, b) ⊢ (M1 ⊸ M2 )(a, b)) −
+→
+ ∼
+N ⊢ (M1 ⊸ M2 )(a, a)) −
+→
+ ∼
+N (a, b) ⊢ (M1 ⊸ M2 )(a, c, b, c)) −
+→
+ ∼
+N (f (x, z), g(y)) ⊢ (M1 ⊸ M2 )(h(x, y), z)) −
+→
+
+13
+
+
+N (a, b), M1 (a) ⊢ M2 (b)
+
+N, M1 (a) ⊢ M2 (a)
+
+N (a, b), M1 (a, c) ⊢ M2 (b, c)
+
+N (f (x, z), g(y)), M1 (h(x, y)) ⊢ M2 (z)
+
+and so on. Note that the composition map (??) is indeed what we get by postcompos- 
+ing with ev: as described in ??,when composing (M1 ⊸ M2 )(ξ1 , ξ2 ), M1 (ξ1 ) ⊢ M2 (ξ2 )
+with Γ ⊢ (M1 ⊸ M2 )(θ1 , θ2 ) (and technically the identity on M1 (ξ1 ) as well), ξ1
+and ξ2 get identified with θ1 and θ2 , so that in the result instead of M1 (ξ1 ) and
+M2 (ξ2 ) in the domain and codomain we have M1 (θ1 ) and M2 (θ2 ).
+Combining the universal properties of function modules with tensor products, we
+have an isomorphism
+
+
+(M1 ⊗ M2 )(θ1 , θ2 ) ⊢ M3 (θ3 ) ∼
+= M1 (θ1 ) ⊢ (M2 ⊸ M3 )(θ2 , θ3 )
+that looks like an adjunction, except that one side or the other (or both) must
+always be extraordinary. However, if we add in an end or a coend, we can make
+an isomorphism between two ordinary sets of morphisms, and therefore an actual
+adjunction. Examples include
+
+R
+
+a:A
+(M1 ⊗ M2 )(a, a) ⊢ M3 ∼
+= M1 (a) ⊢ (M2 ⊸ M3 )(a)
+
+
+R
+(M1 ⊗ M2 )(a) ⊢ M3 (a) ∼
+= M1 ⊢ a:A (M2 ⊸ M3 )(a, a)
+which can be interpreted (for fixed M2 ∈ Mod K (A)) as adjunctions
+Mod K (A) ⇆ Mod K (())
+Mod K (()) ⇆ Mod K (A)
+respectively. Adding in a couple of other variables, we find that for M ∈ Mod K (B ◦ , A)
+and N ∈ Mod K (C ◦ , B) and P ∈ modk(C ◦ , A) we have
+R
+
+
+R
+b:B
+(N ⊗ M )(c, b, b, a) ⊢ P (c, a) ∼
+= M (b, a) ⊢ c:C (N ⊸ P )(c, b, c, a)
+RB
+Since
+(N ⊗ M ) is the composition in the expected “bicategory of profunctors”,
+this shows that if we have function modules and ends then that will be a closed
+bicategory, in the usual sense that its composition functors have right adjoints on
+both sides.
+As in the case of the binding tensor product, it is sometimes useful to directly
+name the binding function module
+R
+M ⊸A N = A (M ⊸ N )
+whose universal property can be expressed directly as a morphism
+
+ev ∈ (M ⊸A N )(θ1 , θ2 ), M (θ1 , a) ⊢ N (θ2 , a)
+postcomposition with which induces an isomorphism
+ ∼
+
+Γ ⊢ (M ⊸A N )(θ1 , θ2 ) −
+→ Γ, M (θ1 , a) ⊢ N (θ2 , a) .
+
+14
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+5.5. Hom-modules and representable modules. The most important universal
+objects in a kit are the “hom-modules” homA ∈ Mod K (A◦ , A). Their universal
+property is essentially a “two-sided double Yoneda lemma”.
+Definition 5.8. A hom-module of a cat Ais a module homA ∈ Mod K (A◦ , A)
+together with a morphism idA ∈ ⊢ homA (a, a) , precomposition with which induces
+bijections
+ ∼
+
+Γ, homA (x, y) ⊢ Ω −
+→ Γ[y ←[ x] ⊢ Ω[y ←[ x]
+Two instances of this universal property look like the Yoneda lemma and the
+co-Yoneda lemma:
+ ∼
+
+homA (x, y) ⊢ M (x, y) −
+→ ⊢ M (x, x)
+ ∼
+
+M (x), homA (x, y) ⊢ N (y) −
+→ M (x) ⊢ N (x)
+TODO: Derive the one-sided versions.
+5.6. Functor and presheaf cats.
+6. Examples of formal category theory
+We will always assume that all kits have hom-modules; this seems to be a
+prerequisite for doing much of any formal category theory. However, we will
+explicitly assume other universal objects when we need them.
+6.1. Limits and colimits. Consider functors d : D → C and l : () → C (i.e. l is
+an “object” of C), and a module J ∈ Mod K (D). A J-weighted cone over d with
+vertex l is a (ordinary) module morphism
+
+π ∈ J(x) ⊢ homC (l, d(x)) .
+Using the universal property of hom-modules, this corresponds to a morphism
+
+π ′ ∈ homC (y, l), J(x) ⊢ homC (y, d(x)) .
+We say that π exhibits l as a J-weighted limit of d if π ′ gives homC (1, l) the
+universal property of the binding function module J ⊸D homC (1, d); in other words,
+if postcomposition with π ′ induces bijections
+ ∼
+
+Γ ⊢ homC (y, l) −
+→ Γ, J(x) ⊢ homC (y, d(x)) .
+Of course, if J ⊸D homC (1, d) is known to exist (such as if K has ends and
+function modules), then to make l a J-weighted limit of d is equivalent to giving an
+isomorphism homC (1, l) ∼
+= J ⊸D homC (1, d) in Mod K (C ◦ ).
+(Hmm, in the definition of function modules (and all the other universal properties)
+I incorporated a substitution to make it restriction-stable. Is that necessary to do
+here too? In an equipment that corresponds to asserting the universal property
+with respect to cells having nontrivial vertical-arrow boundaries. But maybe we
+can avoid that once we have homs and the Yoneda lemma by moving them into the
+domain?)
+While the above definition most closely matches the usual definition of weighted
+limits, it is not necessary to restrict d and l to have unary and nullary domains,
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+15
+
+respectively. The case when l also has unary domain E is also very important. In
+this case π is ordinary in E and π ′ is extraordinary:
+
+π ∈ J(e, x) ⊢ homC (l(e), d(x))
+
+π ′ ∈ homC (y, l(e)), J(e, x) ⊢ homC (y, d(x))
+and the limit is again characterized by homC (1, l) ∼
+= J ⊸D homC (1, d), only now
+this is an isomorphism in Mod K (C ◦ , E). Since universal properties are stable
+under restriction, it follows that for any f : E ′ → E we have also homC (1, lf ) ∼
+=
+J(f, 1) ⊸D homC (1, d), so that l : E → C is a functor given by taking “pointwise
+limits”.
+As a special case, we can define (pointwise) Kan extensions. If f : D → C and
+g : D → E are functors, then the right Kan extension of f along g (if it exists) is
+the limit of f weighted by homE (1, g).
+Part 2. The definition of a kit
+7. Generalized polycategories
+Our formal definition of a kit will be a special case of a general notion called a
+generalized polycategory. Generalized polycategories appear only implicitly in the
+literature (e.g. [?]), so we will have to define them as well along the way. However,
+we defer their general study to a later paper, taking here a reasonably geodesic
+route to the definition of kit.
+Roughly speaking, generalized polycategories are to polycategories as generalized
+multicategories are to multicategories. Recall that a multicategory is like a category
+in which a morphism can have a finite list of objects, rather than a single object, as
+its domain (but still only a single object as codomain). Generalized multicategories
+are a vast generalization obtained by observing that “finite lists” can be regarded
+as elements of the free-monoid monad, and that a version of the definition of
+multicategory can be carried out for any sufficiently well-behaved monad.
+Polycategories, on the other hand, are like categories in which a morphism can
+have finite lists of objects as both its domain and codomain. However, this brief
+description is significantly farther from a precise definition than the corresponding
+brief description of multicategories, because there are many more choices about how
+to allow such morphisms to be composed. Polycategories proper [?, ?] result from
+one such choice, but other (perhaps even more natural) choices yield structures such
+as “colored props” and “colored properads”.2
+Generalized polycategories are thus defined relative not just to two monads
+(one describing the domains and one the codomains), but also a “distributive law”
+between them that describes “how morphisms should be composed”. Ordinary
+polycategories were defined in this language by Garner [?]; to obtain a general
+notion we abstract out the details of his construction (with some changes; see below).
+This is promising as an avenue for defining kits, since we can use the distributive
+law to encode the “allowable composites” of extraordinary natural transformations.
+There are a number of perspectives on generalized multicategories that one could
+enhance to a theory of generalized polycategories. We will use the framework of [?],
+2Thus perhaps the general notion should be called a “generalized prop”, but “generalized
+polycategory” is more euphonious and intuitive-sounding.
+
+16
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+except that (aiming at a geodesic route to kits) we simplify it by considering only
+double categories rather than the “virtual double categories” used there.
+Specifically, we consider pseudo double categories, in which one direction of
+composition is strict and the other is only associative and unital up to isomorphisms
+in the strict direction. The literature is not consistent about whether the strict
+direction is the “vertical” or the “horizontal” one. To be agnostic about this, we
+will use instead the words tight and loose (from [?]) for the strict and pseudo
+directions, and we allow ourselves to write them in either orientation, marking the
+loose morphisms with a dot to disambiguate. Thus, a cell in a double category can
+be written either as
+/C
+A • /B
+A
+
+C
+
+⇓
+•
+
+
+/D
+
+or
+
+•
+
+
+B
+
+⇒
+
+•
+
+
+/D
+
+We write tight composition (of arrows or cells) with · or juxtaposition in applicative
+order, and loose composition (of arrows or cells) with • in diagrammatic order.3
+Similarly, we write 1 for tight identities (of objects or loose arrows), and IdA for
+loose identities (of objects or tight arrows).
+The particular double category we have most in mind is Cat, where:
+• The objects are categories,
+• The tight arrows are functors,
+•
+• A loose arrow A −
+−
+→ B is a profunctor, i.e. a functor B op × A → Set, and
+• The 2-cells are natural transformations of the obvious sort.
+We will also be interested in slice double categories of Cat: for any object A of a
+double category D, in the slice D/A the category (D/A)0 of objects and tight maps
+is the slice of D0 over A, and the category (D/A)1 of loose arrows and cells is the
+slice of D1 over IdA .
+Between (pseudo) double categories we will mainly be interested in strong or
+pseudo double functors, which are strictly functorial in the tight direction and
+functorial up to tight isomorphism in the loose direction. Such functors admit an
+obvious notion of tight transformation, with tight arrow components αA : F A → GA
+for each object A, and 2-cell components
+FA
+αA
+
+
+GA
+
+FM
+•
+⇓
+•
+GM
+
+/ FB
+αB
+
+
+/ GB
+
+M
+
+for each loose arrow A −•
+−
+→ B. This yields a strict 2-category of double categories
+which we denote Dbl . By a double monad we mean a monad in this 2-category.
+(Many of the definitions make sense even for double monads whose underlying double
+functors are lax, but all the ones we will be interested in are strong.)
+Distributive laws can also be defined internal to any 2-category; interpreted in
+Dbl this yields a notion of tight distributive law. However, for generalized polycategories we are interested in loose distributive laws, which we now define. If F and
+3Applicative order means that the composite of f : A → B and g : B → C is g · f , while
+diagrammatic order means that the composite of M : A −•
+−
+→ B and N : B −•
+−
+→ C is M • N .
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+17
+
+G are double functors between pseudo double categories, a loose transformation
+α : F −•
+−
+→ G consists of a loose arrow αX : F X −•
+−
+→ GX for each object X of the
+domain, forming a pseudonatural transformation between the loose parts of F and
+G, together with for each tight arrow f : X → Y in the domain, a cell
+FX
+Ff
+
+
+FY
+
+αX
+•
+αf
+•
+αY
+
+/ GX
+Gf
+
+
+/ GY
+
+satisfying some evident axioms; see [?] wherein this is called a vertical transformation.
+These are the loose arrows in a double category of functors whose tight arrows are
+tight transformations, and whose cells are an evident kind of “square modification”.
+In the following definitions, we write composition of double functors (and whiskering of tight and loose transformations by double functors) with ◦, to distinguish it
+from the compositions · and • in the tight and loose direction respectively. A further
+reason for this will become apparent in ??. For brevity, we will also omit mention
+of the associativity and unit constraints for loose composition, and the functoriality
+constraints for double functors.
+Definition 7.1. Let T and S be monads on a double category K. A loose
+distributive law between (T, ν, ι) and (S, µ, η) consists of the following:
+(i) A loose transformation δ : T ◦ S −•
+−
+→ S ◦ T.
+(ii) Square modifications
+T ◦T ◦S
+
+T ◦δ
+•
+
+/ T ◦S◦T
+
+δ◦T
+•
+
+ν̄
+
+ν◦S
+
+
+T ◦S
+
+S◦ν
+
+
+/ S◦T
+
+•
+δ
+
+T ◦S◦S
+
+δ◦S
+•
+
+/ S◦T ◦S
+
+T ◦µ
+
+µ̄
+
+
+T ◦S
+
+•
+δ
+
+/ S◦T ◦T
+
+S◦δ
+•
+
+/ S◦S◦T
+µ◦T
+
+
+/ S◦T
+
+S
+ι◦S
+
+
+T ◦S
+
+T
+T ◦η
+
+
+T ◦S
+
+IdS
+•
+ῑ
+•
+δ
+IdT
+•
+η̄
+•
+δ
+
+/S
+S◦ι
+
+
+/ S◦T
+/T
+
+η◦T
+
+
+/ S◦T
+
+These are versions of the diagrams that would have to commute if δ were an
+ordinary tight distributive law.
+(iii) The following equalities of square modifications hold:
+ῑ · Idη = η̄ · Idι
+
+µ̄ · ((µ̄ ◦ S) • µδ ) = µ̄ · (δµ • (S ◦ µ̄))
+
+µ̄ · ((η̄ ◦ S) • ηδ ) = 1δ
+
+ν̄ · (νδ • (ν̄ ◦ T )) = ν̄ · ((T ◦ ν̄) • δν )
+
+µ̄ · (δη • (S ◦ η̄)) = 1δ
+
+µ̄ · ((ῑ ◦ S) • Sῑ) = ῑ · Idµ
+
+ν̄ · (ιδ • (ῑ ◦ T )) = 1δ
+
+ν̄ · ((T ◦ η̄) • (η̄ ◦ T )) = η̄ · Idν
+
+ν̄ · ((T ◦ ῑ) • δι ) = 1δ
+
+µ̄ · ((ν̄ ◦ S) • (S ◦ ν̄)) = ν̄ · ((T ◦ µ̄) • (µ̄ ◦ T )) · δ̄
+
+where
+∼
+δ̄ : (δ ◦ T ◦ S) • (T ◦ S ◦ δ) −
+→ (T ◦ S ◦ δ) • (δ ◦ T ◦ S)
+
+18
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+is a pseudonaturality constraint of δ. In all cases the tight naturality and
+monad axioms for the transformations ν, ι, µ, η ensures that the boundaries of
+both sides of the equations agree automatically.
+The data and axioms of a loose distributive law may appear rather formidable
+when written out unforgivingly as above. In ???? we sketch them instead using an
+informal string diagram calculus, in which the monads T and S are written as a red
+and a blue string respectively and the loose transformation δ is a “string crossing”.
+In [?] the theory of generalized multicategories relative to a double monad is
+developed in two steps, by first constructing a “horizontal Kleisli virtual double
+category” and then considering monoids therein. In a later paper we will do the
+same for generalized polycategories relative to a loose distributive law, but at present
+it suffices to define the end result explicitly.
+In the following definitions we write application of double functors and transformations to objects by juxtaposition, so that for instance the components of
+•
+•
+δ :T ◦S −
+−
+→ S ◦ T are of the form δA : T SA −
+−
+→ ST A.
+Definition 7.2. Let δ : T ◦ S −•
+−
+→ S ◦ T be a loose distributive law between double
+monads. A δ-monoid consists of an object A and a loose arrow M : T A −•
+−
+→ SA
+together with unit and multiplication cells
+/A
+
+IdA
+•
+
+A
+ιA
+
+
+TA
+
+TTA
+
+ηA
+
+e⇓
+
+/ T SA
+
+νA
+
+
+/ SA
+
+•
+M
+
+TM
+•
+
+δ
+•
+
+/ ST A
+
+SM
+•
+
+µA
+
+m⇓
+
+
+TA
+
+/ SSA
+
+/ SA
+
+•
+M
+
+such that the two following two ways to compose the multiplication with the unit
+are equal (modulo unit constraints for loose composition) to the identity on M :
+/ TA
+
+IdT A
+•
+
+/ TA
+
+T IdA
+•
+
+/ TA
+
+IdT A
+•
+
+Te
+
+T ηA
+
+η̄
+
+TA
+
+IdT A
+•
+
+TA
+
+M
+•
+
+/ SA
+
+/ TA
+
+M
+•
+
+/ SA
+
+ηT A
+
+ηM
+
+TA
+
+M
+•
+
+/ SA
+
+IdSA
+•
+
+/ SA
+
+IdSA
+•
+
+M
+•
+
+/ SA
+
+IdSA
+•
+
+/ SA
+
+SIdA
+•
+
+ιM
+
+ιSA
+
+ῑ
+
+SιA
+
+Se
+
+T̄
+
+T ιA
+
+
+TTA
+
+•
+TM
+
+/ SA
+
+S̄
+
+
+/ T SA
+
+νA
+
+
+/ ST A
+
+•
+δ
+
+•
+SM
+
+ηSA ιT A
+
+
+/ SSA
+
+
+TTA
+
+µA
+
+m
+
+
+TA
+
+TA
+
+νA
+
+
+/ SA
+
+•
+M
+
+•
+TM
+
+
+/ T SA
+
+•
+δ
+m
+
+
+TA
+
+•
+M
+
+/ SA
+SηA
+
+
+
+/ ST A SM
+• / SSA
+
+µA
+
+
+/ SA
+
+and also the two following ways to compose the multiplication with itself are equal
+to each other:
+TTTA
+
+TTM/
+•
+T T SA
+
+νT
+
+νM
+
+
+TTA
+ν
+
+
+TA
+
+•
+TM
+
+νS
+
+
+/ T SA
+
+Tδ
+•
+
+/ T ST A
+ν̄
+•
+δ
+
+δT
+•
+
+/ ST T A ST•M / ST SA
+Sν
+
+
+/ ST A
+m
+•
+
+Sδ
+•
+Sm
+•
+SM
+
+/ SST A SSM
+• / SSSA
+Sµ
+
+
+/ SSA
+µ
+
+
+/ SA
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+Figure 1. The data of a loose distributive law
+
+Figure 2. The axioms of a loose distributive law
+
+19
+
+20
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+TTM/
+•
+T T SA
+
+Tδ
+•
+
+/ T ST A
+
+TTM
+T T T A • / T T SA
+
+Tδ
+•
+
+/ T ST A T SM
+• / T SSA
+
+Tν
+
+Tm
+
+TTTA
+
+/ ST T A ST•M / ST SA
+
+δT
+•
+
+Sδ
+•
+
+/ SST A SSM
+• / SSSA
+
+Sδ
+•
+
+/ SST A SSM
+• / SSSA
+
+δ̄
+
+
+T T A′
+
+δS
+•
+
+/ ST SA
+µ̄
+
+Tµ
+
+
+/ T SA
+
+•
+TM
+
+µT
+
+
+/ ST A
+
+•
+δ
+
+µM
+•
+SM
+
+µ
+
+m
+
+ν
+
+
+TA
+
+µS
+
+
+/ SSA
+
+/ SA
+
+•
+
+(In the last axiom, note that we needed to use the loose pseudonaturality of δ to
+make the domains match up.)
+Definition 7.3. If (A, M, eM , mM ) and (B, N, eN , mN ) are δ-monoids, a δ-monoid
+morphism consists of a tight arrow f : A → B and a cell
+M
+•
+
+TA
+Tf
+
+
+TB
+
+f⇓
+•
+N
+
+/ SA
+Sf
+
+
+/ SB
+
+such that f · eM = eN and f · mM = mN · (T f • δf • Sf ).
+Definition 7.4. If (f, f ) and (g, g) are δ-monoid morphisms from (A, M, eM , mM )
+to (B, N, eN , mN ), a δ-monoid transformation α : f ⇒ g consists of a cell
+IdA
+•
+
+A
+ιB ·g
+
+
+TB
+
+α⇓
+•
+N
+
+/A
+ηB ·f
+
+
+/ SB
+
+such that the following two composites are equal:
+/ SA
+
+M
+•
+
+TA
+
+∼
+=
+
+TA
+
+T IdA
+/ TA
+•
+
+Tg
+
+
+TB
+
+T ιB
+
+Tf
+
+Tα
+
+νB
+
+
+TB
+
+∼
+=
+
+IdT A
+/ TA
+•
+
+M
+•
+
+IdT f
+
+f
+
+Tf
+
+
+TB
+
+
+IdT B
+• / TB
+
+N
+•
+
+T ηB
+
+η̄B
+
+ηT B
+
+ηN
+
+
+
+TM
+T T B • / T SB
+
+δB
+•
+mN ⇓
+•
+N
+
+/ SA
+
+M
+•
+
+TA
+
+/ SA
+Sf
+
+
+/ SB
+
+ηSB
+
+
+
+/ ST B SN
+• / SSB
+
+µB
+
+
+/ SB
+
+TA
+Tg
+
+
+TB
+
+ιT B
+
+M
+•
+
+/ SA
+
+g
+
+Sg
+
+N
+•
+
+
+/ SB
+
+ιM
+
+ιSB
+
+IdSA
+•
+
+/ SA
+
+IdSg
+
+Sg
+
+IdSB
+•
+
+
+/ SB
+
+ῑB
+
+SιB
+
+
+
+TM
+T T B • / T SB
+
+δB
+•
+
+νB
+
+mN ⇓
+
+
+TB
+
+•
+N
+
+SIdA
+/ SA
+•
+Sf
+
+Sα
+
+
+SB
+
+SηB
+
+
+
+/ ST B SN
+• / SSB
+
+µB
+
+
+/ SB
+
+Theorem 7.5. δ-monoids, δ-monoid morphisms, and δ-monoid transformations
+form a 2-category.
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+21
+
+Proof. Composition of morphisms is easy: simply compose both the tight arrow
+and cell components.
+We define the postwhiskering of a transformation α : f ⇒ g by a morphism
+h : N → P to be h · α. The transformation axiom follows by postcomposing that for
+α with h and using the morphism axiom h · mN = mP · (T h • δh • Sh), the naturality
+of ι, η, and the modification/naturality of ῑ, η̄. For associativity of postwhiskering,
+we have k · (h · α) = (k · h) · α = k · h · α, and similarly for identities.
+We define the prewhiskering of a transformation α : f ⇒ g by a morphism
+h : P → M to be α · Idh . The transformation axiom follows by precomposing that
+for α with h and using the naturality of the constraints for loose composition and
+for the pseudofunctoriality of T and S. For associativity we have (α · Idk ) · Idh =
+α · (Idk · Idh ) = α · Idk·h , and similarly for identities.
+The identity transformation on a morphism f : M → N is the cell eN · Idf . We
+define the composite of two transformations α : f ⇒ g and β : g ⇒ h to be the
+following composite (precomposed with a unit isomorphism):
+A
+
+IdA
+•
+
+g
+
+h
+
+
+B
+
+β
+
+ιT B
+
+
+TTB
+
+νB
+
+
+TB
+
+
+B
+
+IdA
+•
+Idg
+IdB
+•
+
+ηB
+
+ιb
+
+
+TB
+
+/A
+
+N
+•
+
+
+/ SB
+
+ιN
+
+ιSB
+
+
+TN /
+•
+T SB
+
+/A
+
+IdA
+•
+
+/A
+
+α
+
+
+B
+
+
+TB
+
+N
+•
+
+
+/ SB
+
+ηT B
+
+ηN
+
+g
+
+
+/B
+
+f
+
+ηB
+
+ιB
+
+ῑ·Idη =
+η̄·Idι
+
+δB
+•
+mN ⇓
+•
+N
+
+
+/ ST B
+
+ηSB
+
+
+SN /
+•
+SSB
+
+µB
+
+
+/ SB
+
+The transformation axiom for this follows by using the associativity axiom for the
+δ-monoid N and the transformation axioms for α and β. Associativity of this
+composite similarly follows from associativity for N , while unitality follows from
+the unit axiom for N . [TODO: I haven’t really checked these.]
+It remains to show that all three kinds of composition satisfy the interchange law.
+[Also TODO]
+□
+In the rest of the paper we will define a loose distributive law for which δmonoids are kits (or, more precisely, “pre-kits”). Of course, first we need a couple of
+monads. In a kit there are actually four different kinds of structure that have to be
+incorporated into these monads: the extraordinary pairing of variables in the domain,
+the extraordinary pairing in the codomian, the possibility of multiple modules in
+the domain, and the substitution of functor terms for abstract variables in the
+codomain. To simplify the construction and clarify the essential point (composing
+extraordinary natural transformations), we will first define a loose distributive law
+for “unary kits without substitution” that includes only the first two; then we will
+add in the other two.
+
+22
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+8. Linear double monads
+Many of the monads we will be interested in are particularly simple: they are
+the monads on a slice Cat/A induced by an internal category in Cat (that is, a
+strict double category) with A as object-of-objects. In particular, their underlying
+functors are given by span composition. Functors between slice categories of this
+sort are sometimes called linear (by analogy with the more general polynomial
+functors that also involve an exponential); they and the “linear” transformations
+between them are induced by morphisms and 2-cells in the bicategory of spans in
+Cat.
+However, we need not only monads on the ordinary category Cat, but on the
+double category Cat; and also loose distributive laws between these. For this it
+is convenient to have a structure that describes “spans in Cat” analogous to the
+bicategory of spans in the 1-category Cat. There are several ways one could organize
+such a structure, but for us the important one will be the following.
+Let Dbl denote the 2-category of pseudo double categories and strong double
+functors. This has finite products, so we can regard it as cartesian monoidal.
+Definition 8.1 ([?]). A locally cubical bicategory is a Dbl -enriched bicategory.
+Thus, it has objects with hom-double-categories A(x, y), strong composition functors
+A(y, z) × A(x, y) → A(x, z), strong unit functors 1 → A(x, x), and associativity and
+unitality tight natural isomorphisms satisfying the usual axioms.
+◦
+We call the objects of A(A, B) the morphisms of A and write them A −
+−
+→ B.
+We call the tight and loose arrows of A(A, B) tight 2-cells and loose 2-cells of A,
+•
+and write them as f → g and f −
+−
+→ g respectively, and we call the cells of A(A, B)
+3-cells of A. We refer to composition of tight 2-cells in A(A, B) (and composition of
+3-cells in the tight direction) as transversal, composition of loose 2-cells in A(A, B)
+(and composition of 3-cells in the loose direction) as vertical, and the action of
+the composition functors A(B, C) × A(A, B) → A(A, C) as horizontal. We have in
+mind the following picture:
+◦
+
+◦
+◦
+◦
+We write transversal composition with · or juxtaposition in applicative order,
+vertical composition with • in diagrammatic order, and horizontal composition with
+◦ in applicative order. The unit functors 1 → A(A, A) pick out an identity morphism
+idA for each object A. In addition, every morphism f has an identity tight 2-cell
+1f and an identity loose 2-cell Idf , every tight 2-cell α has an identity 3-cell Idα ,
+every loose 2-cell β has an identity 3-cell 1β , and we have Id1f = 1Idf . We have
+Idf ◦ Idg ∼
+= Idf ◦g and 1g ◦ 1g = 1f ◦g , as well as isomorphisms
+(8.2)
+(p ◦ q) • (r ◦ s) ∼
+= (p • r) ◦ (q • s).
+Note that the objects, morphisms, and tight 2-cells of a locally cubical bicategory A
+form an ordinary bicategory under transversal and horizontal composition, which
+we denote H(A). On the other hand, a locally cubical bicategory can be regarded as
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+23
+
+a degenerate sort of intercategory [?]. We will not need this point of view very much,
+but our notation is chosen to match theirs (except that we write ◦ in functional
+rather than diagrammatic order).
+There are two main examples we care about.
+Example 8.3. The cartesian monoidal 2-category Dbl is in fact closed as a monoidal
+bicategory, i.e. the functors A × − have right biadjoints. As observed in [?], it
+can therefore be regarded as a bicategory enriched over itself, i.e. a locally cubical
+bicategory. The hom-double-category Dbl(A, B) consists of strong double functors,
+tight transformations, loose transformations, and modifications between them.
+Theorem 8.4. There is a locally cubical bicategory L(Cat) described as follows.
+• Its objects are groupoids.
+• Its morphisms are spans A ← C → B in Cat such that A and B are groupoids
+and C → A is a fibration. Composition is by pullback, which is well-defined
+since fibrations are closed under pullback and composition.
+• Its tight 2-cells are span morphisms:
+C
+%
+y
+
+Ae
+
+9B
+
+
+D
+
+Thus the underlying bicategory is a sub-bicategory of Span(Cat).
+• Its loose 2-cells from A ← C → B to A ← D → B are profunctors C −•
+−
+→D
+equipped with a span of 2-cells in Cat:
+/B
+C
+Ao
+IdA •
+
+
+Ao
+
+⇐
+
+•
+
+
+D
+
+⇒
+
+• IdB
+
+
+/ B.
+
+These are composed by pullback in Cat1 .
+• Its 3-cells are span morphisms in Cat1 .
+Proof. Recall from [?, ?] that an “intercategory” is an internal category in the
+2-category Lx Dbl of double categories and lax double functors whose source and
+target functors are strict. As observed in [?, 3.5], a locally cubical bicategory is an
+intercategory whose double category of objects is discrete and whose compostion
+and unit functors are strong.
+If an intercategory has strictly unital vertical composition (which can usually —
+though not always — be obtained by redefining vertical composition at identities),
+then we can discard all the arrows and cells in its double category of objects to
+obtain another intercategory with a discrete double category of objects. Applying
+this to the example of [?, 6.5], we get a structure that is almost like a locally
+cubical bicategory, but its composition functors are only lax normal rather than
+strong (though its unit functor is strong). However, when we restrict the objects to
+groupoids and the spans to have one leg a fibration, then the composition functor
+becomes strong as well, by [?, Proposition 49].
+□
+Now, a linear functor C/A → C/B induced by a span A ← C → B in C can
+be described in terms of the bicategory Span(C), by identifying C/A with the
+
+24
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+hom-category Span(C)(1, A) and composing them with the given span A ← C → B.
+We can do something similar in L(Cat), where the slice double category Cat/A can
+be identified with the hom-double-category L(Cat)(1, A). The following observation
+is entirely straightforward.
+Theorem 8.5. Any object X in a locally cubical bicategory A induces a representable
+locally cubical pseudofunctor A(X, −) : A → Dbl.
+□
+In particular, any “horizontal monad” on A ∈ A (whose multiplication and
+unit are tight 2-cells) induces a strong double monad on any hom-double-category
+A(X, A). Taking A = L(Cat) and X = 1, we see that any linear monad on Cat/A
+induces a strong double monad on Cat/A. (In a later paper we will show that
+something similar is true for all polynomial monads.)
+The punchline is that loose distributive laws are essentially a “locally cubical”
+concept. If literally true, this would mean they could be defined in any locally
+cubical bicategory and are preserved by locally cubical pseudofunctors. To see this,
+simply take ?? and replace functors by 1-cells, tight and loose transformations by
+tight and loose 2-cells, square modifications by square 3-cells, and so on. We chose
+our notations for composition so that the pictures would require no changes; the
+pseudonaturality of δ is replaced by the interchanger (??).
+The reason this is not exactly true is that in stating ?? we used the fact that
+composition of pseudo double functors is strictly associative and unital, whereas
+in a general locally cubical bicategory, ◦ is only associative and unital up to
+isomorphism. One is tempted to say “just insert the associativity and unitality
+constraints everywhere”, but this doesn’t work because these are tight 2-cells,
+whereas in the domain of (say) µ̄ we would need an associativity to appear in the
+middle of a composite of two loose isomorphisms.
+The solution to this is fairly standard in double-category theory, and goes by
+various names such as “fibrancy”, “framing”, or “transportability”: we require that
+the relevant tight 2-cells have loose companions. [TODO: Define.]
+With this modification, we can define a loose distributive law in any fibrant
+locally cubical bicategory, and they will be preserved by any locally cubical functor
+(since any strong double functor preserves companions). This applies in particular to
+the functor L(Cat)(1, −), so that to define a loose distributive law between monads
+on a slice double category Cat/A, it suffices to define a corresponding structure on A
+in L(Cat). The latter is a combinatorial structure amenable to concrete description.
+9. Extraordinary naturality
+Let V be the monad on Cat whose algebras are symmetric strict monoidal
+categories equipped with a strict symmetric monoidal strict involution, i.e. a strict
+symmetric monoidal functor (−)◦ : C → C such that (a◦ )◦ = a functorially. Concretely, the objects of V C are finite lists of objects of C, some of which are marked
+with a formal (– )◦ , such as (a, b◦ , b, c◦ , a). It will also sometimes be convenient to
+write such a list as (a+ , b− , b+ , c− , a+ ), where a+ = a and a− = a◦ ; we can then
+write aε to mean either a+ or a− depending on whether ε = + or ε = −. We write
+ε∗ for the reversed variance, i.e. +∗ = − and −∗ = +.
+Since V C is monoidal with an involution, its objects can be concatenated and
+oppositized (by distributing the opposite over the list), so for instance
+(a, b◦ )(c◦ , d, a) = (a, b◦ , c◦ , d, a)
+
+and
+
+(b◦ , a, a)◦ = (b, a◦ , a◦ ).
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+25
+
+Its unit object is 1 = (). The morphisms of V C are given by finite lists of morphisms of C labeled by permutations which respect the opposites, e.g. a morphism
+(a, b◦ , b, c◦ , a) → (d, e, d◦ , f, e◦ ) might be:
+a
+a
+c◦
+b◦
+b
+f
+
+g◦
+
+ℓ
+
+k◦
+h
+
+d
+
+e
+
+d◦
+
+f
+
+e◦
+
+Here f : a → e, g : b → e, h : b → d, k : c → d, and ℓ : a → f are morphisms
+in C. Note that there can only be a morphism between two lists if they have the
+same length and the same number of opposites. Formally, if A = (aε11 , . . . , aεnn ) and
+1
+φn
+B = (bφ
+1 , . . . , bn ), then a morphism A → B is a pair (σ, f ) where σ ∈ Σn is a
+permutation such that φσ(k) = εk , and f = (f1 , . . . , fn ) is a list of morphisms with
+fn : an → bσ(n) .
+For the rest of this section, let C be a discrete category, whose objects will be the
+cats of our unary kit. In particular, therefore V C is a groupoid. We will define a
+loose distributive law on V C in L(Cat), inducing one on Cat/V C whose generalized
+polycategories are “unary kits without functors”.
+The two monads involved in this distributive law will in fact be the same monad,
+which we denote R. Being a horizontal monad in L(Cat), it is equivalently a monad
+in the bicategory Span(Cat), i.e. an internal category in Cat, i.e. a strict double
+category R. Since its category of objects R0 is V C, its objects are those of V C and
+its tight morphisms are the morphisms of V C. We now define its loose morphisms
+and cells.
+Let us call an object of V C totally covariant if it contains no (−)◦ ’s. A Btrivial pre-matching between A, B ∈ V C is an isomorphism A ∼
+= BEE ◦ in V C
+where E is totally covariant and the permutation preserves the relative order of cats
+in B. Two pre-matchings are equivalent if they are related by an isomorphism
+E∼
+= E ′ (necessarily unique if it exists); a B-trivial matching is an equivalence
+class of B-trivial pre-matchings. [Is this passage to equivalence classes the right
+thing to do? Does it actually make sense everywhere?]
+Now a loose morphism from A to B in our double category (an object of R1 ) is a
+B-trivial matching between A and B. The loose composite of matchings A ∼
+= BDD◦
+◦
+∼
+and B = CEE is the composite
+A∼
+= BDD◦ ∼
+= CEE ◦ DD◦ ∼
+= C(ED)(ED)◦ .
+The identity matching is the unique one with E = (). The cells are commutative
+squares of two matchings and two isomorphisms, in an obvious sense.
+This completes the definition of a strict double category R with R0 = V C. Note
+that the source and target functors of R are both individually fibrations (though the
+functor (s, t) : R1 → R0 × R0 is not a fibration). Thus, in particular it is a monad
+in L(Cat), and thus induces a strong double monad R on Cat/V C.
+An object of Cat/V C is a functor E → V C, where the fiber E(A) over A =
+(aε11 , . . . , aεnn ) is the set of modules with boundary A. Usually we will assume it
+to be a discrete fibration (or equivalently a discrete opfibration, since V C is a
+
+26
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+groupoid), meaning that we can permute the cats in the boundary of a module.
+The objects of RE are then obtained by choosing an object of E, pairing up some
+of the cats in its boundary into covariant and contravariant pairs, and removing
+them from the boundary of the result. Note that the passage from pre-matchings
+to matchings means that there is no ordering imposed on the paired cats, and
+B-triviality means that the order of the unremoved cats is maintained. However,
+RE → V C is still no longer a discrete fibration: an object in the fiber over B consists
+of a B-trivial matching A ∼
+= BEE ◦ together with an object of E(A), and if E admits
+automorphisms in V C then so can such objects.
+Now a profunctor M : RE −•
+−
+→ RE in Cat/V C consists of a set of “morphisms”,
+each of which is assigned a pair of modules with some of their cats paired up to
+be its domain and codomain, plus a permutation relating the unpaired cats in the
+domain and the codomain. The latter datum is the 2-cell
+/ VC
+
+RE
+M•
+
+
+RE
+
+⇒
+
+• IdV C
+
+
+/ VC
+
+exhibiting M as a loose morphism in Cat/V C. These elements of M are the
+extraordinary morphisms between modules, with the pairings in their domain and
+codomain representing the extraordinary-natural cats. The profunctorial action
+means that the cats in the domains and codomains of morphisms can be permuted,
+including the extraordinary natural ones.
+Now we have to define a loose distributive law of R over itself on Cat/V C. As
+suggested in ??, we will do this by defining a loose distributive law of R over itself
+in the locally cubical bicategory L(Cat). For clarity, we write S = T = R, with S as
+a mnemonic for source and T for target; thus our goal is δ : T ◦ S −•
+−
+→ S ◦ T.
+Now T ◦ S and S ◦ T are spans from V C to itself, whose objects consist of a
+B-trivial matching A ∼
+= BDD◦ and a C-trivial matching B ∼
+= CEE ◦ , with the
+projections selecting A and C. Of course these have a composite C-trivial matching
+from A to C; the additional data beyond the composite is simply a division of
+the paired cats into those in D and those in E. The object B ∈ V C is actually
+determined once we know D and the composite, by B-triviality of the first matching.
+In particular, the fibers of T ◦ S → V C × V C are discrete.
+Our δ is supposed to be a profunctor T ◦ S −•
+−
+→ S ◦ T, which moreover must be a
+loose 2-cell in L(Cat) and thus come with cells
+VC o
+IdV C •
+
+
+
+VC o
+
+/ VC
+
+T◦S
+⇐
+
+•
+
+
+S◦T
+
+⇒
+
+• IdV C
+
+
+/ V C.
+
+Taken together, this means that for any A, C and A′ , C ′ , and isomorphisms A ∼
+= A′
+′
+′
+∼
+and C = C , plus a C-trivial matching from A to C and a C -trivial matching from
+A′ to C ′ , both with the paired cats partitioned into two subsets, we must have a
+specified “set of ways to compose”. Put differently, the “type” of an element of δ is
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+27
+
+given by the following data:
+(9.1)
+
+A
+
+∼
+=
+
+/ BDD◦
+
+∼
+=
+
+/ CEE ◦ DD◦
+
+C
+
+/ C ′ E ′ (E ′ )◦ D′ (D′ )◦
+
+
+C′
+
+∼
+=
+
+
+A′
+
+∼
+=
+
+∼
+=
+
+/ B ′ D′ (D′ )◦
+
+∼
+=
+
+Note that the isomorphism C ∼
+= C ′ is not required to “commute” with the others.
+As the first step in our definition, we specify that any such “type” will be
+inhabited by at most one element of δ. It is simplest to describe the conditions
+under which this happens as a partial function from the left half of the diagram
+BDD◦ ∼
+=A∼
+= A′ ∼
+= B ′ D′ (D′ )◦ to the right half. Regard this composite isomorphism
+◦ ∼
+′ ′
+BDD = B D (D′ )◦ as a bipartite graph, and add additional edges connecting each
+cat in D or D′ to its counterpart in D◦ or (D′ )◦ , respectively. In the resulting graph
+all vertices have degree 1 or 2, so it is a disjoint union of paths and cycles. The
+partial function is defined if and only if there are no cycles. In this case, each path
+must start and end at a cat in B or B ′ . Every path that connects two cats in B
+gives us an element of E, while every path that connects two cats in B ′ gives us an
+element of E ′ . The remaining paths connect one cat in B with one in B ′ , specifying
+the isomorphism C ∼
+= C ′ . Note that the variance gets flipped every time a path
+“changes direction”, so E- and E ′ -paths do indeed connect two copies of a cat with
+opposite variance, while the remaining ones preserve variance.
+To be a profunctor, δ must also be acted on by permutations on both sides,
+compatibly with the projections to IdV C on both sides; but this is evident. Thus,
+•
+we have defined a loose 2-cell δ : T ◦ S −
+−
+→ S ◦ T in L(Cat).
+For the remaining data and axioms of a loose distributive law from ??, we note
+that T and S play entirely symmetrical roles in the construction. Thus, we can
+cut our work almost in half by symmetry (“almost” because two of the axioms are
+self-dual under this symmetry).
+[TODO . . . ]
+10. Substitutions
+Next we incorporate nontrivial functors into our unary kits. We start by describing
+the structure formed by the cats and functors as a kind of generalized multicategory
+in its own right.
+We extend V to a monad on the double category Cat in the usual way (in
+fact, the unique way), by treating the elements of profunctors as if they were
+“morphisms”. That is, the above diagram could also represent an element of a
+profunctor V H : V D −7→ V C, if a, b, c ∈ C and d, e, f ∈ D while f ∈ H(a, e),
+g ∈ H(b, e), and so on. The technology of generalized multicategories then yields a
+notion of virtual V -algebra, which contains “multimorphisms” whose domain is a list
+with variance like (a, b◦ , b, c◦ , a). Note that these are like symmetric multicategories
+in that symmetric groups act on the domain lists.
+b whose objects
+As usual, any virtual V -algebra C generates a free V -algebra C,
+are the lists with variance of objects in C, and whose morphisms are lists of multimorphisms in C, with domain and codomain arbitrarily permuted. More precisely, a
+1
+φm
+b
+morphism from A = (aε11 , . . . , aεnn ) P
+to B = (bφ
+1 , . . . , bm ) in C is represented by a
+m
+∼
+pair (σ, f ) where σ is a bijection ( i=1 ki ) −
+→ n and f = (f1 , . . . , fm ) is a list of
+
+28
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+φi εσ(i,k )
+
+φi ε
+
+σ(i,1)
+morphisms fi : (aσ(i,1)
+, . . . , aσ(i,ki ) i ) → bi . (Here φi εσ(i,j) means the usual multiplication of signs.) We quotient these pairsPby the inner symmetric group actions, i.e.
+given permutations τi ∈ Σki we have (σ( i τi ), f ) = (σ, f τ ), where (f τ )i = fi τi is
+defined by the symmetric action on the domains of morphisms in C. More formally,
+the hom-profunctor of Cb is given by homCb = V homC ⊗V V C V C(1, ν). Since the
+monoidal structure on Cb is induced by the concatenation monoidal structure on V C,
+we also write it as juxtaposition.
+Note that every isomorphism in Cb consists only of unary arrows. By a permutation isomorphism in Cb we mean an isomorphism in which these unary arrows are
+all identities; thus it really is nothing but a permutation. In fact, the subcategory of
+permutation isomorphisms in Cb is isomorphic to V C0 , where C0 is the set of objects
+of C.
+Now fix a virtual V -algebra C, whose objects and arrows will be our cats and
+functors. We define a new linear double monad incorporating restriction along
+morphisms in C as follows. Say that a pre-matching with restriction between
+A, B ∈ V C is a morphism BEE ◦ → A in V C where E is totally covariant. Two
+such pre-matchings are equivalent if they are related by an isomorphism E ∼
+= E′
+(necessarily unique if it exists); a matching with restriction is an equivalence
+class of pre-matchings.
+Now let C be the strict double category whose tight morphisms are the permutation isomorphisms (that is, C0 = V C0 ), whose loose morphisms from A to
+B are matchings with restrictions from B to A, and whose cells are commutative
+b [Hmm, does this make sense with the passage to equivalence classes?]
+squares in C.
+Then C is a monad in L(Cat) on V C0 . We will construct a loose distributive law
+•
+C◦S−
+−
+→ S ◦ C in L(Cat), analogous to the one constructed in the previous section.
+As a loose 2-cell in L(Cat), this will look like
+
+V C0 o
+IdV C0 •
+
+
+V C0 o
+
+/ V C0
+
+C◦S
+⇐
+
+•
+
+
+S◦C
+
+⇒
+
+• IdV C0
+
+
+/ V C0 .
+
+Now the “type” of an element of δ is given by the following data, in which some of
+b
+the isomorphisms from (??) have been replaced by morphisms in C:
+∼
+=
+
+A
+
+/ BDD◦ o
+
+CEE ◦ DD◦
+
+C
+
+/ C ′ E ′ (E ′ )◦ D′ (D′ )◦
+
+
+C′
+
+∼
+=
+
+
+A′ o
+
+∼
+=
+
+B ′ D′ (D′ )◦
+
+∼
+=
+
+As before, any such “type” will be inhabited by at most one element of δ, and we
+can describe the conditions under which this happens as a partial function from
+the left half of the diagram to the right half. Thus, suppose given the left half,
+including in particular a composite morphism B ′ D′ (D′ )◦ → A′ ∼
+=A∼
+= BDD◦ in
+b
+C. By definition of b
+C, this consists of a morphism fb : Fb → b of C for each b ∈ B
+and two morphisms gd : Gd → d and hd : Hd → d for each d ∈ D, together with an
+isomorphism
+(10.1)
+
+∼
+B ′ D′ (D′ )◦ −
+→ Fbε11 · · · Fbεnn Gd1 · · · Gdm Hd◦1 · · · Hd◦m
+
+MULTIVARIABLE FORMAL CATEGORY THEORY
+
+29
+
+The conditions are then:
+(i) gd = hd for each d (and in particular, Gd = Hd ).
+(ii) Regard the isomorphism (??) as a bipartite graph, and add additional edges
+connecting each cat in D to its counterpart in D◦ , and each cat in each Gd to
+its counterpart in Hd◦ (which is equal to G◦d ). Again this is a disjoint union of
+paths and cycles, and we require that there are no cycles.
+When these conditions hold, each path in the above graph must start and end
+at a cat in B ′ or some Fb . Every path that connects two cats in B ′ gives us an
+element of E ′ , and we define C ′ to be the remaining cats in B ′ , giving the matching
+B′ ∼
+= C ′ E ′ (E ′ )◦ . Every path that connects two cats in some Fb ’s (perhaps for
+different b’s) gives us an element of E, and we define C to be the remaining cats
+in any of the Fb ’s. This yields an isomorphism CEE ◦ ∼
+= Fbε11 · · · Fbεnn , and we define
+◦
+the morphism CEE → B to be given by this isomorphism together with the fb ’s.
+Finally, the remaining paths in the graph connect one cat in B ′ with one in some
+Fb , specifying the isomorphism C ∼
+= C ′ . As before, the actions of permutation
+isomorphisms are trivial, so we have a loose 2-cell in L(Cat).
+[TODO. . . ]
+[NOTE: the action of permuting cats in the boundary of a module seems to
+be getting represented in two different ways here. We start with a category over
+the groupoid V C0 of permutation isomorphisms, which seems like it ought to be a
+discrete fibration. But then we also incorporate formal restrictions along arbitrary
+morphisms of Cb in the codomains of module morphisms, which includes permutation
+isomorphisms as well, and can then characterize actual restrictions/substitutions by
+a universal property. How are these two representations related? It seems that we
+do neet to use V C0 , rather than its discrete set of objects, as the base, since the
+“composition of graphs” partial function wants to output a permutation.]
+11. Multivariable morphisms
+Finally, we incorporate the possibility of module morphisms with multiple modules
+in the domain. This takes us out of the realm of linear functors (though polynomial
+functors would suffice), so we use a different technique. Let P denote the monad
+on Cat for symmetric strict monoidal categories. With V and C as in the previous
+section V C0 is a P -algebra. Therefore, P induces a monad on Cat/V C0 (this is
+true for any monad algebra and any comma object in a 2-category), which we also
+denote P . We claim that this monad P is connected to the monad S (a.k.a. R and
+T ) defined in ?? by a tight distributive law σ : P S → SP .
+For a category E over V C0 , the objects of P SE are finite lists (M1 , . . . , Mn ) of
+objects of SE, each of which is an object Mi ∈ E(Ai ) where Ai ∈ V C0 is equipped
+with a Bi -trivial matching Ai ∼
+= Bi Ei Ei◦ . Such an object sits over B1 . . . Bn in V C0 .
+On the other hand, the objects of SP E are finite lists (M1 , . . . , Mn ) of objects
+Mi ∈ E(Ai ), equipped with a B-trivial matching A1 · · · An ∼
+= BEE ◦ . Thus σ on
+objects has merely to concatenate the matchings and rearrange them, defining
+B = B1 · · · Bn and E = E1 · · · En :
+∼
+∼
+A1 · · · An −
+→ B1 E1 E1◦ · · · Bn En En◦ −
+→ (B1 · · · Bn )(E1 · · · En )(E1 · · · En )◦
+
+The action of σ on morphisms and profunctors is analogous, and its naturality and
+compatibility with the monad structures of P and S is straightforward.
+
+30
+
+PATRICK SCHULTZ AND MICHAEL SHULMAN
+
+We also have a similar tight distributive law τ : P C → CP , where C is the
+monad on Cat/V C0 from ??. The only difference is that we have to concatenate
+morphisms of Cb rather than merely permutation isomorphisms.
+We intend to assemble these two tight distributive laws with the loose distributive
+law δ : CS −•
+−
+→ SC into a loose distributive law C(SP ) −•
+−
+→ (SP )C, which will
+finally be the one that characterizes pre-kits as generalized polycategories. The basic
+idea is contained in [?] where it is shown that given three monads T1 , T2 , T3 and
+distributive laws λij : Ti Tj → Tj Ti for i > j satisfying the Yang-Baxter equation
+
+λ32 T1
+
+T9 2 T3 T1
+
+T2 λ31
+
+/ T2 T1 T3
+λ21 T3
+
+%
+T9 1 T2 T3
+
+T3 T2 T1
+T3 λ21
+
+%
+T3 T1 T2
+
+λ31 T2
+
+/ T1 T3 T2
+
+T1 λ32
+
+there is (among other things) a composite distributive law T3 (T1 T2 ) → (T1 T2 )T3 .
+Our present situation is complicated by the fact that two of our distributive laws
+are tight and one is loose. Moreover, just as in the definition of loose distributive
+laws, instead of a commutative Yang-Baxter diagram it is more natural to ask for a
+(not necessarily invertible) “Yang-Baxterator” modification satisfying its own laws.
+This leads us to the following definition.
+Definition 11.1.
+[TODO. . . ]
+
+

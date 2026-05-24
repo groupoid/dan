@@ -1,0 +1,8 @@
+module groupoid where
+import "library/category.ulrik"
+
+-- A groupoid structure on category A implies the existence of a morphism inversion map.
+-- inv : hom(A, x, y) ⊸ hom(A, y, x)
+-- This map is quadratic in both x and y.
+
+def_type InverseMap (x y) := hom(A, x, y) -> hom(A, y, x)

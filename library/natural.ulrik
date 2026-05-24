@@ -1,0 +1,13 @@
+module natural where
+import "library/functor.ulrik"
+
+-- A natural transformation η between functors F and G is the end over the hom of the components.
+-- Nat(F, G) = ∫_{w:A} hom(B, F(w), G(w))
+
+def_type Nat (F G) := end(w:A). hom(B, F(w), G(w))
+
+functor G (x : A) : B
+
+-- Component projection: Given η : Nat(F, G), we can project its component at z : A.
+-- Since the category variable z is doubled to x, y, the component has type hom(B, F(y), G(x)).
+check z:A | eta:Nat(F, G) ⊢ let x y @ z := eta in eta : hom(B, F(z), G(z))

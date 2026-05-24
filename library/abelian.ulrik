@@ -1,0 +1,7 @@
+module abelian where
+import "library/category.ulrik"
+
+-- In an abelian category, we have zero morphisms, kernels, cokernels, and direct sums.
+-- Here we represent the type of morphisms between objects x and y in A.
+
+def_type ZeroMorphism (A x y) := hom(A, x, y)
