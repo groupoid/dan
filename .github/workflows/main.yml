@@ -21,8 +21,8 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-version }}
       - name: Build
-        run: opam exec -- dune build
+        run: dune build
       - name: Run Ulrik
-        run: opam exec -- dune exec ulrik library/book.anders
+        run: dune exec ulrik library/book.anders
       - name: Run Mike
-        run: opam exec -- dune exec mike library/book.anders
+        run: dune exec mike library/book.anders
