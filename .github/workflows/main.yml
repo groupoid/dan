@@ -20,14 +20,7 @@ jobs:
         uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: ${{ matrix.ocaml-version }}
-      - name: Install system dependencies
-        run: opam depext ulrik --yes
-      - name: Install dependencies
-        run: opam install . --deps-only
-      - name: Build
         run: opam exec -- dune build
-      - name: Install package
-        run: opam install .
       - name: Run Ulrik
         run: opam exec -- dune exec ulrik library/book.anders
       - name: Run Mike
