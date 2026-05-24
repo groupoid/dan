@@ -1,6 +1,9 @@
 open Dirtt
 open Format
 
+type mode_type = SimplicialOnly | DirttOnly
+let mode = ref SimplicialOnly
+
 let imported_files = ref []
 let global_simpl_ctx : (string * Simplicialtt.value) list ref = ref []
 
@@ -89,24 +92,28 @@ let rec process_cmd file_path cmd =
          
          (* Check using dirtt engine *)
          let term_dirtt = to_m_term term in
-         let _ = check_sequent cat_args [] term_dirtt tp_expanded in
-         printf "  => Term %s typechecked successfully (Dirtt Engine)\n" name;
+         if !mode = DirttOnly then (
+           let _ = check_sequent cat_args [] term_dirtt tp_expanded in
+           printf "  => Term %s typechecked successfully (Dirtt Engine)\n" name
+         );
          
          (* Check using simplicialtt compatibility engine *)
-         let free = collect_cats tp in
-         register_free_cats free;
-         let cat_args_simpl = List.map (fun (x, cat) ->
+         if !mode = SimplicialOnly then (
+           let free = collect_cats tp in
+           register_free_cats free;
+           let cat_args_simpl = List.map (fun (x, cat) ->
 
-           (x, Simplicialtt.eval !global_simpl_ctx [] (cat_to_simpl cat))
-         ) cat_args in
-         let base_ctx = cat_args_simpl @ !global_simpl_ctx in
-         let base_env = List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) base_ctx in
-         let term_simpl = m_term_to_simpl (expand_m_term term_dirtt) in
-         let tp_simpl = m_type_to_simpl tp_expanded in
-         let tp_val = Simplicialtt.eval base_ctx base_env tp_simpl in
-         Simplicialtt.check base_ctx base_env term_simpl tp_val;
-         active_type_params := old_active;
-         printf "  => Term %s typechecked successfully (Simplicialtt Engine)\n" name
+             (x, Simplicialtt.eval !global_simpl_ctx [] (cat_to_simpl cat))
+           ) cat_args in
+           let base_ctx = cat_args_simpl @ !global_simpl_ctx in
+           let base_env = List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) base_ctx in
+           let term_simpl = m_term_to_simpl (expand_m_term term_dirtt) in
+           let tp_simpl = m_type_to_simpl tp_expanded in
+           let tp_val = Simplicialtt.eval base_ctx base_env tp_simpl in
+           Simplicialtt.check base_ctx base_env term_simpl tp_val;
+           printf "  => Term %s typechecked successfully (Simplicialtt Engine)\n" name
+         );
+         active_type_params := old_active
        with Failure msg ->
          active_type_params := old_active;
          printf "  => Term %s typechecking FAILED: %s\n" name msg)
@@ -120,47 +127,56 @@ let rec process_cmd file_path cmd =
       let tp_expanded = expand_m_type tp_dirtt in
       let gamma_expanded = List.map (fun (x, t) -> (x, expand_m_type t)) gamma_dirtt in
       
-      printf "Running Dirtt Engine:\n";
-      check_sequent delta_dirtt gamma_expanded term_dirtt tp_expanded;
+      if !mode = DirttOnly then (
+        printf "Running Dirtt Engine:\n";
+        check_sequent delta_dirtt gamma_expanded term_dirtt tp_expanded;
+        printf "  => OK! (Valid Dirtt Sequent)\n\n"
+      );
       
-      printf "Running Simplicialtt Compatibility Engine:\n";
-      let free = List.concat (List.map (fun (_, cat) -> collect_cats cat) delta) @ collect_cats tp in
-      register_free_cats free;
-      let delta_simpl = List.map (fun (x, cat) ->
+      if !mode = SimplicialOnly then (
+        printf "Running Simplicialtt Compatibility Engine:\n";
+        let free = List.concat (List.map (fun (_, cat) -> collect_cats cat) delta) @ collect_cats tp in
+        register_free_cats free;
+        let delta_simpl = List.map (fun (x, cat) ->
 
-        (x, Simplicialtt.eval !global_simpl_ctx [] (to_cat cat |> cat_to_simpl))
-      ) delta in
-      let delta_env = List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) delta_simpl in
-      let base_ctx = delta_simpl @ !global_simpl_ctx in
-      let base_env = delta_env @ List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) !global_simpl_ctx in
-      let gamma_simpl = List.map (fun (x, t) ->
-        (x, Simplicialtt.eval base_ctx base_env (to_m_type t |> expand_m_type |> m_type_to_simpl))
-      ) gamma in
-      let ctx = gamma_simpl @ base_ctx in
-      let env = List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) gamma_simpl @ base_env in
-      let term_simpl = m_term_to_simpl (expand_m_term term_dirtt) in
-      let tp_simpl = m_type_to_simpl tp_expanded in
-      let tp_val = Simplicialtt.eval ctx env tp_simpl in
-      Simplicialtt.check ctx env term_simpl tp_val;
-      printf "  => OK! (Valid Simplicialtt Compat Sequent)\n\n"
+          (x, Simplicialtt.eval !global_simpl_ctx [] (to_cat cat |> cat_to_simpl))
+        ) delta in
+        let delta_env = List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) delta_simpl in
+        let base_ctx = delta_simpl @ !global_simpl_ctx in
+        let base_env = delta_env @ List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) !global_simpl_ctx in
+        let gamma_simpl = List.map (fun (x, t) ->
+          (x, Simplicialtt.eval base_ctx base_env (to_m_type t |> expand_m_type |> m_type_to_simpl))
+        ) gamma in
+        let ctx = gamma_simpl @ base_ctx in
+        let env = List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) gamma_simpl @ base_env in
+        let term_simpl = m_term_to_simpl (expand_m_term term_dirtt) in
+        let tp_simpl = m_type_to_simpl tp_expanded in
+        let tp_val = Simplicialtt.eval ctx env tp_simpl in
+        Simplicialtt.check ctx env term_simpl tp_val;
+        printf "  => OK! (Valid Simplicialtt Compat Sequent)\n\n"
+      )
 
   | Syntax.CCheckSimplicial (ctx, term, tp) ->
-      printf "Checking Simplicialtt Sequent...\n";
-      let rec eval_ctx built_ctx built_env = function
-        | [] -> (built_ctx, built_env)
-        | (x, tp_expr) :: rest ->
-            let tp_val = Simplicialtt.eval (built_ctx @ !global_simpl_ctx) built_env (Simplicialtt.translate tp_expr) in
-            let vx = Simplicialtt.VNeutral (tp_val, Simplicialtt.NVar x) in
-            eval_ctx ((x, tp_val) :: built_ctx) ((x, vx) :: built_env) rest
-      in
-      let (ctx_simpl, env_simpl) = eval_ctx [] [] ctx in
-      let full_ctx = ctx_simpl @ !global_simpl_ctx in
-      let full_env = env_simpl @ List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) !global_simpl_ctx in
-      let term_simpl = Simplicialtt.translate term in
-      let tp_simpl = Simplicialtt.translate tp in
-      let tp_val = Simplicialtt.eval full_ctx full_env tp_simpl in
-      Simplicialtt.check full_ctx full_env term_simpl tp_val;
-      printf "  => OK! (Valid Simplicialtt Sequent)\n\n"
+      if !mode = SimplicialOnly then (
+        printf "Checking Simplicialtt Sequent...\n";
+        let rec eval_ctx built_ctx built_env = function
+          | [] -> (built_ctx, built_env)
+          | (x, tp_expr) :: rest ->
+              let tp_val = Simplicialtt.eval (built_ctx @ !global_simpl_ctx) built_env (Simplicialtt.translate tp_expr) in
+              let vx = Simplicialtt.VNeutral (tp_val, Simplicialtt.NVar x) in
+              eval_ctx ((x, tp_val) :: built_ctx) ((x, vx) :: built_env) rest
+        in
+        let (ctx_simpl, env_simpl) = eval_ctx [] [] ctx in
+        let full_ctx = ctx_simpl @ !global_simpl_ctx in
+        let full_env = env_simpl @ List.map (fun (x, v) -> (x, Simplicialtt.VNeutral (v, Simplicialtt.NVar x))) !global_simpl_ctx in
+        let term_simpl = Simplicialtt.translate term in
+        let tp_simpl = Simplicialtt.translate tp in
+        let tp_val = Simplicialtt.eval full_ctx full_env tp_simpl in
+        Simplicialtt.check full_ctx full_env term_simpl tp_val;
+        printf "  => OK! (Valid Simplicialtt Sequent)\n\n"
+      ) else (
+        printf "Skipping Simplicialtt Sequent (Dirtt Only Mode)\n\n"
+      )
 
 and process_file file_path =
   printf "Loading file %s...\n" file_path;
@@ -179,7 +195,7 @@ and process_file file_path =
       close_in ic;
       raise e
 
-let () =
+let main_run () =
   if Array.length Sys.argv < 2 then (
     printf "Usage: %s <file.ulrik>\n" Sys.argv.(0);
     exit 1

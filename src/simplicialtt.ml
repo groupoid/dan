@@ -562,29 +562,51 @@ and snd_val ctx = function
   | _ -> failwith "snd of non-pair value"
 
 (* Equivalence checking under constraint phi *)
-let equal_under ctx env phi tp v1 v2 =
-  let ivars = List.filter_map (fun (x, t) ->
-    if t = VIDir then Some x else None
-  ) ctx in
-  let valuations = gen_valuations ivars in
-  let size = List.length env in
-  List.for_all (fun val_env ->
-    let eval_env = val_env @ env in
-    let phi_exp = quote ctx size VUniv phi in
-    let phi_val = eval ctx eval_env phi_exp in
-    if eval_value ctx val_env phi_val = 1 then
-      let e1 = quote ctx size tp v1 in
-      let e2 = quote ctx size tp v2 in
-      let v1' = eval ctx eval_env e1 in
-      let v2' = eval ctx eval_env e2 in
-      let tp' = eval ctx eval_env (quote ctx size VUniv tp) in
-      if tp' = VIDir then
-        eval_value ctx val_env v1' = eval_value ctx val_env v2'
-      else
-        quote ctx size tp' v1' = quote ctx size tp' v2'
-    else
-      true
-  ) valuations
+let rec equal_under ctx env phi tp v1 v2 =
+  match tp, v1, v2 with
+  | VUniv, VExt (a1, phi1, u1), VExt (a2, phi2, u2) ->
+      let VShapeClosure (env_phi1, phi_exp1) = phi1 in
+      let VShapeClosure (env_phi2, phi_exp2) = phi2 in
+      phi_exp1 = phi_exp2 &&
+      equal_under ctx env phi VUniv a1 a2 &&
+      (match a1 with
+       | VPi (VIDir, (t, env_t, b)) ->
+           let VShapeClosure (env_u1, u_exp1) = u1 in
+           let VShapeClosure (env_u2, u_exp2) = u2 in
+           List.for_all (fun vt ->
+             let phi_val = eval ctx ((t, vt) :: env_phi1) phi_exp1 in
+             if eval_value ctx [] phi_val = 1 then
+               let v1_val = eval ctx ((t, vt) :: env_u1) u_exp1 in
+               let v2_val = eval ctx ((t, vt) :: env_u2) u_exp2 in
+               let vb = eval ctx ((t, vt) :: env_t) b in
+               equal_under ctx env VOneDir vb v1_val v2_val
+             else
+               true
+           ) [VZeroDir; VOneDir]
+       | _ -> false)
+  | _ ->
+      let ivars = List.filter_map (fun (x, t) ->
+        if t = VIDir then Some x else None
+      ) ctx in
+      let valuations = gen_valuations ivars in
+      let size = List.length env in
+      List.for_all (fun val_env ->
+        let eval_env = val_env @ env in
+        let phi_exp = quote ctx size VUniv phi in
+        let phi_val = eval ctx eval_env phi_exp in
+        if eval_value ctx val_env phi_val = 1 then
+          let e1 = quote ctx size tp v1 in
+          let e2 = quote ctx size tp v2 in
+          let v1' = eval ctx eval_env e1 in
+          let v2' = eval ctx eval_env e2 in
+          let tp' = eval ctx eval_env (quote ctx size VUniv tp) in
+          if tp' = VIDir then
+            eval_value ctx val_env v1' = eval_value ctx val_env v2'
+          else
+            quote ctx size tp' v1' = quote ctx size tp' v2'
+        else
+          true
+      ) valuations
 
 let equal ctx env tp v1 v2 =
   equal_under ctx env VOneDir tp v1 v2
@@ -640,8 +662,12 @@ let rec check (ctx : context) (env : env) (e : exp) (tp : value) : unit =
            check ctx env m tp_m;
            let f_source = EApp (f, EZeroDir) in
            let tp_source = eval ctx env (subst x_var f_source tp_expr) in
-           if not (equal ctx env VUniv tp_source expected_tp) then
-             failwith "J_contra target type mismatch"
+            if not (equal ctx env VUniv tp_source expected_tp) then (
+              Format.printf "J_contra target mismatch:\n";
+              Format.printf "  tp_source:   %a\n" pp_exp (quote ctx (List.length env) VUniv tp_source);
+              Format.printf "  expected_tp: %a\n" pp_exp (quote ctx (List.length env) VUniv expected_tp);
+              failwith "J_contra target type mismatch"
+            )
        | _ -> failwith "J_contra expects path type")
 
   | EEndIntro (w, body), VPi (a, b) ->

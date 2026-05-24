@@ -1,0 +1,22 @@
+(ocamllex lexer)
+(ocamlyacc parser)
+
+(library
+ (name ulrik_lib)
+ (wrapped false)
+ (flags :standard -w -8-11-26-27-33-39)
+ (modules syntax parser lexer simplicialtt dirtt main))
+
+(executable
+ (name ulrik)
+ (public_name ulrik)
+ (modules ulrik)
+ (flags :standard -w -8-11-26-27-33-39)
+ (libraries ulrik_lib))
+
+(executable
+ (name mike)
+ (public_name mike)
+ (modules mike)
+ (flags :standard -w -8-11-26-27-33-39)
+ (libraries ulrik_lib))

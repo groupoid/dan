@@ -13,6 +13,6 @@ def_type YonedaCoend (x z) := coend(y : A). (hom(A, x, y) * F(y, z))
 -- We eliminate the coend, then the tensor, and apply J_contra to map F(y) to F(x) along f : hom(A, x, y).
 def_term yoneda_map (x z) : YonedaCoend(x, z) -> F(x, z) :=
   lambda(e : YonedaCoend(x, z)).
-    let <y_var, t> := e in
-    let f * u := t in
+    let <y_var, t_val> := e in
+    let f * u := t_val in
     J_contra(w. F(w, z), u, y_var, f)

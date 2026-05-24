@@ -1,0 +1,7 @@
+(rule
+ (alias default)
+ (targets ulrik mike)
+ (mode (promote (until-clean)))
+ (action (progn
+          (copy src/ulrik.exe ulrik)
+          (copy src/mike.exe mike))))
