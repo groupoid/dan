@@ -101,15 +101,6 @@ type expr =
   | ECoendElim of name * name * expr * expr                 (* let <x, y> := t in c *)
   | EEndIntro of name * expr                                (* end(w, m) *)
   | EEndElim of name * name * name * expr * expr            (* let x y @ z := t in c *)
-
-type cmd =
-  | CModule of string
-  | CImport of string
-  | CFunctor of name * (expr * sign) list * expr
-  | CDefType of name * name list * expr
-  | CDefTerm of name * name list * expr * expr
-  | CCheck of (name * expr) list * (name * expr) list * expr * expr  (* dirtt check *)
-  | CCheckSimplicial of (name * expr) list * expr * expr        (* simplicial check *)
 ```
 
 Ulrik is a proof assistant based on:
