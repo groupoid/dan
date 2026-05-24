@@ -1,7 +1,6 @@
 Ulrik
 =====
 
-[![OPAM](https://img.shields.io/github/v/release/groupoid/ulrik.svg)](https://opam.ocaml.org/packages/ulrik/)
 [![Actions](https://github.com/groupoid/ulrik/workflows/opam/badge.svg)](https://github.com/groupoid/ulrik/actions)
 
 Here is presented a proof assistant and typechecker for Simplicial and Directed Type Theories called **ulrik**.
