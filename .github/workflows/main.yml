@@ -20,6 +20,8 @@ jobs:
         uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: ${{ matrix.ocaml-version }}
+      - name: Install Dune
+        run: opam install dune
       - name: Build
         run: dune build
       - name: Run Ulrik
