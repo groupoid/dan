@@ -1,0 +1,34 @@
+name: opam
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-24.04
+        ocaml-version:
+          - "5.3"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-version }}
+      - name: Install system dependencies
+        run: opam depext ulrik --yes
+      - name: Install dependencies
+        run: opam install . --deps-only
+      - name: Build
+        run: opam exec -- dune build
+      - name: Install package
+        run: opam install .
+      - name: Run Ulrik
+        run: opam exec -- dune exec ulrik library/book.anders
+      - name: Run Mike
+        run: opam exec -- dune exec mike library/book.anders
