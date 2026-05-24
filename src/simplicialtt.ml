@@ -1,11 +1,11 @@
 (* simplicialtt by Ulrik Buchholtz *)
 
+open Syntax
 open Format
 
 type name = string
 
 type exp =
-
   (* MLTT Core *)
   | EUniv                                   (* U *)
   | EVar of name
@@ -38,6 +38,125 @@ type exp =
   | EJoin of exp * exp                      (* i ∨ j *)
   | EMeet of exp * exp                      (* i ∧ j *)
   | ENeg of exp                             (* ¬i *)
+
+  (* Dirtt Compatibility Primitives *)
+  | EJ of exp * name * name * name * exp * exp * exp * exp
+  | EJCov of exp * name * exp * exp * exp
+  | EJContra of exp * name * exp * exp * exp
+  | EEndIntro of name * exp
+
+let rec subst x v = function
+  | EVar y -> if x = y then v else EVar y
+  | EUniv -> EUniv
+  | EPi (a, (y, b)) ->
+      if x = y then EPi (subst x v a, (y, b))
+      else EPi (subst x v a, (y, subst x v b))
+  | ELam ((y, a), b) ->
+      if x = y then ELam ((y, subst x v a), b)
+      else ELam ((y, subst x v a), subst x v b)
+  | EApp (f, a) -> EApp (subst x v f, subst x v a)
+  | ESig (a, (y, b)) ->
+      if x = y then ESig (subst x v a, (y, b))
+      else ESig (subst x v a, (y, subst x v b))
+  | EPair (a, b) -> EPair (subst x v a, subst x v b)
+  | EFst e -> EFst (subst x v e)
+  | ESnd e -> ESnd (subst x v e)
+  | EId (a, y, z) -> EId (subst x v a, subst x v y, subst x v z)
+  | ERef e -> ERef (subst x v e)
+  | EIDir -> EIDir
+  | EZeroDir -> EZeroDir
+  | EOneDir -> EOneDir
+  | ELeq (i, j) -> ELeq (subst x v i, subst x v j)
+  | EShapeInc (phi, psi) -> EShapeInc (subst x v phi, subst x v psi)
+  | EExt (a, phi, f) -> EExt (subst x v a, subst x v phi, subst x v f)
+  | ESystem list -> ESystem (List.map (fun (phi, t) -> (subst x v phi, subst x v t)) list)
+  | EModalPi (a, (y, b)) ->
+      if x = y then EModalPi (subst x v a, (y, b))
+      else EModalPi (subst x v a, (y, subst x v b))
+  | EModalLam ((y, a), b) ->
+      if x = y then EModalLam ((y, subst x v a), b)
+      else EModalLam ((y, subst x v a), subst x v b)
+  | EModalApp (f, a) -> EModalApp (subst x v f, subst x v a)
+  | ETw a -> ETw (subst x v a)
+  | ETwPi0 a -> ETwPi0 (subst x v a)
+  | ETwPi1 a -> ETwPi1 (subst x v a)
+  | EJoin (a, b) -> EJoin (subst x v a, subst x v b)
+  | EMeet (a, b) -> EMeet (subst x v a, subst x v b)
+  | ENeg a -> ENeg (subst x v a)
+  | EJ (tp, x_var, y_var, z_var, mz, a, b, f) ->
+      let tp' = if x = x_var || x = y_var then tp else subst x v tp in
+      let mz' = if x = z_var then mz else subst x v mz in
+      EJ (tp', x_var, y_var, z_var, mz', subst x v a, subst x v b, subst x v f)
+  | EJCov (tp, x_var, m, a, f) ->
+      let tp' = if x = x_var then tp else subst x v tp in
+      EJCov (tp', x_var, subst x v m, subst x v a, subst x v f)
+  | EJContra (tp, x_var, m, b, f) ->
+      let tp' = if x = x_var then tp else subst x v tp in
+      EJContra (tp', x_var, subst x v m, subst x v b, subst x v f)
+  | EEndIntro (w, m) -> EEndIntro (w, subst x v m)
+
+let rec hom (a : exp) (x : exp) (y : exp) : exp =
+  EExt (
+    EPi (EIDir, ("t", a)),
+    EJoin (ELeq (EVar "t", EZeroDir), ELeq (EOneDir, EVar "t")),
+    ESystem [(ELeq (EVar "t", EZeroDir), x); (ELeq (EOneDir, EVar "t"), y)]
+  )
+
+let rec translate = function
+  | Syntax.EVar x -> EVar x
+  | Syntax.EUniv -> EUniv
+  | Syntax.EPi (a, (x, b)) -> EPi (translate a, (x, translate b))
+  | Syntax.ELam ((x, a), b) -> ELam ((x, translate a), translate b)
+  | Syntax.EApp (f, a) -> EApp (translate f, translate a)
+  | Syntax.ESig (a, (x, b)) -> ESig (translate a, (x, translate b))
+  | Syntax.EPair (a, b) -> EPair (translate a, translate b)
+  | Syntax.EFst e -> EFst (translate e)
+  | Syntax.ESnd e -> ESnd (translate e)
+  | Syntax.EId (a, y, z) -> EId (translate a, translate y, translate z)
+  | Syntax.ERef e -> ERef (translate e)
+  | Syntax.EIDir -> EIDir
+  | Syntax.EZeroDir -> EZeroDir
+  | Syntax.EOneDir -> EOneDir
+  | Syntax.ELeq (i, j) -> ELeq (translate i, translate j)
+  | Syntax.EShapeInc (phi, psi) -> EShapeInc (translate phi, translate psi)
+  | Syntax.EExt (a, phi, f) -> EExt (translate a, translate phi, translate f)
+  | Syntax.ESystem cases -> ESystem (List.map (fun (phi, t) -> (translate phi, translate t)) cases)
+  | Syntax.EModalPi (a, (x, b)) -> EModalPi (translate a, (x, translate b))
+  | Syntax.EModalLam ((x, a), b) -> EModalLam ((x, translate a), translate b)
+  | Syntax.EModalApp (f, a) -> EModalApp (translate f, translate a)
+  | Syntax.ETw a -> ETw (translate a)
+  | Syntax.ETwPi0 a -> ETwPi0 (translate a)
+  | Syntax.ETwPi1 a -> ETwPi1 (translate a)
+  | Syntax.EJoin (a, b) -> EJoin (translate a, translate b)
+  | Syntax.EMeet (a, b) -> EMeet (translate a, translate b)
+  | Syntax.ENeg a -> ENeg (translate a)
+  | Syntax.EOp a -> translate a
+  | Syntax.EHom (cat, a, b) -> hom (translate cat) (translate a) (translate b)
+  | Syntax.ETensor (m1, m2) -> ESig (translate m1, ("_", translate m2))
+  | Syntax.EFunc (m1, m2) -> EPi (translate m1, ("_", translate m2))
+  | Syntax.ECoend (cat, w, m) -> ESig (translate cat, (w, translate m))
+  | Syntax.EEnd (cat, w, m) -> EPi (translate cat, (w, translate m))
+  | Syntax.EIdTerm a -> ELam (("t", EIDir), translate a)
+  | Syntax.EJ (tp, x, y, z, mz, a, b, f) ->
+      EJ (translate tp, x, y, z, translate mz, translate a, translate b, translate f)
+  | Syntax.EJCov (tp, x, m, a, f) ->
+      EJCov (translate tp, x, translate m, translate a, translate f)
+  | Syntax.EJContra (tp, x, m, b, f) ->
+      EJContra (translate tp, x, translate m, translate b, translate f)
+  | Syntax.ETensorElim (x, y, t, c) ->
+      let t' = translate t in
+      subst x (EFst t') (subst y (ESnd t') (translate c))
+  | Syntax.ECoendIntro (x, y, z, m) ->
+      EPair (EVar z, translate m)
+  | Syntax.ECoendElim (w, m_var, t, c) ->
+      let t' = translate t in
+      subst w (EFst t') (subst m_var (ESnd t') (translate c))
+  | Syntax.EEndIntro (w, m) ->
+      EEndIntro (w, translate m)
+  | Syntax.EEndElim (x, y, z, t, c) ->
+      let t' = translate t in
+      let w_var = match t' with EVar name -> name | _ -> failwith "end elim expects variable" in
+      subst x (EVar z) (subst y (EVar z) (subst w_var (EApp (t', EVar z)) (translate c)))                          (* ¬i *)
 
 type value =
   | VUniv
@@ -123,6 +242,14 @@ let rec pp_exp fmt = function
   | EJoin (a, b)    -> fprintf fmt "%a ∨ %a" pp_exp_paren a pp_exp_paren b
   | EMeet (a, b)    -> fprintf fmt "%a ∧ %a" pp_exp_paren a pp_exp_paren b
   | ENeg a          -> fprintf fmt "¬%a" pp_exp_paren a
+  | EJ (tp, x, y, z, mz, a, b, f) ->
+      fprintf fmt "J(%s.%s.%a, %s, %a; %a, %a, %a)" x y pp_exp tp z pp_exp mz pp_exp a pp_exp b pp_exp f
+  | EJCov (tp, x, m, a, f) ->
+      fprintf fmt "J_cov(%s.%a, %a, %a, %a)" x pp_exp tp pp_exp m pp_exp a pp_exp f
+  | EJContra (tp, x, m, b, f) ->
+      fprintf fmt "J_contra(%s.%a, %a, %a, %a)" x pp_exp tp pp_exp m pp_exp b pp_exp f
+  | EEndIntro (w, m) ->
+      fprintf fmt "end_intro(%s, %a)" w pp_exp m
   | ESystem list    ->
       if list = [] then fprintf fmt "[]"
       else (
@@ -202,10 +329,30 @@ let rec eval (ctx : context) (env : env) (e : exp) : value =
   | EJoin (e1, e2) -> VJoin (eval ctx env e1, eval ctx env e2)
   | EMeet (e1, e2) -> VMeet (eval ctx env e1, eval ctx env e2)
   | ENeg e -> VNeg (eval ctx env e)
+  | EJ (tp, x, y, z, mz, a, b, f) ->
+      let tp_val = eval ctx env (subst x a (subst y b tp)) in
+      VNeutral (tp_val, NVar "J")
+  | EJCov (tp, x, m, a, f) ->
+      let tp_val = eval ctx env (subst x (EApp (f, EOneDir)) tp) in
+      VNeutral (tp_val, NVar "J_cov")
+  | EJContra (tp, x, m, b, f) ->
+      let tp_val = eval ctx env (subst x (EApp (f, EZeroDir)) tp) in
+      VNeutral (tp_val, NVar "J_contra")
+  | EEndIntro (w, m) ->
+      VLam (w, env, m)
 
 and apply ctx (f : value) (a : value) : value =
   match f with
   | VLam (x, env, body) -> eval ctx ((x, a) :: env) body
+  | VNeutral (VExt (VPi (domain, (t, env_t, b)), phi, u), neu) ->
+      let VShapeClosure (env_phi, phi_exp) = phi in
+      let phi_val = eval ctx ((t, a) :: env_phi) phi_exp in
+      if eval_value ctx [] phi_val = 1 then
+        let VShapeClosure (env_u, u_exp) = u in
+        eval ctx ((t, a) :: env_u) u_exp
+      else
+        let target = inst ctx (t, env_t, b) a in
+        VNeutral (target, NApp (neu, a))
   | VNeutral (VPi (domain, target), neu) ->
       VNeutral (inst ctx target a, NApp (neu, a))
   | _ -> failwith "apply of non-lambda"
@@ -256,7 +403,46 @@ and eval_value ctx (val_env : env) = function
   | VShapeClosure (env_phi, phi_exp) ->
       let v = eval ctx (val_env @ env_phi) phi_exp in
       eval_value ctx val_env v
-  | _ -> failwith "not a lattice value"
+  | v ->
+      let rec raw_string = function
+        | VUniv -> "VUniv"
+        | VIDir -> "VIDir"
+        | VZeroDir -> "VZeroDir"
+        | VOneDir -> "VOneDir"
+        | VPi _ -> "VPi"
+        | VLam _ -> "VLam"
+        | VSig _ -> "VSig"
+        | VPair _ -> "VPair"
+        | VId _ -> "VId"
+        | VRef _ -> "VRef"
+        | VLeq _ -> "VLeq"
+        | VShapeInc _ -> "VShapeInc"
+        | VSystem _ -> "VSystem"
+        | VExt _ -> "VExt"
+        | VModalPi _ -> "VModalPi"
+        | VModalLam _ -> "VModalLam"
+        | VTw _ -> "VTw"
+        | VTwPi0 _ -> "VTwPi0"
+        | VTwPi1 _ -> "VTwPi1"
+        | VJoin _ -> "VJoin"
+        | VMeet _ -> "VMeet"
+        | VNeg _ -> "VNeg"
+        | VNeutral (tp, neu) ->
+            let rec raw_neu = function
+              | NVar x -> "NVar " ^ x
+              | NApp (n, v) -> "NApp (" ^ raw_neu n ^ ", ...)"
+              | NFst n -> "NFst (" ^ raw_neu n ^ ")"
+              | NSnd n -> "NSnd (" ^ raw_neu n ^ ")"
+              | NModalApp (n, v) -> "NModalApp (" ^ raw_neu n ^ ", ...)"
+              | NTwPi0 n -> "NTwPi0 (" ^ raw_neu n ^ ")"
+              | NTwPi1 n -> "NTwPi1 (" ^ raw_neu n ^ ")"
+              | NSystemElim _ -> "NSystemElim"
+            in
+            "VNeutral (" ^ raw_neu neu ^ ")"
+        | VShapeClosure _ -> "VShapeClosure"
+      in
+      Printf.printf "eval_value failed for: %s\n" (raw_string v);
+      failwith "not a lattice value"
 
 and is_true ctx env v =
   let ivars = List.filter_map (fun (x, t) ->
@@ -406,6 +592,63 @@ let equal ctx env tp v1 v2 =
 (* Bidirectional Type Checker *)
 let rec check (ctx : context) (env : env) (e : exp) (tp : value) : unit =
   match e, tp with
+  | EJ (tp_expr, x_var, y_var, z_var, mz, a, b, f), expected_tp ->
+      let tp_f = infer ctx env f in
+      (match tp_f with
+       | VExt (VPi (VIDir, closure), _, _) ->
+           let cat_val = inst ctx closure VZeroDir in
+           let va = eval ctx env a in
+           let vb = eval ctx env b in
+           let vz = VNeutral (cat_val, NVar z_var) in
+           let env_ext = (z_var, vz) :: env in
+           let env_ext = match a with
+             | EVar va_name -> (va_name, vz) :: env_ext
+             | _ -> env_ext
+           in
+           let env_ext = match b with
+             | EVar vb_name -> (vb_name, vz) :: env_ext
+             | _ -> env_ext
+           in
+           let tp_z = eval ((z_var, cat_val) :: ctx) env_ext (subst x_var (EVar z_var) (subst y_var (EVar z_var) tp_expr)) in
+           check ((z_var, cat_val) :: ctx) env_ext mz tp_z;
+           let tp_ab = eval ctx env (subst x_var a (subst y_var b tp_expr)) in
+           if not (equal ctx env VUniv tp_ab expected_tp) then
+             failwith "J target type mismatch"
+       | _ -> failwith "J expects path type")
+
+  | EJCov (tp_expr, x_var, m, a, f), expected_tp ->
+      let tp_f = infer ctx env f in
+      (match tp_f with
+       | VExt (VPi (VIDir, closure), _, _) ->
+           let cat_val = inst ctx closure VZeroDir in
+           let va = eval ctx env a in
+           let tp_m = eval ctx env (subst x_var a tp_expr) in
+           check ctx env m tp_m;
+           let f_target = EApp (f, EOneDir) in
+           let tp_target = eval ctx env (subst x_var f_target tp_expr) in
+           if not (equal ctx env VUniv tp_target expected_tp) then
+             failwith "J_cov target type mismatch"
+       | _ -> failwith "J_cov expects path type")
+
+  | EJContra (tp_expr, x_var, m, b, f), expected_tp ->
+      let tp_f = infer ctx env f in
+      (match tp_f with
+       | VExt (VPi (VIDir, closure), _, _) ->
+           let cat_val = inst ctx closure VZeroDir in
+           let vb = eval ctx env b in
+           let tp_m = eval ctx env (subst x_var b tp_expr) in
+           check ctx env m tp_m;
+           let f_source = EApp (f, EZeroDir) in
+           let tp_source = eval ctx env (subst x_var f_source tp_expr) in
+           if not (equal ctx env VUniv tp_source expected_tp) then
+             failwith "J_contra target type mismatch"
+       | _ -> failwith "J_contra expects path type")
+
+  | EEndIntro (w, body), VPi (a, b) ->
+      let vx = VNeutral (a, NVar w) in
+      let target_tp = inst ctx b vx in
+      check ((w, a) :: ctx) ((w, vx) :: env) body target_tp
+
   | ELam ((x, a_exp), body), VPi (a, b) ->
       let va = eval ctx env a_exp in
       if not (equal ctx env VUniv va a) then
@@ -488,7 +731,11 @@ let rec check (ctx : context) (env : env) (e : exp) (tp : value) : unit =
 
   | e, tp ->
       let inferred = infer ctx env e in
-      if not (equal ctx env VUniv inferred tp) then (
+      let rec coerce = function
+        | VExt (base, _, _) -> coerce base
+        | t -> t
+      in
+      if not (equal ctx env VUniv (coerce inferred) (coerce tp)) then (
         printf "Type mismatch for term: %a\n" pp_exp e;
         printf "  Inferred: %a\n" pp_exp (quote ctx (List.length env) VUniv inferred);
         printf "  Expected: %a\n" pp_exp (quote ctx (List.length env) VUniv tp);
@@ -497,6 +744,43 @@ let rec check (ctx : context) (env : env) (e : exp) (tp : value) : unit =
 
 and infer (ctx : context) (env : env) (e : exp) : value =
   match e with
+  | EJ (tp_expr, x_var, y_var, z_var, mz, a, b, f) ->
+      let tp_f = infer ctx env f in
+      (match tp_f with
+       | VExt (VPi (VIDir, closure), _, _) ->
+           let cat_val = inst ctx closure VZeroDir in
+           let va = eval ctx env a in
+           let vb = eval ctx env b in
+           let vz = VNeutral (cat_val, NVar z_var) in
+           let tp_z = eval ((z_var, cat_val) :: ctx) ((z_var, vz) :: env) (subst x_var (EVar z_var) (subst y_var (EVar z_var) tp_expr)) in
+           check ((z_var, cat_val) :: ctx) ((z_var, vz) :: env) mz tp_z;
+           eval ctx env (subst x_var a (subst y_var b tp_expr))
+       | _ -> failwith "J expects path type")
+
+  | EJCov (tp_expr, x_var, m, a, f) ->
+      let tp_f = infer ctx env f in
+      (match tp_f with
+       | VExt (VPi (VIDir, closure), _, _) ->
+           let cat_val = inst ctx closure VZeroDir in
+           let va = eval ctx env a in
+           let tp_m = eval ctx env (subst x_var a tp_expr) in
+           check ctx env m tp_m;
+           let f_target = EApp (f, EOneDir) in
+           eval ctx env (subst x_var f_target tp_expr)
+       | _ -> failwith "J_cov expects path type")
+
+  | EJContra (tp_expr, x_var, m, b, f) ->
+      let tp_f = infer ctx env f in
+      (match tp_f with
+       | VExt (VPi (VIDir, closure), _, _) ->
+           let cat_val = inst ctx closure VZeroDir in
+           let vb = eval ctx env b in
+           let tp_m = eval ctx env (subst x_var b tp_expr) in
+           check ctx env m tp_m;
+           let f_source = EApp (f, EZeroDir) in
+           eval ctx env (subst x_var f_source tp_expr)
+       | _ -> failwith "J_contra expects path type")
+
   | EUniv -> VUniv
   | EVar x ->
       (match List.assoc_opt x ctx with
@@ -610,8 +894,8 @@ and infer (ctx : context) (env : env) (e : exp) : value =
       if t = VIDir then VIDir
       else if t = VUniv then VUniv
       else failwith "Neg argument must be either interval term or shape"
-  | ELam _ | EModalLam _ | EPair _ | ESystem _ ->
-      failwith "cannot infer type of lambda, pair, or system"
+  | ELam _ | EModalLam _ | EPair _ | ESystem _ | EEndIntro _ ->
+      failwith "cannot infer type of lambda, pair, system, or end intro"
 
 (* Test suite *)
 let tests () =

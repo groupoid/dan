@@ -1,5 +1,6 @@
 (* dirtt by Michael Shulman *)
 
+open Syntax
 open Format
 
 type name = string
@@ -36,6 +37,113 @@ type m_term =
   | MTFuncIntro of name * m_type * m_term
   | MTFuncElim of m_term * m_term
   | MTVar of name
+
+let rec to_cat = function
+  | EVar x -> CVar x
+  | EOp c -> COp (to_cat c)
+  | ETw c -> COp (to_cat c)
+  | ETensor (c1, c2) -> CProd (to_cat c1, to_cat c2)
+  | e -> failwith "invalid dirtt category"
+
+and to_cat_term = function
+  | EVar x -> CTVar x
+  | EApp (f, a) ->
+      let rec collect_args acc = function
+        | EApp (f, a) -> collect_args (flatten_expr_to_cat_terms a @ acc) f
+        | EVar f -> (f, acc)
+        | _ -> failwith "invalid category function application"
+      in
+      let (f, args) = collect_args (flatten_expr_to_cat_terms a) f in
+      CTFun (f, args)
+  | EOp a -> CTOp (to_cat_term a)
+  | ETw a -> CTOp (to_cat_term a)
+
+and flatten_expr_to_cat_terms = function
+  | EPair (e1, e2) -> flatten_expr_to_cat_terms e1 @ flatten_expr_to_cat_terms e2
+  | e -> [to_cat_term e]
+  | e ->
+      let rec string_of_expr = function
+        | EVar s -> "EVar " ^ s
+        | EApp (f, a) -> "EApp (" ^ string_of_expr f ^ ", " ^ string_of_expr a ^ ")"
+        | ELam ((x, t), b) -> "ELam ((" ^ x ^ ", " ^ string_of_expr t ^ "), " ^ string_of_expr b ^ ")"
+        | EPi (a, (x, b)) -> "EPi (" ^ string_of_expr a ^ ", (" ^ x ^ ", " ^ string_of_expr b ^ "))"
+        | ESig (a, (x, b)) -> "ESig (" ^ string_of_expr a ^ ", (" ^ x ^ ", " ^ string_of_expr b ^ "))"
+        | EPair (a, b) -> "EPair (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ")"
+        | EFst a -> "EFst (" ^ string_of_expr a ^ ")"
+        | ESnd a -> "ESnd (" ^ string_of_expr a ^ ")"
+        | EUniv -> "EUniv"
+        | EId (a, b, c) -> "EId (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ", " ^ string_of_expr c ^ ")"
+        | ERef a -> "ERef (" ^ string_of_expr a ^ ")"
+        | EIDir -> "EIDir"
+        | EZeroDir -> "EZeroDir"
+        | EOneDir -> "EOneDir"
+        | ELeq (a, b) -> "ELeq (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ")"
+        | EShapeInc (a, b) -> "EShapeInc (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ")"
+        | EExt (a, b, c) -> "EExt (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ", " ^ string_of_expr c ^ ")"
+        | ESystem _ -> "ESystem"
+        | EModalPi (a, (x, b)) -> "EModalPi (" ^ string_of_expr a ^ ", (" ^ x ^ ", " ^ string_of_expr b ^ "))"
+        | EModalLam ((x, a), b) -> "EModalLam ((" ^ x ^ ", " ^ string_of_expr a ^ "), " ^ string_of_expr b ^ ")"
+        | EModalApp (f, a) -> "EModalApp (" ^ string_of_expr f ^ ", " ^ string_of_expr a ^ ")"
+        | ETw a -> "ETw (" ^ string_of_expr a ^ ")"
+        | EOp a -> "EOp (" ^ string_of_expr a ^ ")"
+        | ETwPi0 a -> "ETwPi0 (" ^ string_of_expr a ^ ")"
+        | ETwPi1 a -> "ETwPi1 (" ^ string_of_expr a ^ ")"
+        | EJoin (a, b) -> "EJoin (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ")"
+        | EMeet (a, b) -> "EMeet (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ")"
+        | ENeg a -> "ENeg (" ^ string_of_expr a ^ ")"
+        | EHom (a, b, c) -> "EHom (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ", " ^ string_of_expr c ^ ")"
+        | ETensor (a, b) -> "ETensor (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ")"
+        | EFunc (a, b) -> "EFunc (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ")"
+        | ECoend (a, x, b) -> "ECoend (" ^ string_of_expr a ^ ", " ^ x ^ ", " ^ string_of_expr b ^ ")"
+        | EEnd (a, x, b) -> "EEnd (" ^ string_of_expr a ^ ", " ^ x ^ ", " ^ string_of_expr b ^ ")"
+        | EIdTerm a -> "EIdTerm (" ^ string_of_expr a ^ ")"
+        | EJ _ -> "EJ"
+        | EJCov _ -> "EJCov"
+        | EJContra _ -> "EJContra"
+        | ETensorElim _ -> "ETensorElim"
+        | ECoendIntro _ -> "ECoendIntro"
+        | ECoendElim _ -> "ECoendElim"
+        | EEndIntro _ -> "EEndIntro"
+        | EEndElim _ -> "EEndElim"
+      in
+      failwith ("invalid category term: " ^ string_of_expr e)
+
+and to_m_type = function
+  | EHom (cat, a, b) -> MHom (to_cat cat, to_cat_term a, to_cat_term b)
+  | ETensor (m1, m2) -> MTensor (to_m_type m1, to_m_type m2)
+  | ECoend (cat, w, m) -> MCoend (to_cat cat, w, to_m_type m)
+  | EEnd (cat, w, m) -> MEnd (to_cat cat, w, to_m_type m)
+  | EFunc (m1, m2) -> MFunc (to_m_type m1, to_m_type m2)
+  | EApp (f, a) ->
+      let rec collect_args acc = function
+        | EApp (f, a) -> collect_args (flatten_expr_to_cat_terms a @ acc) f
+        | EVar f -> (f, acc)
+        | _ -> failwith "invalid module type application"
+      in
+      let (f, args) = collect_args (flatten_expr_to_cat_terms a) f in
+      MApp (f, args)
+  | EVar f -> MApp (f, [])
+  | e -> failwith "invalid module type"
+
+and to_m_term = function
+  | EVar x -> MTVar x
+  | EIdTerm a -> MTId (to_cat_term a)
+  | EJ (tp, x, y, z, mz, a, b, f) ->
+      MTJ (to_m_type tp, x, y, z, to_m_term mz, to_cat_term a, to_cat_term b, to_m_term f)
+  | EJCov (tp, x, m, a, f) ->
+      MTJCov (to_m_type tp, x, to_m_term m, to_cat_term a, to_m_term f)
+  | EJContra (tp, x, m, b, f) ->
+      MTJContra (to_m_type tp, x, to_m_term m, to_cat_term b, to_m_term f)
+  | ETensor (m1, m2) -> MTTensorIntro (to_m_term m1, to_m_term m2)
+  | ETensorElim (x, y, t, c) -> MTTensorElim (x, y, to_m_term t, to_m_term c)
+  | ECoendIntro (x, y, z, m) -> MTCoendIntro (x, y, z, to_m_term m)
+  | ECoendElim (w, m_var, t, c) -> MTCoendElim (w, m_var, to_m_term t, to_m_term c)
+  | EEndIntro (w, m) -> MTEndIntro (w, to_m_term m)
+  | EEndElim (x, y, z, t, c) -> MTEndElim (x, y, z, to_m_term t, to_m_term c)
+  | ELam ((x, tp), body) -> MTFuncIntro (x, to_m_type tp, to_m_term body)
+  | EApp (f, a) -> MTFuncElim (to_m_term f, to_m_term a)
+  | EModalApp (f, a) -> MTFuncElim (to_m_term f, to_m_term a)
+  | e -> failwith "invalid module term"
 
 type sign = [ `Cov | `Contra ]
 
@@ -204,6 +312,32 @@ let rec expand_m_type = function
   | MCoend (cat, w, m) -> MCoend (cat, w, expand_m_type m)
   | MEnd (cat, w, m) -> MEnd (cat, w, expand_m_type m)
   | MFunc (m1, m2) -> MFunc (expand_m_type m1, expand_m_type m2)
+
+let rec expand_m_term = function
+  | MTVar x -> MTVar x
+  | MTId a -> MTId a
+  | MTJ (tp, x, y, z, mz, a, b, f) ->
+      MTJ (expand_m_type tp, x, y, z, expand_m_term mz, a, b, expand_m_term f)
+  | MTJCov (tp, x, m, a, f) ->
+      MTJCov (expand_m_type tp, x, expand_m_term m, a, expand_m_term f)
+  | MTJContra (tp, x, m, b, f) ->
+      MTJContra (expand_m_type tp, x, expand_m_term m, b, expand_m_term f)
+  | MTTensorIntro (m1, m2) ->
+      MTTensorIntro (expand_m_term m1, expand_m_term m2)
+  | MTTensorElim (x, y, t, c) ->
+      MTTensorElim (x, y, expand_m_term t, expand_m_term c)
+  | MTCoendIntro (x, y, z, m) ->
+      MTCoendIntro (x, y, z, expand_m_term m)
+  | MTCoendElim (w, m_var, t, c) ->
+      MTCoendElim (w, m_var, expand_m_term t, expand_m_term c)
+  | MTEndIntro (w, m) ->
+      MTEndIntro (w, expand_m_term m)
+  | MTEndElim (x, y, z, t, c) ->
+      MTEndElim (x, y, z, expand_m_term t, expand_m_term c)
+  | MTFuncIntro (x, tp, body) ->
+      MTFuncIntro (x, expand_m_type tp, expand_m_term body)
+  | MTFuncElim (f, a) ->
+      MTFuncElim (expand_m_term f, expand_m_term a)
 
 (* Category Term Inferer *)
 let rec infer_cat_term (delta : (name * cat) list) (t : cat_term) : cat * (name * sign) list =
@@ -651,5 +785,60 @@ let infer_categories_from_type (tp : m_type) : (name * cat) list =
           unique ((x, c) :: acc) rest
   in
   unique [] raw
+
+let rec cat_to_simpl = function
+  | CVar x -> Simplicialtt.EVar x
+  | COp c -> cat_to_simpl c
+  | CProd (c1, c2) -> Simplicialtt.ESig (cat_to_simpl c1, ("_", cat_to_simpl c2))
+
+and cat_term_to_simpl = function
+  | CTVar x -> Simplicialtt.EVar x
+  | CTFun (f, args) ->
+      List.fold_left (fun acc arg -> Simplicialtt.EApp (acc, cat_term_to_simpl arg)) (Simplicialtt.EVar f) args
+  | CTOp a -> cat_term_to_simpl a
+
+and m_type_to_simpl = function
+  | MHom (cat, a, b) ->
+      Simplicialtt.hom (cat_to_simpl cat) (cat_term_to_simpl a) (cat_term_to_simpl b)
+  | MTensor (m1, m2) ->
+      Simplicialtt.ESig (m_type_to_simpl m1, ("_", m_type_to_simpl m2))
+  | MCoend (cat, w, m) ->
+      Simplicialtt.ESig (cat_to_simpl cat, (w, m_type_to_simpl m))
+  | MEnd (cat, w, m) ->
+      Simplicialtt.EPi (cat_to_simpl cat, (w, m_type_to_simpl m))
+  | MFunc (m1, m2) ->
+      Simplicialtt.EPi (m_type_to_simpl m1, ("_", m_type_to_simpl m2))
+  | MApp (f, args) ->
+      List.fold_left (fun acc arg -> Simplicialtt.EApp (acc, cat_term_to_simpl arg)) (Simplicialtt.EVar f) args
+
+and m_term_to_simpl = function
+  | MTVar x -> Simplicialtt.EVar x
+  | MTId a -> Simplicialtt.ELam (("t", Simplicialtt.EIDir), cat_term_to_simpl a)
+  | MTJ (tp, x, y, z, mz, a, b, f) ->
+      Simplicialtt.EJ (m_type_to_simpl tp, x, y, z, m_term_to_simpl mz, cat_term_to_simpl a, cat_term_to_simpl b, m_term_to_simpl f)
+  | MTJCov (tp, x, m, a, f) ->
+      Simplicialtt.EJCov (m_type_to_simpl tp, x, m_term_to_simpl m, cat_term_to_simpl a, m_term_to_simpl f)
+  | MTJContra (tp, x, m, b, f) ->
+      Simplicialtt.EJContra (m_type_to_simpl tp, x, m_term_to_simpl m, cat_term_to_simpl b, m_term_to_simpl f)
+  | MTTensorIntro (m1, m2) ->
+      Simplicialtt.EPair (m_term_to_simpl m1, m_term_to_simpl m2)
+  | MTTensorElim (x, y, t, c) ->
+      let t' = m_term_to_simpl t in
+      Simplicialtt.subst x (Simplicialtt.EFst t') (Simplicialtt.subst y (Simplicialtt.ESnd t') (m_term_to_simpl c))
+  | MTCoendIntro (x, y, z, m) ->
+      Simplicialtt.EPair (Simplicialtt.EVar z, m_term_to_simpl m)
+  | MTCoendElim (w, m_var, t, c) ->
+      let t' = m_term_to_simpl t in
+      Simplicialtt.subst w (Simplicialtt.EFst t') (Simplicialtt.subst m_var (Simplicialtt.ESnd t') (m_term_to_simpl c))
+  | MTEndIntro (w, m) ->
+      Simplicialtt.EEndIntro (w, m_term_to_simpl m)
+  | MTEndElim (x, y, z, t, c) ->
+      let t' = m_term_to_simpl t in
+      let w_var = match t' with Simplicialtt.EVar name -> name | _ -> failwith "end elim expects variable" in
+      Simplicialtt.subst x (Simplicialtt.EVar z) (Simplicialtt.subst y (Simplicialtt.EVar z) (Simplicialtt.subst w_var (Simplicialtt.EApp (t', Simplicialtt.EVar z)) (m_term_to_simpl c)))
+  | MTFuncIntro (x, tp, body) ->
+      Simplicialtt.ELam ((x, m_type_to_simpl tp), m_term_to_simpl body)
+  | MTFuncElim (f, a) ->
+      Simplicialtt.EApp (m_term_to_simpl f, m_term_to_simpl a)
 
 let () = tests ()

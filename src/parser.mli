@@ -44,6 +44,25 @@ type token =
   | MIX
   | LAMBDALIT
   | EOF
+  | UNIV
+  | REFL
+  | IDIR
+  | ZERO
+  | ONE
+  | LEQ
+  | SUBSETEQ
+  | JOIN
+  | MEET
+  | NEG
+  | FST
+  | SND
+  | TW
+  | PI0
+  | PI1
+  | EQ
+  | LBRACE
+  | RBRACE
+  | MULIT
 
 val file :
-  (Lexing.lexbuf  -> token) -> Lexing.lexbuf -> Dirtt.cmd list
+  (Lexing.lexbuf  -> token) -> Lexing.lexbuf -> Syntax.cmd list

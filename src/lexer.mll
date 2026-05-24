@@ -54,6 +54,10 @@ rule token = parse
   | ")" { RPAREN }
   | "[" { LBRACKET }
   | "]" { RBRACKET }
+  | "{" { LBRACE }
+  | "}" { RBRACE }
+  | "mu" { MULIT }
+  | "μ" { MULIT }
   | "<" { LANGLE }
   | ">" { RANGLE }
   | "⟨" { LANGLE }
@@ -61,6 +65,34 @@ rule token = parse
   | "|" { BAR }
   | "." { DOT }
   | "@" { AT }
+  | "U" { UNIV }
+  | "refl" { REFL }
+  | "I" { IDIR }
+  | "𝕀" { IDIR }
+  | "0" { ZERO }
+  | "1" { ONE }
+  | "<=" { LEQ }
+  | "≤" { LEQ }
+  | "⊆" { SUBSETEQ }
+  | "subseteq" { SUBSETEQ }
+  | "\\/" { JOIN }
+  | "∨" { JOIN }
+  | "/\\" { MEET }
+  | "∧" { MEET }
+  | "~" { NEG }
+  | "¬" { NEG }
+  | "not" { NEG }
+  | ".1" { FST }
+  | "fst" { FST }
+  | ".2" { SND }
+  | "snd" { SND }
+  | "^tw" { TW }
+  | "tw" { TW }
+  | "π₀" { PI0 }
+  | "pi0" { PI0 }
+  | "π₁" { PI1 }
+  | "pi1" { PI1 }
+  | "=" { EQ }
   | ident as id { IDENT id }
   | eof { EOF }
   | _ as c { failwith (Printf.sprintf "unexpected character: %c" c) }
