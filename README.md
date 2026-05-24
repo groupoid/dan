@@ -174,7 +174,6 @@ library/
 Mentions
 --------
 
-* Emily Riehl, Mike Shulman. <a href="https://arxiv.org/pdf/1705.07401">A type theory for synthetic ∞-categories</a>. 2017.
-* Dan Licata, Andreas Nuyts, Patrick Schultz, Michael Shulman. <a href="http://dlicata.web.wesleyan.edu/pubs/lnss20dirtt/lnss20dirtt.pdf">A Directed Type Theory for Formal Category Theory</a>. 2020.
+* Emily Riehl, Mike Shulman. <a href="https://arxiv.org/pdf/1705.07442">A type theory for synthetic ∞-categories</a>. 2017.
+* Dan Licata, Andreas Nuyts, Patrick Schultz, Michael Shulman. <a href="https://ulrik.groupoid.space/doc/dirtt.pdf">A Directed Type Theory for Formal Category Theory</a>. 2020.
 * Daniel Gratzer, Jonathan Weinberger, Ulrik Buchholtz. <a href="https://arxiv.org/pdf/2605.xxxxx">Yoneda embedding in simplicial type theory</a>. 2026.
-* Максим Сохацький. <a href="https://groupoid.github.io/anders/doc/yoneda-simplicialtt-ua.pdf">Вкладення Йонеди в сiмплiцiальнiй теорiї типiв</a>. 2026.
