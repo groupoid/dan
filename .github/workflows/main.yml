@@ -22,7 +22,10 @@ jobs:
           ocaml-compiler: ${{ matrix.ocaml-version }}
           dune-cache: true
       - name: Install Dune
-        run: opam install . --deps-only
+      - name: Install dependencies
+        run: |
+          opam install dune --yes
+          opam install . --deps-only --with-test --yes || echo "No opam file found, skipping"
       - name: Build
         run: opam exec -- dune build
       - name: Run Ulrik
