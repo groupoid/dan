@@ -20,6 +20,7 @@ jobs:
         uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: ${{ matrix.ocaml-version }}
+          dune-cache: true
       - name: Install Dune
         run: opam install . --deps-only
       - name: Build
