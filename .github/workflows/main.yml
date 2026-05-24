@@ -20,6 +20,7 @@ jobs:
         uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: ${{ matrix.ocaml-version }}
+      - name: Build
         run: opam exec -- dune build
       - name: Run Ulrik
         run: opam exec -- dune exec ulrik library/book.anders
