@@ -21,7 +21,7 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-version }}
       - name: Install Dune
-        run: opam install dune
+        run: opam install dune && eval $(opam env)
       - name: Build
         run: dune build
       - name: Run Ulrik
