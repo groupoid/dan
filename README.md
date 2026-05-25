@@ -1,15 +1,17 @@
 # Simplicial Languages: AST Architectures and Translation Maps
 
-This document provides an extensive analysis and architectural design of the **Compilation & Elaboration Model (Option B)**, linking the operational GAP-like core (`Dan`/`Dan Kan`) with the theoretical proof assistants `Ulrik` (Simplicial Type Theory) and `Mike` (Directed Type Theory).
-
----
+This document provides an extensive analysis and architectural design of the **Compilation & Elaboration Model (Option B)**,
+linking the operational GAP-like core (`Dan`) with the theoretical
+proof assistants `Ulrik` (Simplicial Type Theory) and `Mike` (Directed Type Theory).
 
 ## 1. General AST Trees for Each Language
 
 Below we define the exact Abstract Syntax Trees (ASTs) of the three core representations in OCaml.
 
 ### 1.1 Operational Core (Dan / Simplicity HoTT)
-The operational core checks presentations of algebraic and simplicial structures in linear time. Its AST represents elements, generators, face maps, and algebraic equations.
+
+The operational core checks presentations of algebraic and simplicial structures in linear time.
+Its AST represents elements, generators, face maps, and algebraic equations.
 
 ```ocaml
 (* Defined in src/operational/dan.ml *)
@@ -50,7 +52,9 @@ type type_def = {
 ```
 
 ### 1.2 Theoretical Simplicial (Ulrik / Simplicialtt)
-The simplicial type theory engine implements Riehl-Shulman type theory. Its AST supports the directed interval $\mathbb{I}$, cofibrations, extension types, opposite category, and twisted arrow category modalities.
+
+The simplicial type theory engine implements Riehl-Shulman type theory.
+Its AST supports the directed interval $\mathbb{I}$, cofibrations, extension types, opposite category, and twisted arrow category modalities.
 
 ```ocaml
 (* Defined in src/theoretical/simplicialtt.ml *)
@@ -89,16 +93,12 @@ type exp =
   | EJoin of exp * exp                      (* Lattice Join: i ∨ j *)
   | EMeet of exp * exp                      (* Lattice Meet: i ∧ j *)
   | ENeg of exp                             (* Lattice Negation: ¬i *)
-
-  (* Dirtt Compatibility Primitives *)
-  | EJ of exp * name * name * name * exp * exp * exp * exp (* J-elim *)
-  | EJCov of exp * name * exp * exp * exp                  (* Covariant J *)
-  | EJContra of exp * name * exp * exp * exp               (* Contravariant J *)
-  | EEndIntro of name * exp                 (* Limit intro *)
 ```
 
 ### 1.3 Theoretical Directed (Mike / Dirtt)
-The directed type theory engine implements polarized, linear category theory. Its AST supports linear polarized contexts, ends, coends, tensors, and quadraticality.
+
+The directed type theory engine implements polarized, linear category theory.
+Its AST supports linear polarized contexts, ends, coends, tensors, and quadraticality.
 
 ```ocaml
 (* Defined in src/theoretical/dirtt.ml *)
@@ -251,12 +251,13 @@ graph TD
     OpDef[Operational Definition] -->|Parser| OpAST[Dan AST]
     OpAST -->|Translate to STT| UlrikAST[Ulrik exp AST]
     OpAST -->|Translate to Dirtt| MikeAST[Mike m_type AST]
-    
+
     UlrikAST -->|Typecheck| SimpVal[Ulrik Typechecker]
     MikeAST -->|Typecheck| DirttVal[Dirtt Typechecker]
 ```
 
 ### 4.1 Mapping Categories to the Backends
+
 A Category in the operational layer is defined by objects, morphisms, composition, and identity equations.
 
 1. **Translation to Mike (Dirtt / Directed TT)**:
@@ -280,6 +281,7 @@ A Category in the operational layer is defined by objects, morphisms, compositio
    - Segal Condition: For any $x, y, z : A$, the natural restriction map $\text{hom}_A(x, z) \to \text{hom}_A(x,y) \times \text{hom}_A(y,z)$ is an equivalence.
 
 ### 4.2 Mapping Groups to the Backends
+
 A Group $G$ is presented operational-style by generators and relations (e.g. $a^3 = e$).
 
 1. **Translation to Ulrik (STT)**:
@@ -292,20 +294,20 @@ A Group $G$ is presented operational-style by generators and relations (e.g. $a^
    $$\text{hom}_G(*, *) \quad \text{with composition tensor } \otimes \text{ and unit } Id(*)$$
 
 ### 4.3 Mapping Equalities & Relations
-Operational equations (e.g. $f \circ g = h$) map to strict identity terms or path terms:
-- In **Ulrik (STT)**: Translated to identity path terms:
-  $$EId(hom_A(x, z), Comp(f, g), h)$$
-- In **Mike (Dirtt)**: Handled via the $J$-induction operator (`MTJ`), which permits substituting equal terms along path composition:
-  $$MTJ(tp, x, y, z, mz, a, b, f)$$
 
----
+Operational equations (e.g. $f \circ g = h$) map to strict identity terms or path terms:
+
+* In **Ulrik (STT)**: Translated to identity path terms: $$EId(hom_A(x, z), Comp(f, g), h)$$
+* In **Mike (Dirtt)**: Handled via the $J$-induction operator (`MTJ`), which permits substituting equal terms along path composition: $$MTJ(tp, x, y, z, mz, a, b, f)$$
 
 ## 5. Metatheoretical Visual Verification Guide
 
 This guide details how humans can visually verify that theoretical layers absorb operational terms and prove theorems about them.
 
 ### Step 1: Declare the Operational Structure
+
 Let us define a path category with $Z/2Z$ symmetries, `path_z2_category` in the operational layer:
+
 ```
 def path_z2_category : Category
  := П (x y : Simplex),
