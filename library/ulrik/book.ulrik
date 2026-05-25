@@ -7,3 +7,5 @@ import "library/ulrik/symmetric.ulrik"
 import "library/ulrik/universal.ulrik"
 import "library/ulrik/topos.ulrik"
 import "library/ulrik/abelian.ulrik"
+import "library/ulrik/derived.ulrik"
+

@@ -1,0 +1,9 @@
+(ocamllex dan_lexer)
+(ocamlyacc dan_parser)
+
+(executable
+ (name dan)
+ (public_name dan)
+ (modules dan_syntax dan dan_lexer dan_parser)
+ (flags :standard -w -8-11-26-27-33-39)
+)

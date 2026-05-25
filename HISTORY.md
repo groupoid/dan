@@ -109,3 +109,19 @@ By implementing Option B, we are able to define a "Golden Middle" architecture t
 - **Phase 2**: Document the AST structures of the three core engines to establish the source and target representations.
 - **Phase 3**: Establish explicit translation maps from the operational AST (`dan.ml`) to the theoretical ASTs (`simplicialtt.ml` and `dirtt.ml`).
 - **Phase 4**: Provide a human-readable visual verification guide demonstrating how a proof (like composition of quasi-isomorphisms) is transported to a concrete operational object (like the path category).
+- **Phase 5**: Integrate derived categories library into Simplicial Type Theory base library (`derived.ulrik`) and verify it.
+
+---
+
+## 6. Integration of Derived Categories into Simplicial Type Theory
+
+### 6.1 Placement Decision
+The standalone `derived.ml` script and decided to integrate its definitions and theorems into the **Simplicial Type Theory (Ulrik)** base library under `library/ulrik/derived.ulrik`. 
+- **Rationale**: The structures in `derived.ml` (Category, Complexes, Morphisms, Quasi-Isomorphisms, Shifts, and Triangles) are expressed using standard dependent type-theoretic constructs ($\Pi$-types, $\Sigma$-types, Identity types, and structural pairs). They do not require the directed interval $\mathbb{I}$ or the linear polarities and quadraticality restrictions of Directed Type Theory (Mike/Dirtt). Hence, Simplicial Type Theory provides the most natural and direct fit.
+
+### 6.2 Mapping to Simplicial Type Theory (`derived.ulrik`)
+To match the golden middle of typechecking:
+1. Primitives (like `Category`, `AbelianStructure`, `Complex`, `DerivedCategory`, etc.) are declared as dependent types. `Category` is represented as a nested Sigma type of objects, hom-spaces, composition, and identity.
+2. The composition of quasi-isomorphisms and the existence of a triangle are represented as typechecking assertions (`check` statements) in `derived.ulrik`, referencing the parameterized category signatures.
+3. The new module was appended to the base library index [book.ulrik](file:///Users/tonpa/depot/groupoid/ulrik/library/ulrik/book.ulrik), validating the entire theoretical library.
+

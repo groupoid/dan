@@ -43,6 +43,7 @@ let lookup ctx x =
 (* Підстановка в типах *)
 let rec subst_ty ty x t =
   match ty with
+  | Var y -> if y = x then t else ty
   | Univ u -> Univ u
   | Pi (y, a, b) -> Pi (y, subst_ty a x t, if y = x then b else subst_ty b x t)
   | Sigma (y, a, b) -> Sigma (y, subst_ty a x t, if y = x then b else subst_ty b x t)
@@ -179,12 +180,12 @@ let theorem_quasi_iso_compose =
     ("qf", QuasiIso (Var "C", Var "A", Var "X", Var "Y", Var "f"));
     ("g", ComplexMorphism (Var "C", Var "A", Var "Y", Var "Z"));
     ("qg", QuasiIso (Var "C", Var "A", Var "Y", Var "Z", Var "g"));
-    ("compose", Pi ("A", Complex (Var "C", Var "A"), 
-                   Pi ("B", Complex (Var "C", Var "A"),
-                   Pi ("C", Complex (Var "C", Var "A"),
-                   Pi ("f", ComplexMorphism (Var "C", Var "A", Var "A", Var "B"),
-                   Pi ("g", ComplexMorphism (Var "C", Var "A", Var "B", Var "C"),
-                   ComplexMorphism (Var "C", Var "A", Var "A", Var "C")))))))
+    ("compose", Pi ("X'", Complex (Var "C", Var "A"), 
+                   Pi ("Y'", Complex (Var "C", Var "A"),
+                   Pi ("Z'", Complex (Var "C", Var "A"),
+                   Pi ("f'", ComplexMorphism (Var "C", Var "A", Var "X'", Var "Y'"),
+                   Pi ("g'", ComplexMorphism (Var "C", Var "A", Var "Y'", Var "Z'"),
+                   ComplexMorphism (Var "C", Var "A", Var "X'", Var "Z'")))))))
   ] in
   let compose_term = App (App (App (App (App (Var "compose", Var "X"), Var "Y"), Var "Z"), Var "f"), Var "g") in
   let ty = QuasiIso (Var "C", Var "A", Var "X", Var "Z", compose_term) in
