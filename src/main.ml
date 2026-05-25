@@ -58,7 +58,7 @@ let rec process_cmd file_path cmd =
       let cod_dirtt = to_cat cod in
       printf "Declaring functor %s : %a\n" name pp_cat cod_dirtt;
       cat_fun_sigs := (name, { arg_types = args_dirtt; codomain = cod_dirtt }) :: !cat_fun_sigs;
-      
+
       (* Register in simplicialtt global context *)
       let free = collect_cats cod @ List.concat (List.map (fun (cat, _) -> collect_cats cat) args) in
       register_free_cats free;
@@ -89,14 +89,14 @@ let rec process_cmd file_path cmd =
          let cat_args = List.filter (fun (v, _) -> List.mem v args) inferred_delta in
          let type_args = List.filter (fun v -> not (List.mem_assoc v cat_args)) args in
          active_type_params := type_args @ old_active;
-         
+
          (* Check using dirtt engine *)
          let term_dirtt = to_m_term term in
          if !mode = DirttOnly then (
            let _ = check_sequent cat_args [] term_dirtt tp_expanded in
            printf "  => Term %s typechecked successfully (Dirtt Engine)\n" name
          );
-         
+
          (* Check using simplicialtt compatibility engine *)
          if !mode = SimplicialOnly then (
            let free = collect_cats tp in
@@ -126,13 +126,13 @@ let rec process_cmd file_path cmd =
       let tp_dirtt = to_m_type tp in
       let tp_expanded = expand_m_type tp_dirtt in
       let gamma_expanded = List.map (fun (x, t) -> (x, expand_m_type t)) gamma_dirtt in
-      
+
       if !mode = DirttOnly then (
         printf "Running Dirtt Engine:\n";
         check_sequent delta_dirtt gamma_expanded term_dirtt tp_expanded;
         printf "  => OK! (Valid Dirtt Sequent)\n\n"
       );
-      
+
       if !mode = SimplicialOnly then (
         printf "Running Simplicialtt Compatibility Engine:\n";
         let free = List.concat (List.map (fun (_, cat) -> collect_cats cat) delta) @ collect_cats tp in

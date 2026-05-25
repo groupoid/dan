@@ -2,6 +2,7 @@ type name = string
 type sign = [ `Cov | `Contra ]
 
 type expr =
+
   (* Common *)
   | EVar of name
   | EApp of expr * expr
@@ -20,12 +21,12 @@ type expr =
   | EZeroDir                                (* 0 *)
   | EOneDir                                 (* 1 *)
   | ELeq of expr * expr                     (* i ≤ j *)
-  | EShapeInc of expr * expr                 (* φ ⊆ ψ *)
+  | EShapeInc of expr * expr                (* φ ⊆ ψ *)
   | EExt of expr * expr * expr              (* {x : A |^φ f} *)
   | ESystem of (expr * expr) list           (* [ φ | f ] ... *)
-  | EModalPi of expr * (name * expr)         (* μ(x:A). B(x) *)
+  | EModalPi of expr * (name * expr)        (* μ(x:A). B(x) *)
   | EModalLam of (name * expr) * expr       (* λ^μ(x:A). body *)
-  | EModalApp of expr * expr                 (* f @ φ *)
+  | EModalApp of expr * expr                (* f @ φ *)
   | ETw of expr                             (* A^tw *)
   | EOp of expr                             (* category opposite *)
   | ETwPi0 of expr                          (* π₀(x) *)
@@ -35,20 +36,20 @@ type expr =
   | ENeg of expr                            (* ¬i *)
 
   (* Dirtt compatibility / direct AST *)
-  | EHom of expr * expr * expr              (* hom(cat, a, b) *)
-  | ETensor of expr * expr                  (* M * N or M ⊗ N *)
-  | EFunc of expr * expr                    (* M -> N or M ⊸ N *)
-  | ECoend of expr * name * expr            (* coend(x:cat). M *)
-  | EEnd of expr * name * expr              (* end(x:cat). M *)
-  | EIdTerm of expr                         (* id(a) *)
+  | EHom of expr * expr * expr                                  (* hom(cat, a, b) *)
+  | ETensor of expr * expr                                      (* M * N or M ⊗ N *)
+  | EFunc of expr * expr                                        (* M -> N or M ⊸ N *)
+  | ECoend of expr * name * expr                                (* coend(x:cat). M *)
+  | EEnd of expr * name * expr                                  (* end(x:cat). M *)
+  | EIdTerm of expr                                             (* id(a) *)
   | EJ of expr * name * name * name * expr * expr * expr * expr (* J *)
-  | EJCov of expr * name * expr * expr * expr               (* J_cov *)
-  | EJContra of expr * name * expr * expr * expr            (* J_contra *)
-  | ETensorElim of name * name * expr * expr                 (* let x * y := t in c *)
-  | ECoendIntro of name * name * name * expr                 (* mix x y := z in m *)
-  | ECoendElim of name * name * expr * expr                 (* let <x, y> := t in c *)
-  | EEndIntro of name * expr                                (* end(w, m) *)
-  | EEndElim of name * name * name * expr * expr            (* let x y @ z := t in c *)
+  | EJCov of expr * name * expr * expr * expr                   (* J_cov *)
+  | EJContra of expr * name * expr * expr * expr                (* J_contra *)
+  | ETensorElim of name * name * expr * expr                    (* let x * y := t in c *)
+  | ECoendIntro of name * name * name * expr                    (* mix x y := z in m *)
+  | ECoendElim of name * name * expr * expr                     (* let <x, y> := t in c *)
+  | EEndIntro of name * expr                                    (* end(w, m) *)
+  | EEndElim of name * name * name * expr * expr                (* let x y @ z := t in c *)
 
 type cmd =
   | CModule of string

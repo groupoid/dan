@@ -137,26 +137,16 @@ let rec translate = function
   | Syntax.ECoend (cat, w, m) -> ESig (translate cat, (w, translate m))
   | Syntax.EEnd (cat, w, m) -> EPi (translate cat, (w, translate m))
   | Syntax.EIdTerm a -> ELam (("t", EIDir), translate a)
-  | Syntax.EJ (tp, x, y, z, mz, a, b, f) ->
-      EJ (translate tp, x, y, z, translate mz, translate a, translate b, translate f)
-  | Syntax.EJCov (tp, x, m, a, f) ->
-      EJCov (translate tp, x, translate m, translate a, translate f)
-  | Syntax.EJContra (tp, x, m, b, f) ->
-      EJContra (translate tp, x, translate m, translate b, translate f)
-  | Syntax.ETensorElim (x, y, t, c) ->
-      let t' = translate t in
-      subst x (EFst t') (subst y (ESnd t') (translate c))
-  | Syntax.ECoendIntro (x, y, z, m) ->
-      EPair (EVar z, translate m)
-  | Syntax.ECoendElim (w, m_var, t, c) ->
-      let t' = translate t in
-      subst w (EFst t') (subst m_var (ESnd t') (translate c))
-  | Syntax.EEndIntro (w, m) ->
-      EEndIntro (w, translate m)
-  | Syntax.EEndElim (x, y, z, t, c) ->
-      let t' = translate t in
+  | Syntax.EJ (tp, x, y, z, mz, a, b, f) -> EJ (translate tp, x, y, z, translate mz, translate a, translate b, translate f)
+  | Syntax.EJCov (tp, x, m, a, f) -> EJCov (translate tp, x, translate m, translate a, translate f)
+  | Syntax.EJContra (tp, x, m, b, f) -> EJContra (translate tp, x, translate m, translate b, translate f)
+  | Syntax.ETensorElim (x, y, t, c) -> let t' = translate t in subst x (EFst t') (subst y (ESnd t') (translate c))
+  | Syntax.ECoendIntro (x, y, z, m) -> EPair (EVar z, translate m)
+  | Syntax.ECoendElim (w, m_var, t, c) -> let t' = translate t in subst w (EFst t') (subst m_var (ESnd t') (translate c))
+  | Syntax.EEndIntro (w, m) -> EEndIntro (w, translate m)
+  | Syntax.EEndElim (x, y, z, t, c) -> let t' = translate t in
       let w_var = match t' with EVar name -> name | _ -> failwith "end elim expects variable" in
-      subst x (EVar z) (subst y (EVar z) (subst w_var (EApp (t', EVar z)) (translate c)))                          (* ¬i *)
+      subst x (EVar z) (subst y (EVar z) (subst w_var (EApp (t', EVar z)) (translate c))) (* ¬i *)
 
 type value =
   | VUniv
