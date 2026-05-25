@@ -1,9 +1,0 @@
-module book where
-
-import "library/yoneda.ulrik"
-import "library/adjunction.ulrik"
-import "library/groupoid.ulrik"
-import "library/symmetric.ulrik"
-import "library/universal.ulrik"
-import "library/topos.ulrik"
-import "library/abelian.ulrik"

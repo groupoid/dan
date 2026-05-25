@@ -1,5 +1,5 @@
 module yoneda where
-import "library/natural.ulrik"
+import "library/ulrik/natural.ulrik"
 
 -- F_fun is a contravariant functor on A
 functor F_fun (y : A^op) : B

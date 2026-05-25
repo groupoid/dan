@@ -1,0 +1,37 @@
+-- Dan Simplex Library
+-- Geometric simplex definitions from Dan Kan specifications
+
+def triangle : Simplex
+ := П (a b c : Simplex),
+      (ab bc ca : Simplex), ac = ab ∘ bc
+    ⊢ 2 (a b c | ab bc ca)
+
+def singular_cone : Simplex
+ := П (p q r s : Simplex),
+      (qrs prs pqs : Simplex), pqr = pqs ∘ qrs
+    ⊢ 3 (p q r s | qrs prs pqs pqr)
+
+def Möbius : Simplex
+ := П (a b c : Simplex),
+      (bc ac : Simplex), ab = bc ∘ ac
+    ⊢ 2 (a b c | bc ac ab)
+
+def degen_tetra : Simplex
+ := П (p q r s : Simplex, q = r),
+      (qrs prs pqs : Simplex), pqr = pqs ∘ qrs
+    ⊢ 3 (p q r s | qrs prs pqs pqr)
+
+def twisted_annulus : Simplex
+ := П (a b c d : Simplex),
+      (bc ac bd : Simplex), ab = bc ∘ ac, cd = ac ∘ bd
+    ⊢ 2 (a b c | bc ac ab), 2 (b c d | bc bd cd)
+
+def degen_triangle : Simplex
+ := П (a b c : Simplex, b = c),
+      (bc ac : Simplex), ab = bc ∘ ac
+    ⊢ 2 (a b c | bc ac ab)
+
+def singular_prism : Simplex
+ := П (p q r s t : Simplex),
+      (qrs prs pqt : Simplex, qrs = qrs), pqr = pqt ∘ qrs
+    ⊢ 3 (p q r s | qrs prs pqt pqr)

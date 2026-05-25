@@ -1,5 +1,5 @@
 module functor_mod where
-import "library/category.ulrik"
+import "library/ulrik/category.ulrik"
 
 -- In dirtt, a functor F : A -> B is represented by a category generator function.
 functor F (x : A) : B

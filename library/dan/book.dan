@@ -1,0 +1,7 @@
+-- Dan Base Library Index
+-- Imports all sections of the Dan Kan specifications base library
+
+import simplex
+import algebra
+import category
+import simplicial

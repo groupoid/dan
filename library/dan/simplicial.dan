@@ -1,0 +1,18 @@
+-- Dan Simplicial & Chain Library
+-- Simplicial complexes, sets, and chains from Dan Kan specifications
+
+def circle : Simplicial
+ := П (v e : Simplex),
+      ∂₁₀ = v, ∂₁₁ = v, s₀ < v
+    ⊢ 1 (v, e | ∂₁₀ ∂₁₁, s₀)
+
+def s1_infty : Simplicial
+ := П (v e : Simplex),
+      ∂₁₀ = v, ∂₁₁ = v, s₀ < v,
+      ∂₂₀ = e ∘ e, s₁₀ < ∂₂₀
+    ⊢ ∞ (v, e, ∂₂₀ | ∂₁₀ ∂₁₁, s₀, ∂₂₀, s₁₀)
+
+def triangle_chain : Chain
+ := П (v₀ v₁ v₂ e₀₁ e₀₂ e₁₂ t : Simplex),
+      ∂₁₀ = e₀₁, ∂₁₁ = e₀₂, ∂₁₂ = e₁₂, ∂₂ < e₀₁ e₀₂ e₁₂
+    ⊢ 2 (v₀ v₁ v₂, e₀₁ e₀₂ e₁₂, t | ∂₁₀ ∂₁₁ ∂₁₂, ∂₂)

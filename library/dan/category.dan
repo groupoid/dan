@@ -1,0 +1,16 @@
+-- Dan Category Library
+-- Category definitions from Dan Kan specifications
+
+def path_z2_category : Category
+ := П (x y : Simplex),
+      (f g h : Simplex),
+      (z2 : Group(П (e a : Simplex), a² = e ⊢ 1 (a | a² = e))),
+      f ∘ g = h
+    ⊢ 2 (x y | f g h | f ∘ g = h)
+
+def cube_infty : Category
+ := П (a b c : Simplex),
+      (f g h : Simplex),
+      cube2 = g ∘ f, cube2 : Simplex,
+      cube3 = cube2 ∘ f, cube3 : Simplex
+    ⊢ ∞ (a b c | cube2 cube3)

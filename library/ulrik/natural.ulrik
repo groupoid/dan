@@ -1,5 +1,5 @@
 module natural where
-import "library/functor.ulrik"
+import "library/ulrik/functor.ulrik"
 
 -- A natural transformation η between functors F and G is the end over the hom of the components.
 -- Nat(F, G) = ∫_{w:A} hom(B, F(w), G(w))
