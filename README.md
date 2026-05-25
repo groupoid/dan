@@ -1,4 +1,4 @@
-# Simplicial Languages: AST Architectures and Translation Maps
+# Simplicial Languages: Dan, Ulrik, Mike
 
 This document provides an extensive analysis and architectural design of the compilation & elaboration model
 linking the operational GAP-like core (`Dan`) with the theoretical
