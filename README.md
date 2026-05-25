@@ -1,6 +1,6 @@
-# Simplicial Languages: AST Architectures and Translation Maps
+# Simplicial Languages: Dan, Ulrik, Mike
 
-This document provides an extensive analysis and architectural design of the **Compilation & Elaboration Model (Option B)**,
+This document provides an extensive analysis and architectural design of the compilation & elaboration model
 linking the operational GAP-like core (`Dan`) with the theoretical
 proof assistants `Ulrik` (Simplicial Type Theory) and `Mike` (Directed Type Theory).
 
@@ -8,7 +8,7 @@ proof assistants `Ulrik` (Simplicial Type Theory) and `Mike` (Directed Type Theo
 
 Below we define the exact Abstract Syntax Trees (ASTs) of the three core representations in OCaml.
 
-### 1.1 Operational Core (Dan / Simplicity HoTT)
+### 1.1 Operational Core (Dan / General Algebra Processing)
 
 The operational core checks presentations of algebraic and simplicial structures in linear time.
 Its AST represents elements, generators, face maps, and algebraic equations.
