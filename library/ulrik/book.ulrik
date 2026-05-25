@@ -1,7 +1,12 @@
 module book where
 
+-- Theoretical category-theory libraries
+import "library/ulrik/category.ulrik"
+import "library/ulrik/functor.ulrik"
+import "library/ulrik/natural.ulrik"
 import "library/ulrik/yoneda.ulrik"
 import "library/ulrik/adjunction.ulrik"
+import "library/ulrik/equivalence.ulrik"
 import "library/ulrik/groupoid.ulrik"
 import "library/ulrik/symmetric.ulrik"
 import "library/ulrik/universal.ulrik"
@@ -9,3 +14,7 @@ import "library/ulrik/topos.ulrik"
 import "library/ulrik/abelian.ulrik"
 import "library/ulrik/derived.ulrik"
 
+-- Lifted operational libraries
+import "library/ulrik/simplex.ulrik"
+import "library/ulrik/algebra.ulrik"
+import "library/ulrik/simplicial.ulrik"

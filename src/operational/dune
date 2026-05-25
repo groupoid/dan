@@ -7,3 +7,11 @@
  (modules dan_syntax dan dan_lexer dan_parser)
  (flags :standard -w -8-11-26-27-33-39)
 )
+
+(executable
+ (name lift)
+ (public_name lift)
+ (modules dan_syntax lift dan_lexer dan_parser)
+ (libraries ulrik_lib)
+ (flags :standard -w -8-11-26-27-33-39)
+)

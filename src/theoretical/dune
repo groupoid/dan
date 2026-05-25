@@ -4,7 +4,7 @@
 (library
  (name ulrik_lib)
  (wrapped false)
- (flags :standard -w -8-11-26-27-33-39)
+ (flags :standard -w -8-11-26-27-33-39-32)
  (modules syntax parser lexer simplicialtt dirtt main))
 
 (executable

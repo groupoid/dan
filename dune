@@ -1,8 +1,9 @@
 (rule
  (alias default)
- (targets ulrik mike dan)
+ (targets ulrik mike dan lift)
  (mode (promote (until-clean)))
  (action (progn
           (copy src/theoretical/ulrik.exe ulrik)
           (copy src/theoretical/mike.exe mike)
-          (copy src/operational/dan.exe dan))))
+          (copy src/operational/dan.exe dan)
+          (copy src/operational/lift.exe lift))))
