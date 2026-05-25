@@ -1,6 +1,6 @@
 # Simplicial Languages: AST Architectures and Translation Maps
 
-This document provides an extensive analysis and architectural design of the **Compilation & Elaboration Model (Option B)**,
+This document provides an extensive analysis and architectural design of the compilation & elaboration model
 linking the operational GAP-like core (`Dan`) with the theoretical
 proof assistants `Ulrik` (Simplicial Type Theory) and `Mike` (Directed Type Theory).
 
