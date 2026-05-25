@@ -3,5 +3,5 @@
  (targets ulrik mike)
  (mode (promote (until-clean)))
  (action (progn
-          (copy src/ulrik.exe ulrik)
-          (copy src/mike.exe mike))))
+          (copy src/theoretical/ulrik.exe ulrik)
+          (copy src/theoretical/mike.exe mike))))
