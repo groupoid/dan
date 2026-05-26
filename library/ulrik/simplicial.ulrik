@@ -1,7 +1,0 @@
-module simplicial where
-
-def_term circle (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex * Simplex * Simplex * Simplex * Simplex := \(v : Simplex). \(e : Simplex). \(d10 : Simplex). \(d11 : Simplex). \(s0 : Simplex). v * e * d10 * d11 * s0
-
-def_term s1_infty (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex * Simplex * Simplex * Simplex * Simplex * Simplex * Simplex * Simplex := \(v : Simplex). \(e : Simplex). \(d20 : Simplex). \(d10 : Simplex). \(d11 : Simplex). \(s0 : Simplex). \(s10 : Simplex). v * e * d20 * d10 * d11 * s0 * d20 * s10
-
-def_term triangle_chain (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex * Simplex * Simplex * Simplex * Simplex * Simplex * Simplex * Simplex * Simplex * Simplex * Simplex := \(v0 : Simplex). \(v1 : Simplex). \(v2 : Simplex). \(e01 : Simplex). \(e02 : Simplex). \(e12 : Simplex). \(t : Simplex). \(d10 : Simplex). \(d11 : Simplex). \(d12 : Simplex). \(d2 : Simplex). v0 * v1 * v2 * e01 * e02 * e12 * t * d10 * d11 * d12 * d2
