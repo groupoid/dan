@@ -30,4 +30,6 @@ jobs:
       - name: Run Ulrik
         run: opam exec -- dune exec ulrik library/ulrik/book.ulrik
       - name: Run Mike
-        run: opam exec -- dune exec mike library/ulrik/book.ulrik
+        run: opam exec -- dune exec mike library/mike/book.mike
+      - name: Run Dan
+        run: opam exec -- dune exec dan library/dan/book.dan
