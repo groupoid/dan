@@ -17,12 +17,14 @@
             box-shadow: 0 10px 30px -10px rgba(255, 93, 162, 0.15);
             backdrop-filter: blur(12px);
         }
+
         table.premium-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.95rem;
             text-align: left;
         }
+
         table.premium-table th {
             background: rgba(255, 93, 162, 0.12);
             color: var(--accent-dark);
@@ -33,18 +35,22 @@
             font-size: 0.8rem;
             letter-spacing: 0.05em;
         }
+
         table.premium-table td {
             padding: 1rem 1.25rem;
             border-bottom: 1px solid rgba(255, 93, 162, 0.08);
             color: var(--text-secondary);
             vertical-align: middle;
         }
+
         table.premium-table tr:last-child td {
             border-bottom: none;
         }
+
         table.premium-table tr:hover {
             background: rgba(255, 93, 162, 0.04);
         }
+
         table.premium-table code {
             font-family: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', monospace;
             background: rgba(255, 93, 162, 0.06);
@@ -53,6 +59,7 @@
             border-radius: 6px;
             font-size: 0.85rem;
         }
+
         .lift-pipeline {
             display: flex;
             justify-content: space-between;
@@ -61,6 +68,7 @@
             margin: 3rem 0;
             flex-wrap: wrap;
         }
+
         .lift-step {
             flex: 1;
             min-width: 220px;
@@ -72,25 +80,30 @@
             box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
+
         .lift-step:hover {
             transform: translateY(-5px);
             border-color: var(--accent);
             box-shadow: 0 12px 28px -8px rgba(255, 93, 162, 0.15);
         }
+
         .lift-step h4 {
             color: HotPink;
             margin-bottom: 0.5rem;
             font-size: 1.1rem;
         }
+
         .lift-arrow {
             color: var(--accent);
             font-size: 1.8rem;
             font-weight: bold;
         }
+
         @media (max-width: 768px) {
             .lift-pipeline {
                 flex-direction: column;
             }
+
             .lift-arrow {
                 transform: rotate(90deg);
                 margin: 0.5rem 0;
@@ -106,7 +119,7 @@
                     src="https://avatars.githubusercontent.com/u/17128096?s=200&v=4"></a>
             <ul class="nav-links">
                 <li>Dan</li>
-                <li><a href="https://anders.groupoid.space">Anders</a></li>
+                <li><a href="https://homotopy.dev">Anders</a></li>
             </ul>
         </div>
     </nav>
@@ -114,7 +127,8 @@
     <header>
         <div class="hero-content">
             <h1>Dan</h1>
-            <p class="hero-subtitle"><b>General Algebra Processing</b> (Dan), <b>1-Categories</b> (Mike), and <b>∞-Categories</b> (Ulrik) in a unified simplicial HoTT environment by Namdak Tonpa.
+            <p class="hero-subtitle"><b>General Algebra Processing</b> (Dan), <b>1-Categories</b> (Mike), and
+                <b>∞-Categories</b> (Ulrik) in a unified simplicial HoTT environment by Namdak Tonpa.
             </p>
         </div>
     </header>
@@ -123,34 +137,53 @@
         <section>
             <h2>Abstract</h2>
             <div style="max-width:800px;margin:0 auto;text-align: center;">
-                <p>We present a domain-specific language (DSL) ecosystem linking the operational, computer-algebraic core (<b>Dan</b>) with the theoretical proof assistants <b>Mike</b> (Directed Type Theory) and <b>Ulrik</b> (Simplicial Type Theory). Designed as a fast type checker with a focus on algebraic purity, the system employs a Lean/Anders-like sequent syntax to define k-dimensional simplices, categories, and spectra via explicit contexts, vertex lists, and face relations.</p>
-                <p>By balancing algebraic simplicity with practical efficiency, the system avoids complex path-filling (e.g. <code>PathP</code>) at the surface, enabling linear-time combinatorial checks at the operational layer. High-level objects are elaborated and translated directly to type theory, where metatheorems (such as limits, adjunctions, or Yoneda mappings) are proven and verified.</p>
+                <p>We present a domain-specific language (DSL) ecosystem linking the operational, computer-algebraic
+                    core (<b>Dan</b>) with the theoretical proof assistants <b>Mike</b> (Directed Type Theory) and
+                    <b>Ulrik</b> (Simplicial Type Theory). Designed as a fast type checker with a focus on algebraic
+                    purity, the system employs a Lean/Anders-like sequent syntax to define k-dimensional simplices,
+                    categories, and spectra via explicit contexts, vertex lists, and face relations.</p>
+                <p>By balancing algebraic simplicity with practical efficiency, the system avoids complex path-filling
+                    (e.g. <code>PathP</code>) at the surface, enabling linear-time combinatorial checks at the
+                    operational layer. High-level objects are elaborated and translated directly to type theory, where
+                    metatheorems (such as limits, adjunctions, or Yoneda mappings) are proven and verified.</p>
             </div>
         </section>
 
         <section>
             <h2>The Three Languages</h2>
-            <p style="text-align: center; margin-bottom: 2rem;">A tiered approach to simplicial category theory, bridging active computation with formal proof verification.</p>
+            <p style="text-align: center; margin-bottom: 2rem;">A tiered approach to simplicial category theory,
+                bridging active computation with formal proof verification.</p>
             <div class="product-grid">
                 <div class="product-card">
                     <h3>Dan</h3>
-                    <p style="font-weight: 600; color: var(--accent); margin-top:-0.5rem; margin-bottom: 1rem;">General Algebra Processing (GAP)</p>
-                    <p><b>Dan</b> is a statically checked, presentation-oriented language. It allows programmers and mathematicians to define combinatorial cells, groups, rings, and simplicial complexes, and checks their structural soundness in linear time <code>O(k + m + n)</code>.</p>
-                    <p>Dan maps directly into theoretical engines, proving metatheorems that hold "for free" across all models.</p>
+                    <p style="font-weight: 600; color: var(--accent); margin-top:-0.5rem; margin-bottom: 1rem;">General
+                        Algebra Processing (GAP)</p>
+                    <p><b>Dan</b> is a statically checked, presentation-oriented language. It allows programmers and
+                        mathematicians to define combinatorial cells, groups, rings, and simplicial complexes, and
+                        checks their structural soundness in linear time <code>O(k + m + n)</code>.</p>
+                    <p>Dan maps directly into theoretical engines, proving metatheorems that hold "for free" across all
+                        models.</p>
                 </div>
 
                 <div class="product-card">
                     <h3>Mike</h3>
-                    <p style="font-weight: 600; color: var(--accent); margin-top:-0.5rem; margin-bottom: 1rem;">Directed Type Theory (Dirtt)</p>
-                    <p><b>Mike</b> is a proof assistant based on Directed Type Theory (Dirtt) with linear polarities (+/-) and quadraticality constraints. It is tailored for formal 1-category theory.</p>
-                    <p>It represents hom-spaces directly, handling limits/colimits as ends and coends, and maps linear constructs such as tensors $\otimes$ and linear functions $\multimap$ to the simplicial core.</p>
+                    <p style="font-weight: 600; color: var(--accent); margin-top:-0.5rem; margin-bottom: 1rem;">Directed
+                        Type Theory (Dirtt)</p>
+                    <p><b>Mike</b> is a proof assistant based on Directed Type Theory (Dirtt) with linear polarities
+                        (+/-) and quadraticality constraints. It is tailored for formal 1-category theory.</p>
+                    <p>It represents hom-spaces directly, handling limits/colimits as ends and coends, and maps linear
+                        constructs such as tensors ⊗ and linear functions ⊸ to the simplicial core.</p>
                 </div>
 
                 <div class="product-card">
                     <h3>Ulrik</h3>
-                    <p style="font-weight: 600; color: var(--accent); margin-top:-0.5rem; margin-bottom: 1rem;">Simplicial Type Theory (STT)</p>
-                    <p><b>Ulrik</b> is a proof assistant based on Riehl-Shulman simplicial type theory (STT). It features a directed interval 𝕀, Segal precategories, and Rezk categories where identity paths and isomorphisms coincide.</p>
-                    <p>It implements modal operators (opposite category, twisted arrow categories) and forms the core checker for synthetic $\infty$-category theory.</p>
+                    <p style="font-weight: 600; color: var(--accent); margin-top:-0.5rem; margin-bottom: 1rem;">
+                        Simplicial Type Theory (STT)</p>
+                    <p><b>Ulrik</b> is a proof assistant based on Riehl-Shulman simplicial type theory (STT). It
+                        features a directed interval 𝕀, Segal precategories, and Rezk categories where identity paths
+                        and isomorphisms coincide.</p>
+                    <p>It implements modal operators (opposite category, twisted arrow categories) and forms the core
+                        checker for synthetic ∞-category theory.</p>
                 </div>
             </div>
         </section>
@@ -158,23 +191,29 @@
         <section>
             <h2>The Lift: Term Transfer</h2>
             <div style="max-width:800px;margin:0 auto;text-align: center;">
-                <p>The <code>lift</code> compiler operates as the translation bridge between the <b>operational</b> layer (<code>Dan</code>) and the <b>theoretical</b> layer (<code>Ulrik</code> and <code>Mike</code>). It compiles low-level algebraic definitions and combinatorial complexes into high-level type-theoretic terms.</p>
+                <p>The <code>lift</code> compiler operates as the translation bridge between the <b>operational</b>
+                    layer (<code>Dan</code>) and the <b>theoretical</b> layer (<code>Ulrik</code> and
+                    <code>Mike</code>). It compiles low-level algebraic definitions and combinatorial complexes into
+                    high-level type-theoretic terms.</p>
             </div>
 
             <div class="lift-pipeline">
                 <div class="lift-step">
                     <h4>1. Parsing</h4>
-                    <p style="font-size:0.9rem;">Lexes and parses the <code>.dan</code> source file into the operational AST structure.</p>
+                    <p style="font-size:0.9rem;">Lexes and parses the <code>.dan</code> source file into the operational
+                        AST structure.</p>
                 </div>
                 <div class="lift-arrow">➔</div>
                 <div class="lift-step">
                     <h4>2. Spec Folding</h4>
-                    <p style="font-size:0.9rem;">Folds sequent hypotheses into dependent products (<code>EPi</code>) and definition boundaries into Sigma types (<code>ESig</code>).</p>
+                    <p style="font-size:0.9rem;">Folds sequent hypotheses into dependent products (<code>EPi</code>) and
+                        definition boundaries into Sigma types (<code>ESig</code>).</p>
                 </div>
                 <div class="lift-arrow">➔</div>
                 <div class="lift-step">
                     <h4>3. Sanitization</h4>
-                    <p style="font-size:0.9rem;">Translates mathematical Unicode symbols (e.g. <code>∂</code>, <code>s₀</code>) into clean, ASCII-safe identifiers.</p>
+                    <p style="font-size:0.9rem;">Translates mathematical Unicode symbols (e.g. <code>∂</code>,
+                        <code>s₀</code>) into clean, ASCII-safe identifiers.</p>
                 </div>
                 <div class="lift-arrow">➔</div>
                 <div class="lift-step">
@@ -185,8 +224,9 @@
 
             <div style="max-width:900px;margin:0 auto; margin-top:3rem;">
                 <h3 style="text-align: center; margin-bottom: 1.5rem;">Case Study: Möbius Strip Representation</h3>
-                <p style="text-align: center; margin-bottom: 2rem;">Comparison between local combinatorial complexes (Dan) and global synthetic fiber bundles (Anders HoTT).</p>
-                
+                <p style="text-align: center; margin-bottom: 2rem;">Comparison between local combinatorial complexes
+                    (Dan) and global synthetic fiber bundles (Anders HoTT).</p>
+
                 <div class="premium-table-wrapper">
                     <table class="premium-table">
                         <thead>
@@ -209,13 +249,14 @@
                             </tr>
                             <tr>
                                 <td><b>Homotopy Type</b></td>
-                                <td>Contractible ($*$) since it models a single local triangle</td>
-                                <td>Homotopy equivalent to a circle ($S^1$)</td>
+                                <td>Contractible (∗) since it models a single local triangle</td>
+                                <td>Homotopy equivalent to a circle (S¹)</td>
                             </tr>
                             <tr>
                                 <td><b>Mechanism of Twist</b></td>
                                 <td>Specified algebraically via boundary face compositions in coordinates</td>
-                                <td>Specified via univalent path induction (<code>ua</code>) using a boolean negation equivalence</td>
+                                <td>Specified via univalent path induction (<code>ua</code>) using a boolean negation
+                                    equivalence</td>
                             </tr>
                             <tr>
                                 <td><b>Conceptual Role</b></td>
@@ -226,19 +267,23 @@
                     </table>
                 </div>
                 <p style="font-size: 0.95rem; text-align: center; color: var(--text-secondary); margin-top: 1rem;">
-                    <b>Connection:</b> glues multiple local <code>Möbius</code> triangles with a twist to form a simplicial set $X$. Its geometric realization $|X|$ is homeomorphic to the total space of the HoTT fibration $\sum_{x : S^1} \text{moebius}(x)$.
+                    <b>Connection:</b> glues multiple local <code>Möbius</code> triangles with a twist to form a
+                    simplicial set X. Its geometric realization |X| is homeomorphic to the total space of the HoTT
+                    fibration ∑_{x : S¹} moebius(x).
                 </p>
             </div>
         </section>
 
         <section>
             <h2>Algebraic Presentations in Dan</h2>
-            <p style="text-align: center; margin-bottom: 2rem;">Sequent definitions declared in the computer algebra core are checked in linear time.</p>
+            <p style="text-align: center; margin-bottom: 2rem;">Sequent definitions declared in the computer algebra
+                core are checked in linear time.</p>
             <div class="grid-2">
                 <div class="package-card">
                     <h3>Group presentation: ℤ/3ℤ</h3>
                     <hr>
-                    <p>Presented by a single generator subject to relation $a^3 = e$. Identity and generators are declared in the context.</p>
+                    <p>Presented by a single generator subject to relation a³ = e. Identity and generators are declared
+                        in the context.</p>
                     <pre class="code-snippet" style="font-size: 0.85rem;">
 def z3 : Group
  := П (e a : Simplex),
@@ -247,9 +292,10 @@ def z3 : Group
                 </div>
 
                 <div class="package-card">
-                    <h3>Monoid presentation: $\mathbb{N}$</h3>
+                    <h3>Monoid presentation: ℕ</h3>
                     <hr>
-                    <p>Natural numbers defined algebraically as a monoid. Verification checks composition and boundary coherence.</p>
+                    <p>Natural numbers defined algebraically as a monoid. Verification checks composition and boundary
+                        coherence.</p>
                     <pre class="code-snippet" style="font-size: 0.85rem;">
 def nat_monoid : Monoid
  := П (z s : Simplex),
@@ -258,9 +304,10 @@ def nat_monoid : Monoid
                 </div>
 
                 <div class="package-card">
-                    <h3>Simplicial Circle $S^1$</h3>
+                    <h3>Simplicial Circle S¹</h3>
                     <hr>
-                    <p>Defined by a vertex and edge mapping endpoints to the basepoint. The degeneracy constraint collapses $v$ to an edge.</p>
+                    <p>Defined by a vertex and edge mapping endpoints to the basepoint. The degeneracy constraint
+                        collapses v to an edge.</p>
                     <pre class="code-snippet" style="font-size: 0.85rem;">
 def circle : Simplicial
  := П (v e : Simplex),
@@ -271,12 +318,14 @@ def circle : Simplicial
                 <div class="package-card">
                     <h3>Category with Group Symmetries</h3>
                     <hr>
-                    <p>Nested algebraic structures in the context allow categories to inherit properties from internal groups.</p>
+                    <p>Nested algebraic structures in the context allow categories to inherit properties from internal
+                        groups.</p>
                     <pre class="code-snippet" style="font-size: 0.85rem;">
 def path_z2_category : Category
  := П (x y : Simplex),
       (f g h : Simplex),
-      (z2 : Group(П (e a : Simplex), a² = e ⊢ 1 (a | a² = e))),
+      (z2 : Group(П (e a : Simplex),
+      a² = e ⊢ 1 (a | a² = e))),
       f ∘ g = h
     ⊢ 2 (x y | f g h | f ∘ g = h)</pre>
                 </div>
@@ -285,8 +334,9 @@ def path_z2_category : Category
 
         <section>
             <h2>The Golden Middle</h2>
-            <p style="text-align: center; margin-bottom: 2rem;">How constructors and types map between the operational and theoretical layers of the ecosystem.</p>
-            
+            <p style="text-align: center; margin-bottom: 2rem;">How constructors and types map between the operational
+                and theoretical layers of the ecosystem.</p>
+
             <div class="premium-table-wrapper">
                 <table class="premium-table">
                     <thead>
@@ -311,7 +361,7 @@ def path_z2_category : Category
                             <td>Type Former</td>
                             <td><code>Group</code></td>
                             <td>Elaborated</td>
-                            <td>Classifying Space $BG$ (single-object Segal type)</td>
+                            <td>Classifying Space BG (single-object Segal type)</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -325,21 +375,21 @@ def path_z2_category : Category
                             <td>Type Former</td>
                             <td><code>EPi</code> / <code>ESig</code></td>
                             <td>Primitive</td>
-                            <td>Dependent function space $\Pi$ and pair space $\Sigma$</td>
+                            <td>Dependent function space Π and pair space Σ</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>Type Former</td>
                             <td><code>EIDir</code> / <code>ELeq</code></td>
                             <td>Primitive</td>
-                            <td>Interval coordinate space $\mathbb{I}$ and inequality relation</td>
+                            <td>Interval coordinate space 𝕀 and inequality relation</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>Type Former</td>
                             <td><code>hom(x, y)</code></td>
                             <td>Derived</td>
-                            <td>Extension type $\{f : \mathbb{I} \to A \mid f0 = x, f1 = y\}$</td>
+                            <td>Extension type {f : 𝕀 → A | f0 = x, f1 = y}</td>
                         </tr>
                         <tr>
                             <td><b>Mike (Dirtt)</b></td>
@@ -353,14 +403,14 @@ def path_z2_category : Category
                             <td>Type Former</td>
                             <td><code>MTensor(M, N)</code></td>
                             <td>Elaborated</td>
-                            <td>Simplicial dependent pair space <code>ESig</code> ($\Sigma$)</td>
+                            <td>Simplicial dependent pair space <code>ESig</code> (Σ)</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>Type Former</td>
                             <td><code>MEnd</code> / <code>MCoend</code></td>
                             <td>Elaborated</td>
-                            <td>Simplicial $\Pi$ (for Limits) and $\Sigma$ (for Colimits)</td>
+                            <td>Simplicial Π (for Limits) and Σ (for Colimits)</td>
                         </tr>
                     </tbody>
                 </table>
@@ -377,10 +427,8 @@ def path_z2_category : Category
                 <br>
                 <br>
                 <br>
-                <img src="https://homotopy.dev/img/1F1E9-1F1F0.svg" height=50
-                    style="margin:-00px;padding:0px;">
-                <img src="https://homotopy.dev/img/1F1FA-1F1E6.svg" height=50
-                    style="margin:-00px;padding:0px;">
+                <img src="https://homotopy.dev/img/1F1E9-1F1F0.svg" height=50 style="margin:-00px;padding:0px;">
+                <img src="https://homotopy.dev/img/1F1FA-1F1E6.svg" height=50 style="margin:-00px;padding:0px;">
             </center>
         </section>
     </main>
@@ -389,8 +437,8 @@ def path_z2_category : Category
         <div class="footer-columns">
             <div>
                 <h4>Simplicial HoTT Prover</h4>
-                <p>Linear operational algebra core (<b>Dan</b>) and theoretical proof checkers (<b>Mike</b>, <b>Ulrik</b>) developed in OCaml by <a rel="me"
-                        href="https://mathstodon.xyz/@5ht">5HT</a>.</p>
+                <p>Linear operational algebra core (<b>Dan</b>) and theoretical proof checkers (<b>Mike</b>,
+                    <b>Ulrik</b>) developed in OCaml by <a rel="me" href="https://mathstodon.xyz/@5ht">5HT</a>.</p>
             </div>
             <div>
                 <h4>Bibliography</h4>
@@ -398,7 +446,8 @@ def path_z2_category : Category
                     <div>
                         <h5>Operational Core (Dan)</h5>
                         <ul>
-                            <li><a href="https://github.com/groupoid/dan">Dan Kan: Simplicial HoTT Computer Algebra System. [Groupoid Infinity]</a></li>
+                            <li><a href="https://github.com/groupoid/dan">Dan Kan: Simplicial HoTT Computer Algebra
+                                    System. [Groupoid Infinity]</a></li>
                             <li>Daniel Kan. Abstract Homotopy I & II. (1955-1956)</li>
                             <li>Daniel Kan. On c.s.s. Complexes. (1957)</li>
                             <li>Daniel Kan. A Combinatorial Definition of Homotopy Groups. (1958)</li>
@@ -409,10 +458,16 @@ def path_z2_category : Category
                     <div>
                         <h5>Theoretical Backends (Mike, Ulrik)</h5>
                         <ul>
-                            <li>Emily Riehl, Mike Shulman. <a href="https://arxiv.org/abs/1705.07442">A type theory for synthetic ∞-categories. (2017)</a></li>
-                            <li>Dan Licata, Andreas Nuyts, Patrick Schultz, Mike Shulman. <a href="https://ulrik.groupoid.space/doc/dirtt.pdf">A Directed Type Theory for Formal Category Theory. (2020)</a></li>
-                            <li>Daniel Gratzer, Jonathan Weinberger, Ulrik Buchholtz. <a href="https://arxiv.org/abs/2605.xxxxx">Yoneda embedding in simplicial type theory. (2026)</a></li>
-                            <li><a href="https://pure.tue.nl/ws/portalfiles/portal/2039924/256169.pdf">AUTOMATH, a language for mathematics. [N.G. de Bruijn]</a></li>
+                            <li>Emily Riehl, Mike Shulman. <a href="https://arxiv.org/abs/1705.07442">A type theory for
+                                    synthetic ∞-categories. (2017)</a></li>
+                            <li>Dan Licata, Andreas Nuyts, Patrick Schultz, Mike Shulman. <a
+                                    href="https://ulrik.groupoid.space/doc/dirtt.pdf">A Directed Type Theory for Formal
+                                    Category Theory. (2020)</a></li>
+                            <li>Daniel Gratzer, Jonathan Weinberger, Ulrik Buchholtz. <a
+                                    href="https://arxiv.org/abs/2605.xxxxx">Yoneda embedding in simplicial type theory.
+                                    (2026)</a></li>
+                            <li><a href="https://pure.tue.nl/ws/portalfiles/portal/2039924/256169.pdf">AUTOMATH, a
+                                    language for mathematics. [N.G. de Bruijn]</a></li>
                             <li>Per Martin-Löf. Intuitionistic Type Theory. (1984)</li>
                         </ul>
                     </div>
