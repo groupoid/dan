@@ -1,0 +1,131 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{listings}
+
+\title{Category Theory for Dan, Mike, and Ulrik}
+\author{Groupoid Infinity}
+\date{May 2026}
+
+\newcommand{\catC}{\mathcal{C}}
+\newcommand{\catD}{\mathcal{D}}
+\newcommand{\op}{^\text{op}}
+\newcommand{\homtype}[3]{\text{hom}(#1, #2, #3)}
+\newcommand{\dan}[0]{\textbf{Dan}}
+\newcommand{\mike}[0]{\textbf{Mike}}
+\newcommand{\ulrik}[0]{\textbf{Ulrik}}
+\newcommand{\stt}[0]{\textbf{STT}}
+\newcommand{\dtt}[0]{\textbf{DTT}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This article describes the design and implementation of the categorical libraries across the \dan{} presentation front-end and the \mike{} (DTT) and \ulrik{} (STT) typechecking environments. We focus on the transition from first-order Directed Type Theory (\mike{}), which utilizes ends, coends, and path-induction primitives, to the minimal primitives of Simplicial Type Theory (\ulrik{}), where all functions are functorial and natural transformations/Yoneda maps are formulated directly using dependent functions and reflexivity paths. We also outline the compilation and verification workflow via the \texttt{lift} utility.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+The categorical libraries in our system are located in three corresponding directories:
+\begin{itemize}
+    \item \texttt{library/dan/}: Combinatorial definitions and simplicial complex shapes.
+    \item \texttt{library/mike/}: Precategories, functors, natural transformations, adjunctions, and Yoneda coends formulated in Directed Type Theory (\dtt{}).
+    \item \texttt{library/ulrik/}: Categories, functors, natural transformations, equivalences, and Yoneda maps formulated in Simplicial Type Theory (\stt{}).
+\end{itemize}
+
+\section{Definitional Duality}
+
+In both \ulrik{} and \mike{} engines, the opposite category operation $(\cdot)\op$ is a definitional involution on categories:
+\begin{equation}
+    (\catC\op)\op \equiv \catC
+\end{equation}
+Furthermore, the dual of a natural transformation is definitionally involutive:
+\begin{equation}
+    (\alpha\op)\op \equiv \alpha
+\end{equation}
+This allows us to obtain dual category-theoretic statements "for free" upon evaluation in the typechecker, eliminating the need for explicit transport along isomorphisms.
+
+\section{Directed Type Theory Library (Mike)}
+
+The DTT engine (\mike{}) treats categories as first-order parameter structures and represents precategory structures using the $\homtype{\catC}{x}{y}$ primitive.
+\begin{itemize}
+    \item \textbf{Morphism Composition}: Defined via path-induction $J$:
+    \begin{equation}
+        g \circ f \equiv J(w_1.w_2.\homtype{\catC}{x}{w_2}, z, f, y, z, g)
+    \end{equation}
+    \item \textbf{Integrals}: DTT supports ends and coends natively. Natural transformations between functors $F$ and $G$ are defined as the end over the homs of the components:
+    \begin{equation}
+        \text{Nat}(F, G) \equiv \int_{w:\catC} \homtype{\catD}{F(w)}{G(w)}
+    \end{equation}
+    \item \textbf{Yoneda Coend}: The Yoneda lemma in DTT is expressed using coends and tensor products:
+    \begin{equation}
+        \text{YonedaCoend}(x, z) \equiv \int^{y:\catC} (\homtype{\catC}{x}{y} \otimes \homtype{\catD}{z}{F(y)})
+    \end{equation}
+    The covariant Yoneda map is defined using contravariant path induction:
+    \begin{equation}
+        \text{yoneda\_map} \equiv \lambda e. \text{let } \langle y, t \rangle := e \text{ in let } f \otimes u := t \text{ in } J_\text{contra}(w.F(w, z), u, y, f)
+    \end{equation}
+\end{itemize}
+
+\section{Simplicial Type Theory Library (Ulrik)}
+
+In Simplicial Type Theory (\stt{}) as implemented in \ulrik{}, we adopt a deliberately minimalistic set of primitives following the LICS 2025 Gratzer-Weinberger-Buchholtz paper. Primitives such as ends, coends, tensors, and path-induction operators ($J_\text{cov}$, $J_\text{contra}$) are omitted.
+
+\begin{enumerate}
+    \item \textbf{Functors}: All functions between types are automatically functorial in STT. Hence, a functor is simply represented as a function $F : A \to B$.
+    \item \textbf{Natural Transformations}: A natural transformation between $F$ and $G$ is represented as a dependent function mapping objects to paths in $B$:
+    \begin{equation}
+        \text{Nat}(F, G) \equiv (w : A) \to \homtype{B}{F(w)}{G(w)}
+    \end{equation}
+    The identity natural transformation for a functor $F$ is defined using the constant reflexivity path $\lambda t. F(w)$ for each component:
+    \begin{equation}
+        \text{id\_nat} \equiv \lambda w. \lambda t. F(w)
+    \end{equation}
+    \item \textbf{Presheaves and Yoneda Map}: A presheaf $F$ on category $C$ is a function $C \to U$, where $U$ is the universe of spaces (types). Because morphisms in $U$ are functions ($\to$), natural transformations between presheaves $F$ and $G$ have type:
+    \begin{equation}
+        \text{PshNat}(F, G) \equiv (w : C) \to F(w) \to G(w)
+    \end{equation}
+    The representable functor for an object $c$ is $\text{Yo}(c) \equiv \lambda c'. \homtype{C}{c}{c'}$. The Yoneda map has type:
+    \begin{equation}
+        \text{yoneda\_map} : \text{PshNat}(\text{Yo}(c), F) \to F(c)
+    \end{equation}
+    This is defined by evaluating the natural transformation at the constant identity path:
+    \begin{equation}
+        \text{yoneda\_map}(\eta) \equiv \eta(c, \lambda t. c)
+    \end{equation}
+\end{enumerate}
+
+\section{The Lifting and Verification Workflow}
+
+The operational layer (\dan{}) allows for a presentation-oriented description of simplicial structures. Using the `lift` binary, these definitions are automatically translated into type-theoretic definitions:
+
+\begin{lstlisting}[language=bash]
+$ lift -stt library/dan/simplex.dan
+$ lift -dirtt library/dan/simplex.dan
+\end{lstlisting}
+
+Verification is performed independently using the two separate typecheckers:
+\begin{lstlisting}[language=bash]
+$ dune exec ulrik library/ulrik/book.ulrik
+$ dune exec mike library/mike/book.mike
+$ dune exec dan library/dan/book.dan
+\end{lstlisting}
+
+\begin{thebibliography}{9}
+\bibitem{RS2017}
+Emily Riehl and Michael Shulman.
+\textit{A type theory for synthetic \(\infty\)-categories}.
+Higher Structures, 2017.
+\bibitem{GWB2025}
+Daniel Gratzer, Jonathan Weinberger, and Ulrik Buchholtz.
+\textit{The Yoneda embedding in simplicial type theory}.
+LICS 2025.
+\end{thebibliography}
+
+\end{document}

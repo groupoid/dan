@@ -1,0 +1,298 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning}
+
+\title{Dan, Mike, and Ulrik: Operational and Theoretical Frameworks for Simplicial and Directed Type Theory}
+\author{Groupoid Infinity}
+\date{May 2026}
+
+\newcommand{\dan}[0]{\textbf{Dan}}
+\newcommand{\mike}[0]{\textbf{Mike}}
+\newcommand{\ulrik}[0]{\textbf{Ulrik}}
+\newcommand{\stt}[0]{\textbf{STT}}
+\newcommand{\dtt}[0]{\textbf{DTT}}
+\newcommand{\catC}[0]{\mathcal{C}}
+\newcommand{\op}[0]{^\text{op}}
+\newcommand{\homtype}[3]{\text{hom}(#1, #2, #3)}
+\newcommand{\I}[0]{\mathbb{I}}
+
+\lstdefinelanguage{ulrik}{
+  keywords={module,where,import,def,check,hom,refl,lambda,U,I,not,and,or,tw,op},
+  sensitive=true,
+  comment=[l]{--},
+  morecomment=[s]{\{-}{-\}},
+  string=[b]"
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This article presents the design, syntax, and semantics of three interrelated languages: \dan{}, \mike{}, and \ulrik{}. Together, they form a multi-layered typechecking and compilation system for simplicial and directed homotopy type theories. \dan{} acts as a presentation-oriented algebraic front-end; \mike{} implements a Directed Type Theory (\dtt{}) with ends, coends, and path induction; and \ulrik{} implements a Simplicial Type Theory (\stt{}) with extension types, twisted arrow categories, and type-level modalities.
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+The verification of higher-dimensional structures and category theory in proof assistants is notoriously difficult due to the "infinite stack of coherences" required by $\infty$-categories. Modern synthetic approaches address this by internalizing geometric structures into type theory. 
+
+The system described here is comprised of three languages:
+\begin{enumerate}
+    \item \textbf{\dan{}}: An operational, presentation-oriented front-end language designed for computer algebra and simplicial complexes. It acts as a bridge between combinatorial structures and type theory.
+    \item \textbf{\mike{}}: A Directed Type Theory (\dtt{}) interpreter implementing first-order category theory, hom-types, path-induction primitives ($J$, $J_\text{cov}$, $J_\text{contra}$), and integrals (ends and coends).
+    \item \textbf{\ulrik{}}: A Simplicial Type Theory (\stt{}) proof assistant based on Riehl-Shulman and Gratzer-Weinberger-Buchholtz formulations, implementing a directed interval $\mathbb{I}$, extension types, opposite category modalities ($A\op$), and twisted arrow category modalities ($A^\text{tw}$).
+\end{enumerate}
+
+The compiler bridge, \texttt{lift}, elaborates and translates operational \dan{} files into theoretical \ulrik{} (STT mode) or \mike{} (DTT mode) files.
+
+\subsection{Installation and Usage}
+
+The compilers are implemented in OCaml and can be built using the Dune build system:
+\begin{lstlisting}[language=bash]
+$ dune build
+\end{lstlisting}
+
+To typecheck a library file in Simplicial Type Theory mode:
+\begin{lstlisting}[language=bash]
+$ dune exec ulrik library/ulrik/book.ulrik
+\end{lstlisting}
+
+To typecheck a library file in Directed Type Theory mode:
+\begin{lstlisting}[language=bash]
+$ dune exec mike library/mike/book.mike
+\end{lstlisting}
+
+The lifting tool can translate operational code:
+\begin{lstlisting}[language=bash]
+$ dune exec lift -stt library/dan/simplex.dan
+$ dune exec lift -dirtt library/dan/simplex.dan
+\end{lstlisting}
+
+\newpage
+\section{Syntax}
+
+\subsection{Abstract Syntax Tree (AST)}
+
+The core AST of the theoretical typechecker is defined uniformly in \texttt{syntax.ml}.
+The AST includes common MLTT term formers, Simplicial STT primitives, and compatibility DTT constructors:
+
+\begin{lstlisting}[language=ml]
+type expr =
+  (* Common MLTT *)
+  | EVar of name
+  | EApp of expr * expr
+  | ELam of (name * expr option) * expr
+  | EPi of expr * (name * expr)
+  | ESig of expr * (name * expr)
+  | EPair of expr * expr
+  | EFst of expr
+  | ESnd of expr
+  | EUniv                                   (* U *)
+  | EId of expr * expr * expr               (* strict Id *)
+  | ERef of expr                            (* refl *)
+
+  (* Simplicial Core (STT) *)
+  | EIDir                                   (* directed interval I *)
+  | EZeroDir                                (* 0 *)
+  | EOneDir                                 (* 1 *)
+  | ELeq of expr * expr                     (* i <= j *)
+  | EShapeInc of expr * expr                (* phi <= psi *)
+  | EExt of expr * expr * expr              (* {x : A |^phi f} *)
+  | ESystem of (expr * expr) list           (* [ phi | f ] ... *)
+  | EModalPi of expr * (name * expr)        (* mu(x:A). B(x) *)
+  | EModalLam of (name * expr) * expr       (* lambda^mu(x:A). body *)
+  | EModalApp of expr * expr                (* f @ phi *)
+  | ETw of expr                             (* A^tw *)
+  | EOp of expr                             (* category opposite *)
+  | ETwPi0 of expr                          (* pi0(x) *)
+  | ETwPi1 of expr                          (* pi1(x) *)
+  | EJoin of expr * expr                    (* i \/ j *)
+  | EMeet of expr * expr                    (* i /\ j *)
+  | ENeg of expr                            (* not i *)
+
+  (* Dirtt Compatibility (DTT) *)
+  | EHom of expr * expr * expr              (* hom(cat, a, b) *)
+  | ETensor of expr * expr                  (* M * N *)
+  | EFunc of expr * expr                    (* M -> N *)
+  | ECoend of expr * name * expr            (* coend(x:cat). M *)
+  | EEnd of expr * name * expr              (* end(x:cat). M *)
+  | EIdTerm of expr                         (* id(a) *)
+  | EJ of expr * name * name * name * expr * expr * expr * expr
+  | EJCov of expr * name * expr * expr * expr
+  | EJContra of expr * name * expr * expr * expr
+  | ETensorElim of name * name * expr * expr
+  | ECoendIntro of name * name * name * expr
+  | ECoendElim of name * name * expr * expr
+  | EEndElim of name * name * name * expr * expr
+\end{lstlisting}
+
+\subsection{Top-Level Commands}
+
+The surface syntax processes files as lists of commands:
+\begin{lstlisting}[language=ml]
+type cmd =
+  | CModule of string
+  | CImport of string
+  | CFunctor of name * (expr * sign) list * expr
+  | CDef of name * name list * expr option * expr
+  | CCheck of (name * expr) list * (name * expr) list * expr * expr
+  | CCheckSimplicial of (name * expr) list * expr * expr
+\end{lstlisting}
+
+\newpage
+\section{Semantics}
+
+\subsection{Presentation-Oriented Semantics of Dan}
+
+The operational language \dan{} acts as a presentation-oriented algebraic and simplicial front-end. It differs fundamentally from \mike{} and \ulrik{} in that it is designed for static presentation verification rather than general proof search or type checking.
+
+\subsubsection{Unified Sequent Presentations}
+A construction in \dan{} is presented using a unified algebraic sequent:
+\begin{equation}
+    \Pi(\text{context}), \text{conditions} \vdash \text{rank} (\text{generators} \mid \text{relations})
+\end{equation}
+The context declares elements of the universe of simplicial shapes (e.g. \texttt{Simplex}), and the relations restrict their boundary faces. The rank verifies that the list of generators matches the dimension of the presentation.
+
+\subsubsection{Algebraic Domains}
+\dan{} provides built-in presentation checkers for several categories of algebraic and higher-dimensional structures:
+\begin{itemize}
+    \item \textbf{Groups and Monoids}: Defined by generators and multiplication/identity relations. For example, the cyclic group $\mathbb{Z}/3\mathbb{Z}$ is presented by:
+    \begin{lstlisting}[language=ulrik,mathescape=true]
+    def z3 : Group := $\Pi$ (e a : Simplex), a$^3$ = e $\vdash$ 1 (a | a$^3$ = e)
+    \end{lstlisting}
+    \item \textbf{Rings and Fields}: Defined by Prime Field or Polynomial relations, checked in linear time using internal lookup tables.
+    \item \textbf{Simplicial Sets}: Defined by vertices, edges, face operators ($\partial_{ij}$), and degeneracy relations ($s_i$). For example, the simplicial circle $S^1$ is presented as:
+    \begin{lstlisting}[language=ulrik,mathescape=true]
+    def circle : Simplicial := $\Pi$ (v e : Simplex), $\partial_{10}$ = v, $\partial_{11}$ = v, $s_0$ < v $\vdash$ 1 (v, e | $\partial_{10}$, $\partial_{11}$, $s_0$)
+    \end{lstlisting}
+    \item \textbf{Categories}: Presented by objects, morphisms, and composition constraints ($f \circ g = h$).
+\end{itemize}
+
+\subsubsection{Elaboration and Mapping}
+When a presentation in \dan{} is processed by the \texttt{lift} compiler, it is mapped into the theoretical types of either \ulrik{} (\stt{}) or \mike{} (\dtt{}):
+\begin{itemize}
+    \item Generators and simplex parameters map to points/types.
+    \item Edges and category morphisms map to paths over the directed interval:
+    \begin{equation}
+        \homtype{C}{x}{y} \equiv \{ t : \mathbb{I} \to C \mid t(0) = x, t(1) = y \}
+    \end{equation}
+    \item Presentation relations map to Segal equivalence paths or path-induction properties.
+\end{itemize}
+
+\subsection{Directed Type Theory (Mike)}
+
+Directed Type Theory (\dtt{}) treats categories as first-order structures and incorporates multivariable category theory (Schultz-Shulman Kits).
+
+\subsubsection{Path Induction}
+Morphisms in \dtt{} are treated as directed paths. Path induction is realized via directed $J$ operators:
+\begin{itemize}
+    \item $J_\text{cov}$ and $J_\text{contra}$ perform path induction along covariant and contravariant positions.
+    \item Composition of $f : \homtype{A}{x}{y}$ and $g : \homtype{A}{y}{z}$ is defined via path induction:
+    \begin{equation}
+        g \circ f \equiv J(w_1.w_2.\homtype{A}{x}{w_2}, z, f, y, z, g)
+    \end{equation}
+\end{itemize}
+
+\subsection{Simplicial Type Theory (Ulrik)}
+
+Simplicial Type Theory (\stt{}) internalizes simplicial sets by extending dependent type theory with a directed interval and extension types.
+
+\subsubsection{The Directed Interval $\mathbb{I}$}
+The directed interval $\mathbb{I}$ is a pretype representing the simplicial $1$-simplex $\Delta^1$. It behaves as a De Morgan algebra:
+\begin{itemize}
+    \item Global endpoints $0, 1 : \mathbb{I}$ representing the source and target.
+    \item A preorder relation $\le$ such that $0 \le t \le 1$.
+    \item Lattice operations: meet ($\wedge$), join ($\vee$), and negation ($\neg$).
+\end{itemize}
+
+\subsubsection{Cofibrations and Shapes}
+Shapes (or cofibrations) are propositions that classify sub-complexes of simplicial cubes. For instance, the boundary of the interval $\partial \mathbb{I}$ is the shape $t \le 0 \vee 1 \le t$.
+
+\subsubsection{Extension Types}
+Given a type $A$, a shape $\varphi$, and a boundary function $f : \varphi \to A$, the extension type $\left\{ x : A \left|\,^\varphi f \right. \right\}$ represents the type of elements of $A$ that restrict definitionally to $f$ when $\varphi$ holds.
+The morphism type $\text{hom}(C, x, y)$ is defined as the extension type of paths $\mathbb{I} \to C$ restricting to $x$ at $0$ and $y$ at $1$:
+\begin{equation}
+    \homtype{C}{x}{y} \equiv \left\{ p : \mathbb{I} \to C \left|\,^{t \le 0 \vee 1 \le t} [t \le 0 \mapsto x, 1 \le t \mapsto y] \right. \right\}
+\end{equation}
+
+\subsubsection{Twisted Arrow Modality $A^\text{tw}$}
+The twisted arrow category is constructed using the modality $A^\text{tw}$. Elements of $A^\text{tw}$ represent morphisms in $A$, projected via $\pi_0 : A^\text{tw} \to A\op$ and $\pi_1 : A^\text{tw} \to A$.
+
+
+\subsubsection{Integrals: Ends and Coends}
+
+Limits and colimits are represented via ends ($\int_{x:A} T(x)$) and coends ($\int^{x:A} T(x)$) constructions.
+
+- Natural transformations are ends over the homs:
+
+$$
+  \text{Nat}(F, G) \equiv \int_{w:A} \homtype{B}{F(w)}{G(w)}.
+$$
+
+- Colimits are coends:
+
+$$
+  \text{Colimit}(F) \equiv \int^{w:A} \homtype{A}{w}{w}
+$$
+
+\newpage
+\section{Properties}
+
+\subsection{Definitional Duality}
+
+In both \ulrik{} and \mike{}, the opposite category operation $(\cdot)\op$ is a definitional involution:
+\begin{equation}
+    (C\op)\op \equiv C
+\end{equation}
+This allows dual theorems to be proven "for free" without requiring explicit transport along isomorphisms.
+
+\subsection{Type Inference}
+
+The unified definition command \texttt{def name := body} derives the type of `body` using type inference in \stt{} mode. For a type-level term (where `body` represents a type), the checker infers `U` as its type and stores it as a type definition in the global context.
+
+\subsection{Naturality and Yoneda Lemma}
+
+In \stt{}, all functions are automatically functorial. A natural transformation between presheaves $F, G : C \to \text{Space}$ is equivalent to a dependent function:
+\begin{equation}
+    \text{PshNat}(F, G) \equiv (w : C) \to F(w) \to G(w)
+\end{equation}
+
+The Yoneda Lemma maps natural transformations from the representable functor $\text{Yo}(c) \equiv \lambda c'. \homtype{C}{c}{c'}$ to an arbitrary presheaf $F$:
+\begin{equation}
+    \text{yoneda\_map} : \text{PshNat}(\text{Yo}(c), F) \to F(c)
+\end{equation}
+The map evaluates the natural transformation $\eta$ at the identity path:
+\begin{equation}
+    \text{yoneda\_map}(\eta) \equiv \eta(c, \lambda t. c)
+\end{equation}
+
+\newpage
+\section{Annex A. Simplicial Type Theory Equations}
+
+\subsection{Evaluation of Extension Types}
+\begin{equation}
+    \text{eval}(\text{EExt}(a, \varphi, f)) \equiv \text{VExt}(\text{eval}(a), \text{VShapeClosure}(\text{env}, \varphi), \text{VShapeClosure}(\text{env}, f))
+\end{equation}
+
+\subsection{Checking of Extension Types}
+To check a term $e$ against $\text{VExt}(base\_tp, \varphi, f)$:
+1. Verify $\text{check}(ctx, env, e, base\_tp)$ where $base\_tp$ is $\Pi(t : \mathbb{I}). B(t)$.
+2. Evaluate the shape boundary $\varphi$ and function $f$ in their respective closure environments:
+
+   \begin{align}
+       \varphi_{val} &\equiv \text{eval}(ctx, val\_env \cup env_\varphi, \varphi_{exp}) \\
+       f_{val} &\equiv \text{eval}(ctx, val\_env \cup env_f, f_{exp})
+   \end{align}
+
+3. Assert that for all valuations where $\varphi_{val} \equiv 1$, the application $e(t)$ is equivalent to $f_{val}$.
+
+\end{document}
