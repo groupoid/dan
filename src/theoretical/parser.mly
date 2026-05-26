@@ -4,7 +4,7 @@ open Syntax
 
 %token <string> IDENT
 %token <string> STRING
-%token MODULE WHERE IMPORT FUNCTOR DEF_TYPE DEF_TERM CHECK
+%token MODULE WHERE IMPORT FUNCTOR DEF CHECK
 %token COLON COLONEQ COMMA LPAREN RPAREN LBRACKET RBRACKET LANGLE RANGLE BAR TURNSTILE DOT AT OP
 %token HOMLIT COENDLIT ENDLIT TENSORLIT FUNCLIT IDLIT JLIT JCOVLIT JCONTRALIT LET IN MIX LAMBDALIT EOF
 %token UNIV REFL IDIR ZERO ONE LEQ SUBSETEQ JOIN MEET NEG FST SND TW PI0 PI1 EQ LBRACE RBRACE MULIT
@@ -35,8 +35,8 @@ decl:
   | MODULE IDENT WHERE { CModule $2 }
   | IMPORT STRING { CImport $2 }
   | FUNCTOR IDENT LPAREN functor_args RPAREN COLON expr { CFunctor ($2, $4, $7) }
-  | DEF_TYPE IDENT opt_params COLONEQ expr { CDefType ($2, $3, $5) }
-  | DEF_TERM IDENT opt_params COLON expr COLONEQ expr { CDefTerm ($2, $3, $5, $7) }
+  | DEF IDENT opt_params COLON expr COLONEQ expr { CDef ($2, $3, Some $5, $7) }
+  | DEF IDENT opt_params COLONEQ expr { CDef ($2, $3, None, $5) }
   | CHECK delta BAR gamma TURNSTILE expr COLON expr { CCheck ($2, $4, $6, $8) }
   | CHECK delta TURNSTILE expr COLON expr { CCheckSimplicial ($2, $4, $6) }
 
@@ -75,8 +75,8 @@ expr:
 
   | LPAREN IDENT COLON expr RPAREN FUNCLIT expr { EPi ($4, ($2, $7)) }
   | LPAREN IDENT COLON expr RPAREN TENSORLIT expr { ESig ($4, ($2, $7)) }
-  | LAMBDALIT LPAREN IDENT COLON expr RPAREN DOT expr { ELam (($3, $5), $8) }
-  | LAMBDALIT LPAREN IDENT RPAREN DOT expr { ELam (($3, EUniv), $6) }
+  | LAMBDALIT LPAREN IDENT COLON expr RPAREN DOT expr { ELam (($3, Some $5), $8) }
+  | LAMBDALIT LPAREN IDENT RPAREN DOT expr { ELam (($3, None), $6) }
   | MULIT LPAREN IDENT COLON expr RPAREN DOT expr { EModalPi ($5, ($3, $8)) }
   | LAMBDALIT OP LPAREN IDENT COLON expr RPAREN DOT expr { EModalLam (($4, $6), $9) }
   | COENDLIT LPAREN IDENT COLON expr RPAREN DOT expr { ECoend ($5, $3, $8) }
@@ -92,7 +92,7 @@ expr:
   | MIX IDENT IDENT COLONEQ IDENT IN expr { ECoendIntro ($2, $3, $5, $7) }
   | LET LANGLE IDENT COMMA IDENT RANGLE COLONEQ expr IN expr { ECoendElim ($3, $5, $8, $10) }
   | LET LBRACKET IDENT COMMA IDENT RBRACKET COLONEQ expr IN expr { ECoendElim ($3, $5, $8, $10) }
-  | ENDLIT LPAREN IDENT COMMA expr RPAREN { EEndIntro ($3, $5) }
+  | ENDLIT LPAREN IDENT COMMA expr RPAREN { ELam (($3, None), $5) }
   | LET IDENT IDENT AT IDENT COLONEQ expr IN expr { EEndElim ($2, $3, $5, $7, $9) }
 
 simple_expr:

@@ -27,6 +27,24 @@ This document provides an extensive analysis and architectural design of the com
 linking the operational GAP-like core (`Dan`) with the theoretical
 proof assistants `Ulrik` (Simplicial Type Theory) and `Mike` (Directed Type Theory).
 
+## 0. Usage
+
+```
+% dune build
+```
+
+```
+% dune exec mike library/mike/book.mike
+```
+
+```
+% dune exec ulrik library/ulrik/book.ulrik
+```
+
+```
+% dune exec dan library/dan/book.dan
+```
+
 ## 1. General AST Trees for Each Language
 
 Below we define the exact Abstract Syntax Trees (ASTs) of the three core representations in OCaml.

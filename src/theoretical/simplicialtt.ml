@@ -6,13 +6,13 @@ open Format
 type name = string
 
 type exp =
-  (* MLTT Core *)
-  | EUniv                                   (* U *)
+  (* MLTT *)
+  | EUniv
   | EVar of name
-  | EPi of exp * (name * exp)               (* (x : A) → B *)
-  | ELam of (name * exp) * exp
+  | EPi of exp * (name * exp)
+  | ELam of (name * exp option) * exp
   | EApp of exp * exp
-  | ESig of exp * (name * exp)              (* Σ *)
+  | ESig of exp * (name * exp)
   | EPair of exp * exp
   | EFst of exp
   | ESnd of exp
@@ -43,7 +43,6 @@ type exp =
   | EJ of exp * name * name * name * exp * exp * exp * exp
   | EJCov of exp * name * exp * exp * exp
   | EJContra of exp * name * exp * exp * exp
-  | EEndIntro of name * exp
 
 let rec subst x v = function
   | EVar y -> if x = y then v else EVar y
@@ -51,9 +50,12 @@ let rec subst x v = function
   | EPi (a, (y, b)) ->
       if x = y then EPi (subst x v a, (y, b))
       else EPi (subst x v a, (y, subst x v b))
-  | ELam ((y, a), b) ->
-      if x = y then ELam ((y, subst x v a), b)
-      else ELam ((y, subst x v a), subst x v b)
+  | ELam ((y, Some a), b) ->
+      if x = y then ELam ((y, Some (subst x v a)), b)
+      else ELam ((y, Some (subst x v a)), subst x v b)
+  | ELam ((y, None), b) ->
+      if x = y then ELam ((y, None), b)
+      else ELam ((y, None), subst x v b)
   | EApp (f, a) -> EApp (subst x v f, subst x v a)
   | ESig (a, (y, b)) ->
       if x = y then ESig (subst x v a, (y, b))
@@ -93,7 +95,7 @@ let rec subst x v = function
   | EJContra (tp, x_var, m, b, f) ->
       let tp' = if x = x_var then tp else subst x v tp in
       EJContra (tp', x_var, subst x v m, subst x v b, subst x v f)
-  | EEndIntro (w, m) -> EEndIntro (w, subst x v m)
+
 
 let rec hom (a : exp) (x : exp) (y : exp) : exp =
   EExt (
@@ -106,7 +108,8 @@ let rec translate = function
   | Syntax.EVar x -> EVar x
   | Syntax.EUniv -> EUniv
   | Syntax.EPi (a, (x, b)) -> EPi (translate a, (x, translate b))
-  | Syntax.ELam ((x, a), b) -> ELam ((x, translate a), translate b)
+  | Syntax.ELam ((x, Some a), b) -> ELam ((x, Some (translate a)), translate b)
+  | Syntax.ELam ((x, None), b) -> ELam ((x, None), translate b)
   | Syntax.EApp (f, a) -> EApp (translate f, translate a)
   | Syntax.ESig (a, (x, b)) -> ESig (translate a, (x, translate b))
   | Syntax.EPair (a, b) -> EPair (translate a, translate b)
@@ -132,18 +135,13 @@ let rec translate = function
   | Syntax.ENeg a -> ENeg (translate a)
   | Syntax.EOp a -> translate a
   | Syntax.EHom (cat, a, b) -> hom (translate cat) (translate a) (translate b)
-  | Syntax.ETensor (m1, m2) -> ESig (translate m1, ("_", translate m2))
-  | Syntax.EFunc (m1, m2) -> EPi (translate m1, ("_", translate m2))
-  | Syntax.ECoend (cat, w, m) -> ESig (translate cat, (w, translate m))
-  | Syntax.EEnd (cat, w, m) -> EPi (translate cat, (w, translate m))
-  | Syntax.EIdTerm a -> ELam (("t", EIDir), translate a)
-  | Syntax.EJ (tp, x, y, z, mz, a, b, f) -> EJ (translate tp, x, y, z, translate mz, translate a, translate b, translate f)
-  | Syntax.EJCov (tp, x, m, a, f) -> EJCov (translate tp, x, translate m, translate a, translate f)
-  | Syntax.EJContra (tp, x, m, b, f) -> EJContra (translate tp, x, translate m, translate b, translate f)
-  | Syntax.ETensorElim (x, y, t, c) -> let t' = translate t in subst x (EFst t') (subst y (ESnd t') (translate c))
-  | Syntax.ECoendIntro (x, y, z, m) -> EPair (EVar z, translate m)
-  | Syntax.ECoendElim (w, m_var, t, c) -> let t' = translate t in subst w (EFst t') (subst m_var (ESnd t') (translate c))
-  | Syntax.EEndIntro (w, m) -> EEndIntro (w, translate m)
+  | Syntax.ETensor (a, b) -> ESig (translate a, ("_", translate b))
+  | Syntax.EFunc (a, b) -> EPi (translate a, ("_", translate b))
+  | Syntax.ECoend _ | Syntax.EEnd _ | Syntax.EIdTerm _
+  | Syntax.EJ _ | Syntax.EJCov _ | Syntax.EJContra _
+  | Syntax.ETensorElim _ | Syntax.ECoendIntro _ | Syntax.ECoendElim _ ->
+      failwith "Dirtt construct is not supported in Simplicialtt (STT) mode"
+
   | Syntax.EEndElim (x, y, z, t, c) -> let t' = translate t in
       let w_var = match t' with EVar name -> name | _ -> failwith "end elim expects variable" in
       subst x (EVar z) (subst y (EVar z) (subst w_var (EApp (t', EVar z)) (translate c))) (* ¬i *)
@@ -209,7 +207,8 @@ let rec pp_exp fmt = function
   | EUniv           -> fprintf fmt "U"
   | EVar x          -> fprintf fmt "%s" x
   | EPi (a, (x, b)) -> fprintf fmt "Π(%s : %a). %a" x pp_exp a pp_exp b
-  | ELam ((x, a), b)-> fprintf fmt "λ(%s : %a). %a" x pp_exp a pp_exp b
+  | ELam ((x, Some a), b)-> fprintf fmt "λ(%s : %a). %a" x pp_exp a pp_exp b
+  | ELam ((x, None), b)-> fprintf fmt "end_intro(%s, %a)" x pp_exp b
   | EApp (f, a)     -> fprintf fmt "%a %a" pp_exp_paren f pp_exp_paren a
   | ESig (a, (x, b))-> fprintf fmt "Σ(%s : %a). %a" x pp_exp a pp_exp b
   | EPair (a, b)    -> fprintf fmt "(%a, %a)" pp_exp a pp_exp b
@@ -238,8 +237,7 @@ let rec pp_exp fmt = function
       fprintf fmt "J_cov(%s.%a, %a, %a, %a)" x pp_exp tp pp_exp m pp_exp a pp_exp f
   | EJContra (tp, x, m, b, f) ->
       fprintf fmt "J_contra(%s.%a, %a, %a, %a)" x pp_exp tp pp_exp m pp_exp b pp_exp f
-  | EEndIntro (w, m) ->
-      fprintf fmt "end_intro(%s, %a)" w pp_exp m
+
   | ESystem list    ->
       if list = [] then fprintf fmt "[]"
       else (
@@ -328,8 +326,7 @@ let rec eval (ctx : context) (env : env) (e : exp) : value =
   | EJContra (tp, x, m, b, f) ->
       let tp_val = eval ctx env (subst x (EApp (f, EZeroDir)) tp) in
       VNeutral (tp_val, NVar "J_contra")
-  | EEndIntro (w, m) ->
-      VLam (w, env, m)
+
 
 and apply ctx (f : value) (a : value) : value =
   match f with
@@ -454,7 +451,7 @@ let rec quote (ctx : context) (depth : int) (tp : value) (v : value) : exp =
       let target_tp = inst ctx b vx in
       let new_ctx = (x, a) :: ctx in
       let quoted_body = quote new_ctx (depth + 1) target_tp v_applied in
-      ELam ((x, quote ctx depth VUniv a), quoted_body)
+      ELam ((x, Some (quote ctx depth VUniv a)), quoted_body)
   | VSig (a, b) ->
       let v1 = fst_val v in
       let v2 = snd_val ctx v in
@@ -486,7 +483,7 @@ and quote_structural (ctx : context) (depth : int) (v : value) : exp =
       let x_fresh = "x" ^ string_of_int depth in
       let vx = VNeutral (VIDir, NVar x_fresh) in
       let new_ctx = (x_fresh, VIDir) :: ctx in
-      ELam ((x_fresh, EUniv), quote new_ctx (depth + 1) VUniv (eval new_ctx ((x, vx) :: env) b))
+      ELam ((x_fresh, Some EUniv), quote new_ctx (depth + 1) VUniv (eval new_ctx ((x, vx) :: env) b))
   | VSig (a, (x, env, b)) ->
       let x_fresh = "x" ^ string_of_int depth in
       let vx = VNeutral (a, NVar x_fresh) in
@@ -660,15 +657,15 @@ let rec check (ctx : context) (env : env) (e : exp) (tp : value) : unit =
             )
        | _ -> failwith "J_contra expects path type")
 
-  | EEndIntro (w, body), VPi (a, b) ->
-      let vx = VNeutral (a, NVar w) in
-      let target_tp = inst ctx b vx in
-      check ((w, a) :: ctx) ((w, vx) :: env) body target_tp
-
-  | ELam ((x, a_exp), body), VPi (a, b) ->
+  | ELam ((x, Some a_exp), body), VPi (a, b) ->
       let va = eval ctx env a_exp in
       if not (equal ctx env VUniv va a) then
         failwith "lambda domain type mismatch";
+      let vx = VNeutral (a, NVar x) in
+      let target_tp = inst ctx b vx in
+      check ((x, a) :: ctx) ((x, vx) :: env) body target_tp
+
+  | ELam ((x, None), body), VPi (a, b) ->
       let vx = VNeutral (a, NVar x) in
       let target_tp = inst ctx b vx in
       check ((x, a) :: ctx) ((x, vx) :: env) body target_tp
@@ -729,14 +726,20 @@ let rec check (ctx : context) (env : env) (e : exp) (tp : value) : unit =
              | [] -> ()
              | val_env :: rest ->
                  let eval_env = val_env @ env in
-                 let phi_exp = quote ctx size VUniv phi in
-                 let phi_val = eval ctx eval_env phi_exp in
+                 let phi_val =
+                   match phi with
+                   | VShapeClosure (env_phi, phi_exp) -> eval ctx (val_env @ env_phi) phi_exp
+                   | _ -> eval ctx eval_env (quote ctx size VUniv phi)
+                 in
                  if eval_value ctx val_env phi_val = 1 then
                    let vt = List.assoc t val_env in
                    let ve_t = apply ctx ve vt in
                    let vb = eval ctx ((t, vt) :: env_t) b in
-                   let f_exp = quote ctx size vb f in
-                   let f_val = eval ctx eval_env f_exp in
+                   let f_val =
+                     match f with
+                     | VShapeClosure (env_f, f_exp) -> eval ctx (val_env @ env_f) f_exp
+                     | _ -> eval ctx eval_env (quote ctx size vb f)
+                   in
                    if not (equal ctx eval_env vb ve_t f_val) then
                      failwith "extension type boundary constraint failed"
                  else ();
@@ -859,7 +862,7 @@ and infer (ctx : context) (env : env) (e : exp) : value =
        | VPi (VIDir, (t, env_t, b)) ->
            let vt = VNeutral (VIDir, NVar t) in
            check ((t, VIDir) :: ctx) ((t, vt) :: env) phi VUniv;
-           let vb = eval ((t, vt) :: env_t) env_t b in
+           let vb = eval ((t, VIDir) :: ctx) ((t, vt) :: env_t) b in
            check ((t, VIDir) :: ctx) ((t, vt) :: env) f vb
        | _ -> failwith "base type of extension must be Pi over interval");
       VUniv
@@ -910,8 +913,8 @@ and infer (ctx : context) (env : env) (e : exp) : value =
       if t = VIDir then VIDir
       else if t = VUniv then VUniv
       else failwith "Neg argument must be either interval term or shape"
-  | ELam _ | EModalLam _ | EPair _ | ESystem _ | EEndIntro _ ->
-      failwith "cannot infer type of lambda, pair, system, or end intro"
+  | ELam _ | EModalLam _ | EPair _ | ESystem _ ->
+      failwith "cannot infer type of lambda, pair, system"
 
 (* Test suite *)
 let tests () =
@@ -942,7 +945,7 @@ let tests () =
      printf "Test 1 FAILED: %s\n" msg);
 
   (* Test 2: identity term checks against hom A x x *)
-  let id_term = ELam (("x", a), ELam (("t", EIDir), EVar "x")) in
+  let id_term = ELam (("x", Some a), ELam (("t", Some EIDir), EVar "x")) in
   let id_type = EPi (a, ("x", hom a (EVar "x") (EVar "x"))) in
   (try
      check ctx env id_term (eval ctx env id_type);

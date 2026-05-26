@@ -19,8 +19,7 @@ rule token = parse
   | "where" { WHERE }
   | "import" { IMPORT }
   | "functor" { FUNCTOR }
-  | "def_type" { DEF_TYPE }
-  | "def_term" { DEF_TERM }
+  | "def" { DEF }
   | "check" { CHECK }
   | "hom" { HOMLIT }
   | "coend" { COENDLIT }

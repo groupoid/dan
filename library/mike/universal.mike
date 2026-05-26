@@ -1,5 +1,5 @@
 module universal where
-import "library/ulrik/category.ulrik"
+import "library/mike/category.mike"
 
 -- A limit of a diagram (represented as a bipartite module) is defined as an end.
 -- Limit = ∫_{w:A} M(w, w)

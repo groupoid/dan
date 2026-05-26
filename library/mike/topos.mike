@@ -1,5 +1,5 @@
 module topos where
-import "library/ulrik/category.ulrik"
+import "library/mike/category.mike"
 
 -- A representable presheaf on A (represented by y) at x is represented by the hom-type hom(A, x, y).
 

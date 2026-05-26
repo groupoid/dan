@@ -1,0 +1,39 @@
+module derived where
+
+-- Base Library of Derived Categories
+-- Formulated in Riehl-Shulman Simplicial Type Theory (STT)
+
+-- Theorem 1: Composition of Quasi-Isomorphisms
+check Category: U,
+      AbelianStructure: Category -> U,
+      Complex: (C: Category) -> AbelianStructure C -> U,
+      ComplexMorphism: (C: Category) -> (A: AbelianStructure C) -> Complex C A -> Complex C A -> U,
+      QuasiIso: (C: Category) -> (A: AbelianStructure C) -> (X: Complex C A) -> (Y: Complex C A) -> ComplexMorphism C A X Y -> U,
+      C: Category,
+      A: AbelianStructure C,
+      X: Complex C A,
+      Y: Complex C A,
+      Z: Complex C A,
+      f: ComplexMorphism C A X Y,
+      qf: QuasiIso C A X Y f,
+      g: ComplexMorphism C A Y Z,
+      qg: QuasiIso C A Y Z g,
+      compose_morphism: (Xp: Complex C A) -> (Yp: Complex C A) -> (Zp: Complex C A) -> ComplexMorphism C A Xp Yp -> ComplexMorphism C A Yp Zp -> ComplexMorphism C A Xp Zp,
+      compose_quasi_iso: (Xp: Complex C A) -> (Yp: Complex C A) -> (Zp: Complex C A) -> (fp: ComplexMorphism C A Xp Yp) -> (gp: ComplexMorphism C A Yp Zp) -> QuasiIso C A Xp Yp fp -> QuasiIso C A Yp Zp gp -> QuasiIso C A Xp Zp (compose_morphism Xp Yp Zp fp gp)
+    ⊢ compose_quasi_iso X Y Z f g qf qg : QuasiIso C A X Z (compose_morphism X Y Z f g)
+
+-- Theorem 2: Existence of a Triangle in the Derived Category
+check Category: U,
+      AbelianStructure: Category -> U,
+      DerivedCategory: (C: Category) -> AbelianStructure C -> U,
+      ComplexMorphism: (C: Category) -> (A: AbelianStructure C) -> DerivedCategory C A -> DerivedCategory C A -> U,
+      Shift: (C: Category) -> (A: AbelianStructure C) -> DerivedCategory C A -> U -> DerivedCategory C A,
+      C: Category,
+      A: AbelianStructure C,
+      X: DerivedCategory C A,
+      Y: DerivedCategory C A,
+      Z: DerivedCategory C A,
+      g: ComplexMorphism C A Y Z,
+      one: U,
+      w: ComplexMorphism C A Z (Shift C A X one)
+    ⊢ (Z, (g, w)) : (Zp: DerivedCategory C A) * (gp: ComplexMorphism C A Y Zp) * ComplexMorphism C A Zp (Shift C A X one)

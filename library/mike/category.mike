@@ -1,0 +1,10 @@
+module category where
+
+-- In Directed Type Theory, categories are first-order parameters.
+-- Precategory structure is represented by the hom-type hom(A, x, y).
+
+-- Identity Morphism
+check x:A | ⊢ id(x) : hom(A, x, x)
+
+-- Morphism Composition (via Path Induction J)
+check x:A, y:A, z:A | f:hom(A, x, y), g:hom(A, y, z) ⊢ J(x_var.y_var.hom(A, x, y_var), z_var, f, y, z, g) : hom(A, x, z)

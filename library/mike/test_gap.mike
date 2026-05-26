@@ -1,0 +1,10 @@
+module test_gap where
+
+def s3_group (Simplex) : Simplex -> Simplex -> (Simplex * Simplex) := \(g1 : Simplex). \(g2 : Simplex). (g1 * g2)
+
+def sl2_z2 (Simplex) : Simplex -> Simplex := \(m : Simplex). m
+
+def fp_dihedral (Simplex) : FpGroup -> FpGroup := \(g : FpGroup). g
+
+def action_verify (Simplex) : Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * Simplex)) := \(a : Simplex). \(b : Simplex). \(c : Simplex). (a * (b * c))
+

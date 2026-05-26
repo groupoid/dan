@@ -1,5 +1,5 @@
 module symmetric where
-import "library/ulrik/category.ulrik"
+import "library/mike/category.mike"
 
 -- Symmetric Monoidal Category structure: tensor symmetry.
 -- symmetry : (M1 ⊗ M2) ⊸ (M2 ⊗ M1)

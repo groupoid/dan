@@ -6,7 +6,7 @@ type expr =
   (* Common *)
   | EVar of name
   | EApp of expr * expr
-  | ELam of (name * expr) * expr
+  | ELam of (name * expr option) * expr
   | EPi of expr * (name * expr)
   | ESig of expr * (name * expr)
   | EPair of expr * expr
@@ -25,7 +25,7 @@ type expr =
   | EExt of expr * expr * expr              (* {x : A |^φ f} *)
   | ESystem of (expr * expr) list           (* [ φ | f ] ... *)
   | EModalPi of expr * (name * expr)        (* μ(x:A). B(x) *)
-  | EModalLam of (name * expr) * expr       (* λ^μ(x:A). body *)
+  | EModalLam of (name * expr) * expr        (* λ^μ(x:A). body *)
   | EModalApp of expr * expr                (* f @ φ *)
   | ETw of expr                             (* A^tw *)
   | EOp of expr                             (* category opposite *)
@@ -48,14 +48,12 @@ type expr =
   | ETensorElim of name * name * expr * expr                    (* let x * y := t in c *)
   | ECoendIntro of name * name * name * expr                    (* mix x y := z in m *)
   | ECoendElim of name * name * expr * expr                     (* let <x, y> := t in c *)
-  | EEndIntro of name * expr                                    (* end(w, m) *)
   | EEndElim of name * name * name * expr * expr                (* let x y @ z := t in c *)
 
 type cmd =
   | CModule of string
   | CImport of string
   | CFunctor of name * (expr * sign) list * expr
-  | CDefType of name * name list * expr
-  | CDefTerm of name * name list * expr * expr
+  | CDef of name * name list * expr option * expr
   | CCheck of (name * expr) list * (name * expr) list * expr * expr  (* dirtt check *)
   | CCheckSimplicial of (name * expr) list * expr * expr             (* simplicial check *)

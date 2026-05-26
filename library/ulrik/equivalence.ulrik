@@ -1,14 +1,14 @@
 module equivalence where
 import "library/ulrik/natural.ulrik"
 
--- Two functors F and G forming an equivalence
-functor F (x : A) : B
-functor G (y : B) : A
-
 -- The unit natural transformation of the equivalence: Id_A -> G o F
--- UnitNat = ∫_{x:A} hom(A, x, G(F(x)))
-def_type UnitNat := end(x : A). hom(A, x, G(F(x)))
+-- UnitNat A B F G = (x : A) -> hom(A, x, G (F x))
+def UnitNat : (A : U) -> (B : U) -> (F : A -> B) -> (G : B -> A) -> U :=
+  \(A : U). \(B : U). \(F : A -> B). \(G : B -> A).
+    (x : A) -> hom(A, x, G (F x))
 
 -- The counit natural transformation of the equivalence: F o G -> Id_B
--- CounitNat = ∫_{y:B} hom(B, F(G(y)), y)
-def_type CounitNat := end(y : B). hom(B, F(G(y)), y)
+-- CounitNat A B F G = (y : B) -> hom(B, F (G y), y)
+def CounitNat : (A : U) -> (B : U) -> (F : A -> B) -> (G : B -> A) -> U :=
+  \(A : U). \(B : U). \(F : A -> B). \(G : B -> A).
+    (y : B) -> hom(B, F (G y), y)

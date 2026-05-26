@@ -1,0 +1,18 @@
+module yoneda where
+import "library/mike/natural.mike"
+
+-- F_fun is a contravariant functor on A
+functor F_fun (y : A^op) : B
+
+def F (y z) := hom(B, z, F_fun(y))
+
+-- The Yoneda coend: ∫^{y:A} hom(A, x, y) ⊗ F(y, z)
+def YonedaCoend (x z) := coend(y : A). (hom(A, x, y) * F(y, z))
+
+-- Yoneda Map: ∫^{y:A} hom(A, x, y) ⊗ F(y, z) -> F(x, z)
+-- We eliminate the coend, then the tensor, and apply J_contra to map F(y) to F(x) along f : hom(A, x, y).
+def yoneda_map (x z) : YonedaCoend(x, z) -> F(x, z) :=
+  lambda(e : YonedaCoend(x, z)).
+    let <y_var, t_val> := e in
+    let f * u := t_val in
+    J_contra(w. F(w, z), u, y_var, f)

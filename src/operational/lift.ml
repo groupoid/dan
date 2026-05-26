@@ -1,5 +1,7 @@
 open Dan_syntax
 
+let mode = ref "stt"
+
 let lift_type_name = function
   | Simplex -> Syntax.EVar "Simplex"
   | Group -> Syntax.EVar "Group"
@@ -22,10 +24,17 @@ let rec make_nested_tensor = function
   | [x] -> x
   | x :: xs -> Syntax.ETensor (x, make_nested_tensor xs)
 
-let rec make_nested_tensor_term = function
+let rec make_nested_term = function
   | [] -> Syntax.EVar "refl"
-  | [x] -> Syntax.EVar x
-  | x :: xs -> Syntax.ETensor (Syntax.EVar x, make_nested_tensor_term xs)
+  | [x] -> x
+  | x :: xs ->
+      if !mode = "stt" then
+        Syntax.EPair (x, make_nested_term xs)
+      else
+        Syntax.ETensor (x, make_nested_term xs)
+
+let make_nested_tensor_term vars =
+  make_nested_term (List.map (fun x -> Syntax.EVar x) vars)
 
 let rec make_arrow_type arg_types ret_type =
   match arg_types with
@@ -35,7 +44,7 @@ let rec make_arrow_type arg_types ret_type =
 let rec make_lambda_term vars term_body =
   match vars with
   | [] -> term_body
-  | (x, t) :: xs -> Syntax.ELam ((x, t), make_lambda_term xs term_body)
+  | (x, t) :: xs -> Syntax.ELam ((x, Some t), make_lambda_term xs term_body)
 
 let lift_type_def defn =
   let var_types = List.concat (List.map (function
@@ -64,7 +73,7 @@ let lift_type_def defn =
         let bindings = List.concat (List.map (fun (b, _, _) -> b) specs_typed) in
         let terms = List.map (fun (_, t, _) -> t) specs_typed in
         let types = List.map (fun (_, _, tp) -> tp) specs_typed in
-        (bindings, make_nested_tensor terms, make_nested_tensor types)
+        (bindings, make_nested_term terms, make_nested_tensor types)
   in
   let rec unique_bindings acc = function
     | [] -> List.rev acc
@@ -77,13 +86,17 @@ let lift_type_def defn =
   let var_bindings_unique = unique_bindings [] var_bindings in
   let tp = make_arrow_type (List.map snd var_bindings_unique) final_type in
   let term = make_lambda_term var_bindings_unique final_term in
-  Syntax.CDefTerm (defn.name, ["Simplex"], tp, term)
+  let params = if !mode = "stt" then [] else ["Simplex"] in
+  Syntax.CDef (defn.name, params, Some tp, term)
 
 let lift_import path =
   let base = Filename.basename path in
   let name = if Filename.check_suffix base ".dan" then Filename.chop_suffix base ".dan" else base in
   let target_name = if name = "category" then "category_dan" else name in
-  "library/ulrik/" ^ target_name ^ ".ulrik"
+  if !mode = "stt" then
+    "library/ulrik/" ^ target_name ^ ".ulrik"
+  else
+    "library/mike/" ^ target_name ^ ".mike"
 
 let lift_cmd = function
   | CImport path -> Syntax.CImport (lift_import path)
@@ -147,8 +160,10 @@ let rec string_of_expr = function
         | _ -> string_of_expr a
       in
       f_str ^ " " ^ a_str
-  | Syntax.ELam ((x, a), b) ->
+  | Syntax.ELam ((x, Some a), b) ->
       "\\(" ^ sanitize_ident x ^ " : " ^ string_of_expr a ^ "). " ^ string_of_expr b
+  | Syntax.ELam ((x, None), b) ->
+      "end_intro(" ^ sanitize_ident x ^ ", " ^ string_of_expr b ^ ")"
   | Syntax.EPi (a, (x, b)) ->
       "(" ^ sanitize_ident x ^ " : " ^ string_of_expr a ^ ") -> " ^ string_of_expr b
   | Syntax.ESig (a, (x, b)) ->
@@ -184,7 +199,7 @@ let rec string_of_expr = function
   | Syntax.ENeg a -> "¬" ^ string_of_expr a
   | Syntax.EHom (cat, a, b) ->
       "hom(" ^ string_of_expr cat ^ ", " ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ")"
-  | Syntax.ETensor (a, b) -> string_of_expr a ^ " * " ^ string_of_expr b
+  | Syntax.ETensor (a, b) -> "(" ^ string_of_expr a ^ " * " ^ string_of_expr b ^ ")"
   | Syntax.EFunc (a, b) -> string_of_expr a ^ " -> " ^ string_of_expr b
   | Syntax.ECoend (cat, w, m) ->
       "coend(" ^ sanitize_ident w ^ " : " ^ string_of_expr cat ^ "). " ^ string_of_expr m
@@ -196,28 +211,36 @@ let rec string_of_expr = function
 let string_of_cmd = function
   | Syntax.CModule name -> "module " ^ sanitize_ident name ^ " where"
   | Syntax.CImport path -> "import \"" ^ path ^ "\""
-  | Syntax.CDefType (name, args, tp) ->
+  | Syntax.CDef (name, args, opt_tp, term) ->
       let args_str = if args = [] then "" else " (" ^ String.concat " " (List.map sanitize_ident args) ^ ")" in
-      "def_type " ^ sanitize_ident name ^ args_str ^ " := " ^ string_of_expr tp
-  | Syntax.CDefTerm (name, args, tp, term) ->
-      let args_str = if args = [] then "" else " (" ^ String.concat " " (List.map sanitize_ident args) ^ ")" in
-      "def_term " ^ sanitize_ident name ^ args_str ^ " : " ^ string_of_expr tp ^ " := " ^ string_of_expr term
+      (match opt_tp with
+       | Some tp ->
+           "def " ^ sanitize_ident name ^ args_str ^ " : " ^ string_of_expr tp ^ " := " ^ string_of_expr term
+       | None ->
+           "def " ^ sanitize_ident name ^ args_str ^ " := " ^ string_of_expr term)
   | Syntax.CCheckSimplicial (ctx, term, tp) ->
       let ctx_str = String.concat ", " (List.map (fun (x, t) -> sanitize_ident x ^ " : " ^ string_of_expr t) ctx) in
       "check " ^ ctx_str ^ " ⊢ " ^ string_of_expr term ^ " : " ^ string_of_expr tp
   | _ -> "<cmd>"
 
 let main () =
-  if Array.length Sys.argv < 2 then (
-    Printf.printf "Usage: lift <file.dan>\n";
+  let file_path = ref "" in
+  let speclist = [
+    ("-stt", Arg.Unit (fun () -> mode := "stt"), "Lift to Simplicial Type Theory (default)");
+    ("-dirtt", Arg.Unit (fun () -> mode := "dirtt"), "Lift to Directed Type Theory");
+  ] in
+  let usage_msg = "Usage: lift [-stt | -dirtt] <file.dan>" in
+  Arg.parse speclist (fun arg -> file_path := arg) usage_msg;
+  if !file_path = "" then (
+    Arg.usage speclist usage_msg;
     exit 1
   );
-  let file_path = Sys.argv.(1) in
   let module_name =
-    let base = Filename.basename file_path in
-    if Filename.check_suffix base ".dan" then Filename.chop_suffix base ".dan" else base
+    let base = Filename.basename !file_path in
+    let name = if Filename.check_suffix base ".dan" then Filename.chop_suffix base ".dan" else base in
+    if name = "category" then "category_dan" else name
   in
-  let ic = open_in file_path in
+  let ic = open_in !file_path in
   let lexbuf = Lexing.from_channel ic in
   try
     let cmds = Dan_parser.file Dan_lexer.token lexbuf in

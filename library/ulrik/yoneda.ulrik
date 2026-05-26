@@ -1,18 +1,20 @@
 module yoneda where
 import "library/ulrik/natural.ulrik"
 
--- F_fun is a contravariant functor on A
-functor F_fun (y : A^op) : B
+-- Natural transformations between presheaves F, G : C -> U.
+-- Since the target category is the universe of types U, the morphisms are functions (->).
+def PshNat : (C : U) -> (F : C -> U) -> (G : C -> U) -> U :=
+  \(C : U). \(F : C -> U). \(G : C -> U).
+    (w : C) -> F w -> G w
 
-def_type F (y z) := hom(B, z, F_fun(y))
+-- The Yoneda Map: PshNat C (\(c' : C). hom(C, c, c')) F -> F c
+-- We map a natural transformation η : (c' : C) -> hom(C, c, c') -> F c'
+-- to an element of F c by evaluating it at c and applying it to the identity path (constant path).
 
--- The Yoneda coend: ∫^{y:A} hom(A, x, y) ⊗ F(y, z)
-def_type YonedaCoend (x z) := coend(y : A). (hom(A, x, y) * F(y, z))
+def yoneda_map : (C : U) -> (F : C -> U) -> (c : C) -> PshNat C (\(c' : C). hom(C, c, c')) F -> F c :=
+  \(C : U). \(F : C -> U). \(c : C). \(eta : PshNat C (\(c' : C). hom(C, c, c')) F).
+    eta c (\(t : I). c)
 
--- Yoneda Map: ∫^{y:A} hom(A, x, y) ⊗ F(y, z) -> F(x, z)
--- We eliminate the coend, then the tensor, and apply J_contra to map F(y) to F(x) along f : hom(A, x, y).
-def_term yoneda_map (x z) : YonedaCoend(x, z) -> F(x, z) :=
-  lambda(e : YonedaCoend(x, z)).
-    let <y_var, t_val> := e in
-    let f * u := t_val in
-    J_contra(w. F(w, z), u, y_var, f)
+-- Verify component mapping:
+check C : U, F : C -> U, c : C, eta : PshNat C (\(c' : C). hom(C, c, c')) F
+  ⊢ yoneda_map C F c eta : F c

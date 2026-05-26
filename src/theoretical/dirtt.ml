@@ -65,7 +65,8 @@ and flatten_expr_to_cat_terms = function
       let rec string_of_expr = function
         | EVar s -> "EVar " ^ s
         | EApp (f, a) -> "EApp (" ^ string_of_expr f ^ ", " ^ string_of_expr a ^ ")"
-        | ELam ((x, t), b) -> "ELam ((" ^ x ^ ", " ^ string_of_expr t ^ "), " ^ string_of_expr b ^ ")"
+        | ELam ((x, Some t), b) -> "ELam ((" ^ x ^ ", Some " ^ string_of_expr t ^ "), " ^ string_of_expr b ^ ")"
+        | ELam ((x, None), b) -> "ELam ((" ^ x ^ ", None), " ^ string_of_expr b ^ ")"
         | EPi (a, (x, b)) -> "EPi (" ^ string_of_expr a ^ ", (" ^ x ^ ", " ^ string_of_expr b ^ "))"
         | ESig (a, (x, b)) -> "ESig (" ^ string_of_expr a ^ ", (" ^ x ^ ", " ^ string_of_expr b ^ "))"
         | EPair (a, b) -> "EPair (" ^ string_of_expr a ^ ", " ^ string_of_expr b ^ ")"
@@ -103,7 +104,6 @@ and flatten_expr_to_cat_terms = function
         | ETensorElim _ -> "ETensorElim"
         | ECoendIntro _ -> "ECoendIntro"
         | ECoendElim _ -> "ECoendElim"
-        | EEndIntro _ -> "EEndIntro"
         | EEndElim _ -> "EEndElim"
       in
       failwith ("invalid category term: " ^ string_of_expr e)
@@ -138,9 +138,9 @@ and to_m_term = function
   | ETensorElim (x, y, t, c) -> MTTensorElim (x, y, to_m_term t, to_m_term c)
   | ECoendIntro (x, y, z, m) -> MTCoendIntro (x, y, z, to_m_term m)
   | ECoendElim (w, m_var, t, c) -> MTCoendElim (w, m_var, to_m_term t, to_m_term c)
-  | EEndIntro (w, m) -> MTEndIntro (w, to_m_term m)
   | EEndElim (x, y, z, t, c) -> MTEndElim (x, y, z, to_m_term t, to_m_term c)
-  | ELam ((x, tp), body) -> MTFuncIntro (x, to_m_type tp, to_m_term body)
+  | ELam ((x, Some tp), body) -> MTFuncIntro (x, to_m_type tp, to_m_term body)
+  | ELam ((w, None), body) -> MTEndIntro (w, to_m_term body)
   | EApp (f, a) -> MTFuncElim (to_m_term f, to_m_term a)
   | EModalApp (f, a) -> MTFuncElim (to_m_term f, to_m_term a)
   | e -> failwith "invalid module term"
@@ -240,7 +240,12 @@ let rec subst_cat_term (substs : (name * cat_term) list) = function
       (match List.assoc_opt x substs with
        | Some t -> t
        | None -> CTVar x)
-  | CTFun (f, args) -> CTFun (f, List.map (subst_cat_term substs) args)
+  | CTFun (f, args) ->
+      let f' = match List.assoc_opt f substs with
+        | Some (CTVar y) -> y
+        | _ -> f
+      in
+      CTFun (f', List.map (subst_cat_term substs) args)
   | CTOp a -> CTOp (subst_cat_term substs a)
 
 let rec subst_cat_in_m_type (substs : (name * cat_term) list) = function
@@ -786,59 +791,6 @@ let infer_categories_from_type (tp : m_type) : (name * cat) list =
   in
   unique [] raw
 
-let rec cat_to_simpl = function
-  | CVar x -> Simplicialtt.EVar x
-  | COp c -> cat_to_simpl c
-  | CProd (c1, c2) -> Simplicialtt.ESig (cat_to_simpl c1, ("_", cat_to_simpl c2))
-
-and cat_term_to_simpl = function
-  | CTVar x -> Simplicialtt.EVar x
-  | CTFun (f, args) ->
-      List.fold_left (fun acc arg -> Simplicialtt.EApp (acc, cat_term_to_simpl arg)) (Simplicialtt.EVar f) args
-  | CTOp a -> cat_term_to_simpl a
-
-and m_type_to_simpl = function
-  | MHom (cat, a, b) ->
-      Simplicialtt.hom (cat_to_simpl cat) (cat_term_to_simpl a) (cat_term_to_simpl b)
-  | MTensor (m1, m2) ->
-      Simplicialtt.ESig (m_type_to_simpl m1, ("_", m_type_to_simpl m2))
-  | MCoend (cat, w, m) ->
-      Simplicialtt.ESig (cat_to_simpl cat, (w, m_type_to_simpl m))
-  | MEnd (cat, w, m) ->
-      Simplicialtt.EPi (cat_to_simpl cat, (w, m_type_to_simpl m))
-  | MFunc (m1, m2) ->
-      Simplicialtt.EPi (m_type_to_simpl m1, ("_", m_type_to_simpl m2))
-  | MApp (f, args) ->
-      List.fold_left (fun acc arg -> Simplicialtt.EApp (acc, cat_term_to_simpl arg)) (Simplicialtt.EVar f) args
-
-and m_term_to_simpl = function
-  | MTVar x -> Simplicialtt.EVar x
-  | MTId a -> Simplicialtt.ELam (("t", Simplicialtt.EIDir), cat_term_to_simpl a)
-  | MTJ (tp, x, y, z, mz, a, b, f) ->
-      Simplicialtt.EJ (m_type_to_simpl tp, x, y, z, m_term_to_simpl mz, cat_term_to_simpl a, cat_term_to_simpl b, m_term_to_simpl f)
-  | MTJCov (tp, x, m, a, f) ->
-      Simplicialtt.EJCov (m_type_to_simpl tp, x, m_term_to_simpl m, cat_term_to_simpl a, m_term_to_simpl f)
-  | MTJContra (tp, x, m, b, f) ->
-      Simplicialtt.EJContra (m_type_to_simpl tp, x, m_term_to_simpl m, cat_term_to_simpl b, m_term_to_simpl f)
-  | MTTensorIntro (m1, m2) ->
-      Simplicialtt.EPair (m_term_to_simpl m1, m_term_to_simpl m2)
-  | MTTensorElim (x, y, t, c) ->
-      let t' = m_term_to_simpl t in
-      Simplicialtt.subst x (Simplicialtt.EFst t') (Simplicialtt.subst y (Simplicialtt.ESnd t') (m_term_to_simpl c))
-  | MTCoendIntro (x, y, z, m) ->
-      Simplicialtt.EPair (Simplicialtt.EVar z, m_term_to_simpl m)
-  | MTCoendElim (w, m_var, t, c) ->
-      let t' = m_term_to_simpl t in
-      Simplicialtt.subst w (Simplicialtt.EFst t') (Simplicialtt.subst m_var (Simplicialtt.ESnd t') (m_term_to_simpl c))
-  | MTEndIntro (w, m) ->
-      Simplicialtt.EEndIntro (w, m_term_to_simpl m)
-  | MTEndElim (x, y, z, t, c) ->
-      let t' = m_term_to_simpl t in
-      let w_var = match t' with Simplicialtt.EVar name -> name | _ -> failwith "end elim expects variable" in
-      Simplicialtt.subst x (Simplicialtt.EVar z) (Simplicialtt.subst y (Simplicialtt.EVar z) (Simplicialtt.subst w_var (Simplicialtt.EApp (t', Simplicialtt.EVar z)) (m_term_to_simpl c)))
-  | MTFuncIntro (x, tp, body) ->
-      Simplicialtt.ELam ((x, m_type_to_simpl tp), m_term_to_simpl body)
-  | MTFuncElim (f, a) ->
-      Simplicialtt.EApp (m_term_to_simpl f, m_term_to_simpl a)
 
 let () = tests ()
+

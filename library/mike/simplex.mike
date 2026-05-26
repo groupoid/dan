@@ -1,0 +1,16 @@
+module simplex where
+
+def triangle (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * Simplex))))) := \(a : Simplex). \(b : Simplex). \(c : Simplex). \(ab : Simplex). \(bc : Simplex). \(ca : Simplex). (a * (b * (c * (ab * (bc * ca)))))
+
+def singular_cone (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * Simplex))))))) := \(p : Simplex). \(q : Simplex). \(r : Simplex). \(s : Simplex). \(qrs : Simplex). \(prs : Simplex). \(pqs : Simplex). \(pqr : Simplex). (p * (q * (r * (s * (qrs * (prs * (pqs * pqr)))))))
+
+def Mobius (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * Simplex))))) := \(a : Simplex). \(b : Simplex). \(c : Simplex). \(bc : Simplex). \(ac : Simplex). \(ab : Simplex). (a * (b * (c * (bc * (ac * ab)))))
+
+def degen_tetra (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * Simplex))))))) := \(p : Simplex). \(q : Simplex). \(r : Simplex). \(s : Simplex). \(qrs : Simplex). \(prs : Simplex). \(pqs : Simplex). \(pqr : Simplex). (p * (q * (r * (s * (qrs * (prs * (pqs * pqr)))))))
+
+def twisted_annulus (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> ((Simplex * (Simplex * (Simplex * (Simplex * (Simplex * Simplex))))) * (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * Simplex)))))) := \(a : Simplex). \(b : Simplex). \(c : Simplex). \(bc : Simplex). \(ac : Simplex). \(ab : Simplex). \(d : Simplex). \(bd : Simplex). \(cd : Simplex). ((a * (b * (c * (bc * (ac * ab))))) * (b * (c * (d * (bc * (bd * cd))))))
+
+def degen_triangle (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * Simplex))))) := \(a : Simplex). \(b : Simplex). \(c : Simplex). \(bc : Simplex). \(ac : Simplex). \(ab : Simplex). (a * (b * (c * (bc * (ac * ab)))))
+
+def singular_prism (Simplex) : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * (Simplex * Simplex))))))) := \(p : Simplex). \(q : Simplex). \(r : Simplex). \(s : Simplex). \(qrs : Simplex). \(prs : Simplex). \(pqt : Simplex). \(pqr : Simplex). (p * (q * (r * (s * (qrs * (prs * (pqt * pqr)))))))
+

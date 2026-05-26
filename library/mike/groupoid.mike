@@ -1,5 +1,5 @@
 module groupoid where
-import "library/ulrik/category.ulrik"
+import "library/mike/category.mike"
 
 -- A groupoid structure on category A implies the existence of a morphism inversion map.
 -- inv : hom(A, x, y) ⊸ hom(A, y, x)

@@ -1,0 +1,14 @@
+module book where
+
+import "library/ulrik/simplex.ulrik"
+
+import "library/ulrik/algebra.ulrik"
+
+import "library/ulrik/category_dan.ulrik"
+
+import "library/ulrik/simplicial.ulrik"
+
+import "library/ulrik/test_pc.ulrik"
+
+import "library/ulrik/test_gap.ulrik"
+
