@@ -1,6 +1,0 @@
-module category_dan where
-
-def path_z2_category : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * (Simplex * (Simplex * Simplex)))) := \(x : Simplex). \(y : Simplex). \(f : Simplex). \(g : Simplex). \(h : Simplex). (x, (y, (f, (g, h))))
-
-def cube_infty : Simplex -> Simplex -> Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * (Simplex * (Simplex * Simplex)))) := \(a : Simplex). \(b : Simplex). \(c : Simplex). \(cube2 : Simplex). \(cube3 : Simplex). (a, (b, (c, (cube2, cube3))))
-

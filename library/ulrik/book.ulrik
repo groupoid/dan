@@ -3,7 +3,7 @@ module book where
 -- Theoretical category-theory libraries
 import "library/ulrik/category.ulrik"
 import "library/ulrik/functor.ulrik"
--- import "library/ulrik/natural.ulrik"
+import "library/ulrik/natural.ulrik"
 import "library/ulrik/yoneda.ulrik"
 import "library/ulrik/adjunction.ulrik"
 import "library/ulrik/equivalence.ulrik"

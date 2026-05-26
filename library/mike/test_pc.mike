@@ -1,4 +1,0 @@
-module test_pc where
-
-def test_grp (Simplex) : Simplex -> Simplex -> Simplex -> (Simplex * (Simplex * Simplex)) := \(a : Simplex). \(b : Simplex). \(c : Simplex). (a * (b * c))
-
