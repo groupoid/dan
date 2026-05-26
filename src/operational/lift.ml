@@ -9,6 +9,13 @@ let lift_type_name = function
   | Monoid -> Syntax.EVar "Monoid"
   | Ring -> Syntax.EVar "Ring"
   | Field -> Syntax.EVar "Field"
+  | PermGroup -> Syntax.EVar "PermGroup"
+  | MatGroup -> Syntax.EVar "MatGroup"
+  | FpGroup -> Syntax.EVar "FpGroup"
+  | PcGroup -> Syntax.EVar "PcGroup"
+  | Module -> Syntax.EVar "Module"
+  | Set -> Syntax.EVar "Set"
+  | GSet -> Syntax.EVar "GSet"
 
 let rec make_nested_tensor = function
   | [] -> Syntax.EVar "Simplex"
@@ -33,6 +40,8 @@ let rec make_lambda_term vars term_body =
 let lift_type_def defn =
   let var_types = List.concat (List.map (function
     | Decl (ids, typ) -> List.map (fun id -> (id, lift_type_name typ)) ids
+    | Presentation (id, _) -> [(id, Syntax.EVar "FpGroup")]
+    | Action (id, _, _) -> [(id, Syntax.EVar "Simplex")]
     | _ -> []
   ) defn.context) in
   let specs_typed = List.map (fun spec ->

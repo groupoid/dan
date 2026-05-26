@@ -19,12 +19,30 @@ rule token = parse
   | "--" [^ '\n']* { token lexbuf }
   | "import" { IMPORT }
   | "def" { DEF }
+  | "in" { IN }
+  | "∈" { IN }
+  | "order" { ORDER }
+  | "rel" { REL }
+  | "PcGroup" { PCGROUP }
+  | "FpGroup" { FPGROUP }
+  | "PermGroup" { PERMGROUP }
+  | "MatGroup" { MATGROUP }
+  | "Hom" { HOM }
+  | "Face" { FACE }
+  | "Deg" { DEG }
+  | "Boundary" { BOUNDARY }
+  | "∂" { BOUNDARY }
+  | "Orbit" { ORBIT }
+  | "Stabilizer" { STABILIZER }
+  | "Perm" { PERM }
+  | "Cycle" { CYCLE }
   | "П" | "Π" { PI }
   | "∘" { COMP }
   | "+" { ADD }
   | "-" { SUB }
   | "/" { DIV }
   | "⋅" | "*" | "×" { MUL }
+  | "·" | "•" { ACT }
   | "^-1" { INVLIT }
   | "^" { POW }
   | "¹" { POW_LIT S1 }
@@ -46,6 +64,7 @@ rule token = parse
   | "[" { LBRACKET }
   | "]" { RBRACKET }
   | "=" { EQ }
+  | "≠" | "!=" { NEQ }
   | "|" { BAR }
   | "<" { LEQ }
   | "≤" { LEQ }

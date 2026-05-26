@@ -5,3 +5,5 @@ import simplex
 import algebra
 import category
 import simplicial
+import test_pc
+import test_gap

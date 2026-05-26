@@ -1,0 +1,4 @@
+def test_grp : Group
+ := П (e a b c : Simplex),
+      a^b = c, [a, b] = e
+    ⊢ 3 (a, b, c | a^b = c, [a, b] = e)
