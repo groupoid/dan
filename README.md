@@ -37,41 +37,58 @@ The operational core checks presentations of algebraic and simplicial structures
 Its AST represents elements, generators, face maps, and algebraic equations.
 
 ```ocaml
-(* Defined in src/operational/dan.ml *)
-type superscript = S1 | S2 | S3 | S4 | S5 | S6 | S7 | S8 | S9
-type type_name = Simplex | Group | Simplicial | Chain | Category | Monoid | Ring | Field
+type superscript = S1 | S2 | S3 | S4 | S5 | S6 | S7 | S8 | S9 | SN of string | Sn of int
+type dimension = Dim of int | DimVar of string
+
+type type_name =
+  | Simplex | Group | Simplicial | Chain | Category | Monoid | Ring | Field
+  | PermGroup | MatGroup | FpGroup | PcGroup | Module | Set | GSet
 
 type term =
-  | Id of string                      (* Variable identifier, e.g. "a" *)
-  | Comp of term * term               (* Composition, e.g. a ∘ b *)
-  | Inv of term                       (* Morphism/Group inverse, e.g. a^-1 *)
-  | Pow of term * superscript         (* Power term, e.g. a² *)
-  | E                                 (* Identity/Neutral element, e.g. "e" *)
-  | Matrix of int list list           (* Concrete matrix values *)
-  | Add of term * term                (* Ring addition, e.g. r₁ + r₂ *)
-  | Mul of term * term                (* Ring multiplication, e.g. r₁ ⋅ r₂ *)
-  | Div of term * term                (* Field division, e.g. r₁ / r₂ *)
+  | Id of string
+  | Comp of term * term
+  | Inv of term
+  | Pow of term * superscript
+  | E
+  | Matrix of int list list
+  | Add of term * term
+  | Mul of term * term
+  | Div of term * term
+  | Conj of term * term
+  | Comm of term * term
+  | PowInt of term * int
+  | Perm of int list
+  | Cycle of int list list
+  | PermGroup of term list
+  | MatGroup of term list * int * int
+  | FpGroup of string list * term list
+  | PcGroup of string list * term list
+  | Scalar of int
+  | Face of superscript * term
+  | Deg of superscript * term
+  | Boundary of term
+  | Act of term * term
+  | Hom of term * term
+  | RelEq of term * term
 
 type constrain =
-  | Eq of term * term                 (* Equation constraint, e.g. a = b *)
-  | Map of string * string list       (* Map inclusions/cofibrations, e.g. s₀ < v *)
+  | Eq of term * term
+  | Map of string * string list
+  | Neq of term * term
+  | In of term * term
+  | Order of term * int
+  | Rel of term list
 
 type hypothesis =
-  | Decl of string list * type_name   (* Variables declaration, e.g. (a b c : Simplex) *)
-  | Equality of string * term * term  (* Equality hypothesis, e.g. ac = ab ∘ bc *)
-  | Mapping of string * term * term   (* Boundary mapping hypothesis, e.g. ∂₁ = C₂ < C₃ *)
+  | Decl of string list * type_name   (* e.g., (a b c : Simplex) *)
+  | Equality of string * term * term  (* e.g., ac = ab ∘ bc *)
+  | Mapping of string * term * term   (* e.g., ∂₁ = C₂ < C₃ *)
+  | Presentation of string * term
+  | Relation of term
+  | Action of string * term * term
+  | Orbit of term * term * term list
+  | Stabilizer of term * term * term
 
-type rank = Finite of int | Infinite
-
-type type_def = {
-  name : string;
-  typ : type_name;
-  context : hypothesis list;
-  rank : rank;
-  elements : string list;
-  faces : string list option;
-  constraints : constrain list
-}
 ```
 
 ### 1.2 Theoretical Simplicial (Ulrik / Simplicialtt)
