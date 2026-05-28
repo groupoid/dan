@@ -51,6 +51,359 @@
             </div>
         </section>
 
+        <section id="cosmic-cube-section">
+            <h2>Cosmic Cube</h2>
+            <p style="text-align:center;max-width:760px;margin:0 auto 1.5rem;">
+                A conceptual framework organizing higher category theory, homotopy theory and type theory
+                along three axes: <b>Strictness</b> (∇/∆), <b>Groupoidality</b> (𝟐/ℕ), and <b>Stability</b> (𝟏/ℍ).
+                Each vertex corresponds to a distinct type-theoretic or categorical structure.
+            </p>
+
+            <div class="cosmic-cube-wrapper">
+                <div class="cube-scene" id="cubeScene" style="margin-top:10px">
+                    <div class="cube-3d" id="cube3d">
+                        <!-- 6 faces of the cube (wireframe via transparent faces) -->
+                        <div class="cube-face face-front"></div>
+                        <div class="cube-face face-back"></div>
+                        <div class="cube-face face-left"></div>
+                        <div class="cube-face face-right"></div>
+                        <div class="cube-face face-top"></div>
+                        <div class="cube-face face-bottom"></div>
+
+                        <!-- 8 vertices with labels -->
+                        <!-- Vertex positions: (front/back) × (top/bottom) × (left/right) at ±90px -->
+
+                        <!-- Front-Bottom-Left: (∆, 𝟐, 𝟏) = MLTT -->
+                        <div class="cube-vertex" style="transform: translate3d(-90px, 90px, 90px);">
+                            <div class="vertex-label">(∆, 𝟐, 𝟏)</div>
+                        </div>
+
+                        <!-- Front-Bottom-Right: (∆, 𝟐, ℍ) = Linear λ -->
+                        <div class="cube-vertex" style="transform: translate3d(90px, 90px, 90px);">
+                            <div class="vertex-label">(∆, 𝟐, ℍ)</div>
+                        </div>
+
+                        <!-- Front-Top-Left: (∆, ℕ, 𝟏) = HoTT -->
+                        <div class="cube-vertex" style="transform: translate3d(-90px, -90px, 90px);">
+                            <div class="vertex-label">(∆, ℕ, 𝟏)</div>
+                        </div>
+
+                        <!-- Front-Top-Right: (∆, ℕ, ℍ) = Linear HoTT -->
+                        <div class="cube-vertex" style="transform: translate3d(90px, -90px, 90px);">
+                            <div class="vertex-label">(∆, ℕ, ℍ)</div>
+                        </div>
+
+                        <!-- Back-Bottom-Left: (∇, 𝟐, 𝟏) = Modal STLC -->
+                        <div class="cube-vertex" style="transform: translate3d(-90px, 90px, -90px);">
+                            <div class="vertex-label">(∇, 𝟐, 𝟏)</div>
+                        </div>
+
+                        <!-- Back-Bottom-Right: (∇, 𝟐, ℍ) = ∞-toposes -->
+                        <div class="cube-vertex" style="transform: translate3d(90px, 90px, -90px);">
+                            <div class="vertex-label">(∇, 𝟐, ℍ)</div>
+                        </div>
+
+                        <!-- Back-Top-Left: (∇, ℕ, 𝟏) = Modal HoTT -->
+                        <div class="cube-vertex" style="transform: translate3d(-90px, -90px, -90px);">
+                            <div class="vertex-label">(∇, ℕ, 𝟏)</div>
+                        </div>
+
+                        <!-- Back-Top-Right: (∇, ℕ, ℍ) = Modal Linear HoTT -->
+                        <div class="cube-vertex" style="transform: translate3d(90px, -90px, -90px);">
+                            <div class="vertex-label">(∇, ℕ, ℍ)</div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <!-- Axis Legend -->
+                <div class="cube-axes-legend">
+                    <div class="axis-item">
+                        <span class="axis-symbol axis-x">∆ ↔ ∇</span>
+                        <span class="axis-desc">Strictness</span>
+                    </div>
+                    <div class="axis-item">
+                        <span class="axis-symbol axis-y">𝟐 ↔ ℕ</span>
+                        <span class="axis-desc">Groupoidality</span>
+                    </div>
+                    <div class="axis-item">
+                        <span class="axis-symbol axis-z">𝟏 ↔ ℍ</span>
+                        <span class="axis-desc">Stability</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vertex table -->
+            <div class="cube-vertex-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Configuration</th>
+                            <th>Structure</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="vtx-config">(∆, 𝟐, 𝟏)</td><td class="vtx-name">ПΣ (MLTT-75)</td><td>Dependently typed λ-calculus — Per</td></tr>
+                        <tr><td class="vtx-config">(∆, 𝟐, ℍ)</td><td class="vtx-name">Linear ПΣ</td><td>λ-calculus, resource-sensitive computation — Urs</td></tr>
+                        <tr><td class="vtx-config">(∆, ℕ, 𝟏)</td><td class="vtx-name">HoTT</td><td>Homotopy Type Theory — Anders</td></tr>
+                        <tr><td class="vtx-config">(∆, ℕ, ℍ)</td><td class="vtx-name">Linear HoTT</td><td>Linear Homotopy Type Theory — Urs</td></tr>
+                        <tr><td class="vtx-config">(∇, 𝟐, 𝟏)</td><td class="vtx-name">Modal MLTT</td><td>Modal Dependently Typed λ-calculus – Anders</td></tr>
+                        <tr><td class="vtx-config">(∇, 𝟐, ℍ)</td><td class="vtx-name">∞-toposes</td><td>∞-toposes, Quantum Field Theory (dirtt, stt) — Dan</td></tr>
+                        <tr><td class="vtx-config">(∇, ℕ, 𝟏)</td><td class="vtx-name">Modal HoTT</td><td>Synthetic Differential Geometry — Anders</td></tr>
+                        <tr><td class="vtx-config">(∇, ℕ, ℍ)</td><td class="vtx-name">Modal Linear HoTT</td><td>Modal Linear Homotopy Type Theory — Urs</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <style>
+        /* ===== COSMIC CUBE ===== */
+        .cosmic-cube-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1rem auto 2rem;
+        }
+
+        .cube-scene {
+            width: 280px;
+            height: 280px;
+            perspective: 800px;
+            cursor: grab;
+            position: relative;
+        }
+
+        .cube-scene:active { cursor: grabbing; }
+
+        .cube-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(-20deg) rotateY(30deg);
+            transition: transform 0.1s linear;
+        }
+
+        /* Wireframe faces */
+        .cube-face {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            top: 50%;
+            left: 50%;
+            margin: -90px 0 0 -90px;
+            border: 1px solid rgba(225, 29, 116, 0.35);
+            background: rgba(255, 240, 255, 0.02);
+        }
+
+        .face-front  { transform: translateZ(90px); }
+        .face-back   { transform: rotateY(180deg) translateZ(90px); }
+        .face-left   { transform: rotateY(-90deg) translateZ(90px); }
+        .face-right  { transform: rotateY(90deg) translateZ(90px); }
+        .face-top    { transform: rotateX(90deg) translateZ(90px); }
+        .face-bottom { transform: rotateX(-90deg) translateZ(90px); }
+
+        /* Vertices */
+        .cube-vertex {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            transform-style: preserve-3d;
+        }
+
+        /* No vertex dots to maintain a clean layout where coordinate text acts as the vertex */
+
+        .vertex-label {
+            position: absolute;
+            z-index: 9999;
+            background: rgba(255, 248, 255, 0.95);
+            border: 1px solid rgba(225, 29, 116, 0.4);
+            border-radius: 4px;
+            padding: 2px 6px;
+            white-space: nowrap;
+            font-family: ui-monospace, monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #c026d3;
+            box-shadow: 0 1px 4px rgba(225, 29, 116, 0.15);
+            pointer-events: none;
+            opacity: 1; /* Always visible */
+        }
+
+        /* Axes legend */
+        .cube-axes-legend {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .axis-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255,255,255,0.75);
+            border: 1px solid rgba(225, 29, 116, 0.2);
+            border-radius: 50px;
+            padding: 0.3rem 0.8rem;
+        }
+
+        .axis-symbol {
+            font-family: ui-monospace, monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .axis-x { color: #e11d74; }
+        .axis-y { color: #7c3aed; }
+        .axis-z { color: #0891b2; }
+
+        .axis-desc {
+            font-size: 0.75rem;
+            color: #6b4f7e;
+            font-weight: 500;
+        }
+
+        /* Vertex table */
+        .cube-vertex-table {
+            max-width: 860px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        .cube-vertex-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.75);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px -4px rgba(225, 29, 116, 0.1);
+        }
+
+        .cube-vertex-table th {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.12), rgba(192, 38, 211, 0.08));
+            color: #831843;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1.5px solid rgba(225, 29, 116, 0.2);
+        }
+
+        .cube-vertex-table td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid rgba(225, 29, 116, 0.08);
+            color: #4a2c6e;
+        }
+
+        .cube-vertex-table tr:last-child td { border-bottom: none; }
+
+        .cube-vertex-table tr:hover td {
+            background: rgba(225, 29, 116, 0.04);
+        }
+
+        .vtx-config {
+            font-family: ui-monospace, monospace;
+            font-weight: 700;
+            color: #c026d3 !important;
+            font-size: 0.82rem;
+        }
+
+        .vtx-name {
+            font-weight: 700;
+            color: #831843 !important;
+        }
+        </style>
+
+        <script>
+        (function() {
+            const scene = document.getElementById('cubeScene');
+            const cube  = document.getElementById('cube3d');
+            if (!scene || !cube) return;
+
+            let isDragging = false;
+            let lastX = 0, lastY = 0;
+            let rotX = -20, rotY = 30;
+            let animId = null;
+            let paused = false;
+            let lastTime = null;
+            const speed = 12; // deg/sec
+
+            const labels = cube.querySelectorAll('.vertex-label');
+
+            function setTransform() {
+                cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+                // Billboard: counter-rotate each label and center it perfectly on the 3D vertex
+                labels.forEach(el => {
+                    el.style.transform = `translate(-50%, -50%) rotateY(${-rotY}deg) rotateX(${-rotX}deg)`;
+                });
+            }
+
+            function tick(ts) {
+                if (!paused && !isDragging) {
+                    if (lastTime !== null) {
+                        rotY += speed * (ts - lastTime) / 1000;
+                    }
+                    lastTime = ts;
+                    setTransform();
+                }
+                animId = requestAnimationFrame(tick);
+            }
+
+            scene.addEventListener('mouseenter', () => { paused = true; lastTime = null; });
+            scene.addEventListener('mouseleave', () => { paused = false; lastTime = null; });
+
+            scene.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - lastX;
+                const dy = e.clientY - lastY;
+                rotY += dx * 0.5;
+                rotX -= dy * 0.5;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                setTransform();
+            });
+
+            window.addEventListener('mouseup', () => { isDragging = false; });
+
+            // Touch support
+            scene.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                lastX = e.touches[0].clientX;
+                lastY = e.touches[0].clientY;
+            }, { passive: true });
+
+            window.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const dx = e.touches[0].clientX - lastX;
+                const dy = e.touches[0].clientY - lastY;
+                rotY += dx * 0.5;
+                rotX -= dy * 0.5;
+                lastX = e.touches[0].clientX;
+                lastY = e.touches[0].clientY;
+                setTransform();
+            }, { passive: true });
+
+            window.addEventListener('touchend', () => { isDragging = false; });
+
+            requestAnimationFrame(tick);
+        })();
+        </script>
+
         <section>
             <h2>The Three Languages</h2>
             <p style="text-align: center; margin-bottom: 2rem;">A tiered approach to simplicial category theory,
@@ -85,7 +438,7 @@
                         features a directed interval 𝕀, Segal precategories, and Rezk categories where identity paths
                         and isomorphisms coincide.</p>
                     <p>It implements modal operators (opposite category, twisted arrow categories) and forms the core
-                        checker for synthetic ∞-category theory in compact modal manner.</p>
+                        checker for synthetic ∞-category theory in compact modal manner. Eventually we will type check "Higher Topos Theory".</p>
                 </div>
             </div>
         </section>
